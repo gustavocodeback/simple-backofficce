@@ -485,7 +485,7 @@ class Maker extends Auth_CMD {
      *
      * @return void
      */
-    public function scafold() {
+    public function scafold( $crud = false ) {
 
         // carrega o inflector
         $this->load->helper( 'inflector' );
@@ -507,6 +507,9 @@ class Maker extends Auth_CMD {
             $this->model( $model_name.':'.$table );
             $this->finder( $model_name );
             $this->table( $table );
+
+            // verifica se deve gerar com crud
+            if ( $crud ) $this->controller( 'web:'.$model_name, $model_name );
         }
     }
 
@@ -628,7 +631,7 @@ class Maker extends Auth_CMD {
      * @param boolean $name
      * @return void
      */
-    public function controller( $name = false ) {
+    public function controller( $name = false, $model = false ) {
         
        // se não existir um nome
        if (!$name) {
@@ -666,8 +669,26 @@ class Maker extends Auth_CMD {
        // seta as variaveis com valor
        $t_val = [ $name ];
 
+       // caminho do template;
+       $t_path = "application/core/templates/default_controller.txt";
+
+       // verifica se é de crud
+       if ( $model ) {
+
+            // seta as variaveis
+            $t_vars[] = '%_MODEL_FILE_%';
+            $t_vars[] = '%_MODEL_CLASS_%';
+
+            // seta os valores
+            $t_val[] = $model;
+            $t_val[] = ucfirst( $model );
+
+            // define o novo template
+            $t_path = "application/core/templates/default_crud_controller.txt";
+       }
+
        // pega o conteudo
-       $record = file_get_contents( "application/core/templates/default_controller.txt" );
+       $record = file_get_contents( $t_path );
        
        // subistiui os valores
        $record = str_replace( $t_vars, $t_val, $record );
@@ -717,6 +738,19 @@ class Maker extends Auth_CMD {
             $this->load->library( '../seeds/DefaultSeed' );
             $this->defaultseed->populate();
         }
+    }
+
+    /**
+     * crud
+     * 
+     * gera os controllers de crud
+     *
+     * @param [type] $name
+     * @return void
+     */
+    public function crud( $name ) {
+        $this->dao( $name );
+        $this->controller( 'web:'.$name, $name );
     }
 }
 
