@@ -1,0 +1,21 @@
+{
+    "jsFiles": [
+        "assets/libraries/**/*.js",
+        "assets/libraries/*.js",
+        "assets/globals/**/*.js",
+        "assets/globals/*.js",
+        "assets/pages/*.js",
+        "assets/pages/**/*.js",
+        "assets/components/**/*.js",
+        "assets/components/*.js",
+        "assets/layouts/**/*.js",
+        "assets/layouts/*.js",
+        "assets/pages/home/home.js",
+        "assets/pages/login/login.js",
+        "assets/pages/signup/signup.js",
+        "assets/pages/forgot-password/forgot-password.js",
+        "assets/components/error-alert/error-alert.js",
+        "assets/components/success-alert/success-alert.js",
+        "assets/pages/change_password/change_password.js"
+    ]
+}

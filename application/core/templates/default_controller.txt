@@ -1,0 +1,28 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class %_CONTROLLER_NAME_% extends SG_Controller {
+
+	/**
+	 * __construct
+	 * 
+	 * método construtor
+	 * 
+	 */
+	public function __construct() {
+		parent::__construct();
+	}
+	
+	/**
+	 * index
+	 * 
+	 * método inicial
+	 *
+	 * @return void
+	 */
+	public function index() {
+		echo 'Welcome to %_CONTROLLER_NAME_%';
+	}
+}
+
+/* end of file */

@@ -1,0 +1,44 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+require_once '%_FINDER_FILE_%';
+
+/**
+ * %_ENTITY_NAME_%
+ * 
+ * Model de %_ENTITY_NAME_%
+ * 
+ */
+class %_MODEL_NAME_% extends %_FINDER_NAME_% {
+
+    /**
+     * fields
+     *
+     * campos do model
+     * 
+     * @var array
+     */
+    public $fields = %_FIELDS_%;
+
+    /**
+     * __construct
+     * 
+     * Método construtor
+     * 
+     */
+    public function __construct() {
+        parent::__construct();
+    }
+
+    /**
+     * table
+     *
+     * pega a tabela
+     * 
+     * @return void
+     */
+    public function table() {
+        return '%_TABLE_NAME_%';
+    }
+}
+
+/* end of file */

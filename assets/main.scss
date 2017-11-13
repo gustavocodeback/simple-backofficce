@@ -1,0 +1,31 @@
+/**
+ |  main.scss
+ |
+ |  Este arquivo é alterado pelo sistema e portanto não deve ter a sua
+ | estrutura alterada. 
+ |  São permitidos apenas imports de outros arquivos Sass.
+ |  Qualquer coisa além disso devem ser feito em outro arquivo.
+ |
+ */
+
+// imports
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
+
+// pages
+@import 'pages/home/home'; 
+@import 'pages/login/login'; 
+@import 'pages/signup/signup'; 
+@import 'pages/forgot-password/forgot-password'; 
+@import 'pages/change_password/change_password'; 
+
+// components
+@import 'components/error-alert/error-alert'; 
+@import 'components/success-alert/success-alert'; 
+
+// modules
+
+// libraries
+@import 'libraries/horizon/horizon.min';
+
+// globals  
+

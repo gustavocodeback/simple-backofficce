@@ -1,0 +1,6 @@
+@extends('')
+@section('')
+    <div id="%_PAGE_ID_%">
+
+    </div>
+@endsection
