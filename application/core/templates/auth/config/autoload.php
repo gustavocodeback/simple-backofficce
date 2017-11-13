@@ -63,6 +63,7 @@ $autoload['libraries'] = array( 'database',
                                 'View',
                                 'form_validation',
                                 'SG_Auth',
+                                'SG_Settings' => 'settings',  
                                 'errors' );
 
 /*

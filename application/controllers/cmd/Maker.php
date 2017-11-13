@@ -18,7 +18,7 @@ class Maker extends Auth_CMD {
      *
      * @var array
      */
-    public $exceptions = [ 'ci_sessions' ];
+    public $exceptions = [ 'ci_sessions', 'sg_settings' ];
 
     /**
      * construct
@@ -112,6 +112,9 @@ class Maker extends Auth_CMD {
      * @return void
      */
     private function __getFields( $table ) {
+
+        // verifica se a tabela existe
+        if ( ! $this->db->table_exists( $table ) ) return [];
 
         // pega os campos
         $fields = $this->db->list_fields( $table );
@@ -262,7 +265,7 @@ class Maker extends Auth_CMD {
     public function table( $table_name ) {
 
         // pega a informação dos campos
-        $fields = $this->db->field_data( $table_name );
+        $fields = $this->db->table_exists( $table_name ) ? $this->db->field_data( $table_name ) : [];
 
         // esquema do banco
         $schema = [];
@@ -320,6 +323,7 @@ class Maker extends Auth_CMD {
     public function dao($name = false) {
         $this->finder( $name );
         $this->model( $name );
+        $this->table( $name );
     }
 
     /**
@@ -513,13 +517,18 @@ class Maker extends Auth_CMD {
      *
      * @return void
      */
-    public function migrate() {
+    public function migrate( $tables = false ) {
+
+        // verifica se foi especificado as tabelas
+        if ( $tables ) {
+            $tables = explode( ':', $tables );
+        }
 
         // carrega a library de migração
         $this->load->library( 'migration' );
 
         // faz a migração
-        $this->migration->start();
+        $this->migration->start( $tables );
     }
 
     /**
@@ -565,6 +574,51 @@ class Maker extends Auth_CMD {
         // imprime a mensagem
         print "Library criada com sucesso".PHP_EOL;
     }
+
+    /**
+     * seed
+     * 
+     * cria uma seed
+     *
+     * @param boolean $name
+     * @return void
+     */
+    public function seed( $name = false ) {
+        
+       // se não existir um nome
+       if (!$name) {
+           print 'Você deve informar um nome ....';
+           return;
+       }
+
+       // seta o nome
+       $name = ucfirst( $name );
+       $name .= 'Seed';
+
+       // verifica se a página já existe
+       if ( file_exists( "application/seeds/$name.php" ) ) {
+           print "A seed já existe ".PHP_EOL;
+           return;
+       }
+
+       // seta as variaveis do template
+       $t_vars = [ '%_LIBRARY_NAME_%' ];
+
+       // seta as variaveis com valor
+       $t_val = [ $name ];
+
+       // pega o conteudo
+       $record = file_get_contents( "application/core/templates/default_seed.txt" );
+       
+       // subistiui os valores
+       $record = str_replace( $t_vars, $t_val, $record );
+
+       // salva no novo arquivo
+       file_force_contents( "application/seeds/$name.php", $record );
+
+       // imprime a mensagem
+       print "Seed criada com sucesso".PHP_EOL;
+   }
 
     /**
      * controller
@@ -623,7 +677,47 @@ class Maker extends Auth_CMD {
 
        // imprime a mensagem
        print "Controller criado com sucesso".PHP_EOL;
-   }
+    }
+
+    /**
+     * populate
+     * 
+     * popula uma tabela de acordo com a seed especificada
+     *
+     * @param boolean $seed
+     * @return void
+     */
+    public function populate( $seed = false ) {
+
+        // verifica se existe um seeder
+        if ( $seed ) {
+
+            // seta o nome da seed
+            $name = ucfirst( $seed ).'Seed';
+
+            // verifica se existe
+            if ( file_exists( 'application/seeds/'.$name.'.php' ) ) {
+            
+                // carrega a librayr
+                $this->load->library( '../seeds/'.$name );
+
+                // seta o nome
+                $n = strtolower( $name );
+
+                // chama o método
+                $this->$n->populate();
+
+            } else {
+                print "A seed $name não existe".PHP_EOL;
+            }
+
+        } else {
+
+            // carrega a library
+            $this->load->library( '../seeds/DefaultSeed' );
+            $this->defaultseed->populate();
+        }
+    }
 }
 
 /* end of file */

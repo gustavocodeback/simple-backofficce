@@ -376,7 +376,7 @@ class CI_Migration {
     * monta o objeto do novo schema
     *
     */
-    public function _getNewSchema() {
+    public function _getNewSchema( $tables = false ) {
 
         // seta o schema
         $schema = [];
@@ -396,11 +396,20 @@ class CI_Migration {
             // verifica se existe um arquivo de tabela
             if ( in_array( $dir.'_table.php', $files ) ) {
                 
+                unset( $config );
+
                 // faz o require do documento
                 require( $modelPath.DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR.$dir.'_table.php' );
                 
+                // verifica se existe o nome da tabela
+                $tb_name = ( isset( $config['table'] ) ) ? $config['table'] : $dir;
+
                 // adiciona no schema
-                $schema[$dir] = $config['schema'];
+                if ( $tables ) {
+                    if ( in_array( $tb_name, $tables ) ) {
+                        $schema[$tb_name] = $config['schema'];
+                    }
+                } else $schema[$tb_name] = $config['schema'];
             }
         }
 
@@ -414,10 +423,10 @@ class CI_Migration {
     * faz a migracao do banco antigo para o novo
     *
     */
-    public function migre() {
+    public function migre( $drop = true ) {
 
         // remove tabelas nao mais usadas
-        $this->_dropUnusedTables();
+        if ( $drop ) $this->_dropUnusedTables();
 
         // cria as tabelas novas
         $this->_createNewTables();
@@ -435,7 +444,7 @@ class CI_Migration {
     * inicia a imigracao
     *
     */
-    public function start( $version = false ) {
+    public function start( $tables = false ) {
 
         // cria a tabela de versoes
         $this->db->query('CREATE TABLE IF NOT EXISTS `ci_sessions` (
@@ -458,7 +467,7 @@ class CI_Migration {
         }
 
         // carrega o novo schema
-        $this->newSchema = $this->_getNewSchema();
+        $this->newSchema = $this->_getNewSchema( $tables );
 
         // seta as novas tabelas
         $this->newTables = [];
@@ -468,7 +477,8 @@ class CI_Migration {
         $this->_setOldSchema();
 
         // inicia a migracao
-        $this->migre();
+        $drop = $tables ? false : true;
+        $this->migre( $drop );
     }
 }
 

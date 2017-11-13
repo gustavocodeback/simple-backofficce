@@ -251,7 +251,7 @@ class Auth_CMD extends CI_Controller {
      * @return void
      */
     private function __lift() {
-        passthru( "php maker auth setup && php maker migrate && php maker auth fill" );
+        passthru( "php maker auth setup && php maker migrate user:group:routine:user_group:permission && php maker auth fill" );
     }
 
     /**
