@@ -189,12 +189,98 @@ class Auth_CMD extends CI_Controller {
         }
     }
 
+    /**
+     * __rollback
+     * 
+     * faz o rollback da autenticação
+     *
+     * @return void
+     */
+    private function __rollback() {
 
+        // arquivos de autor
+        $auth_files = [
+            'application/models/user',
+            'application/models/group',
+            'application/models/permission',
+            'application/models/routine',
+            'application/models/user',
+            'application/models/user_group',
+            'application/controllers/api/Auth.php',
+            'application/controllers/web/Auth.php',
+            'application/controllers/web/Home.php',
+            'application/helpers/auth_helper.php',
+            'application/libraries/SG_auth.php',
+            'application/views/components/navbar.blade.php',
+            'application/views/components/sidebar.blade.php',
+            'application/views/emails/recovery.blade.php',
+            'application/views/pages/auth',
+            'application/views/pages/home.blade.php',
+            'application/libraries/SG_Auth.php'
+        ];
+        
+        // exclui os arquivos
+        foreach( $auth_files as $file ) {
+            print "Apagando $file ...".PHP_EOL;
+            passthru( "rm -Rf $file " );
+        }
+
+        // mensagem
+        print "Copiando arquivos ".PHP_EOL;
+
+        // mova os arquivos
+        passthru( " cp application/core/templates/no-auth/config/autoload.php application/config/ " );
+        passthru( " cp application/core/templates/no-auth/controllers/Welcome.php application/controllers/ " );
+    
+        // remove as tabelas
+        $this->load->dbforge();
+        $this->dbforge->drop_table( 'user', TRUE );
+        $this->dbforge->drop_table( 'group', TRUE );
+        $this->dbforge->drop_table( 'routine', TRUE );
+        $this->dbforge->drop_table( 'permission', TRUE );
+        $this->dbforge->drop_table( 'user_group', TRUE );
+        $this->dbforge->drop_table( 'user', TRUE );
+    }
+
+    /**
+     * __lift
+     * 
+     * prepara a autenticacao
+     * 
+     *
+     * @return void
+     */
+    private function __lift() {
+        passthru( "php maker auth setup && php maker migrate && php maker auth fill" );
+    }
+
+    /**
+     * auth
+     * 
+     * comandos relacionados a autenticacao
+     *
+     * @param [type] $action
+     * @return void
+     */
     public function auth( $action ) {
 
-        
-        $this->__fillTables();
-        print 'Autenticação iniciada com sucesso'.PHP_EOL;
+        switch( $action ) {
+            case 'rollback':
+                $this->__rollback();
+            break;
+            case 'setup':
+                passthru( " cp -Rf application/core/templates/auth/* application/ " );
+                print 'Autenticação iniciada com sucesso'.PHP_EOL;
+            break;
+            case 'fill':
+                $this->__fillTables();
+                print 'Tabelas preenchidas'.PHP_EOL;
+            break;
+            case 'lift':
+                $this->__lift();
+                print 'Autenticação setada com sucesso'.PHP_EOL;
+            break;
+        }
     }
 }
 
