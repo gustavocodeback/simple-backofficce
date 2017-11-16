@@ -5,23 +5,23 @@
             Histórias            
         </div>
         <ul class="card-ul">
-            <?php if( auth() ): ?>
+            @if( auth() )
             <li>
-                <a href="<?php echo e(site_url( 'category/list' )); ?>">
+                <a href="{{ site_url( 'category/list' ) }}">
                     Categorias
                 </a>
             </li>
             <li>
-                <a href="<?php echo e(site_url( 'auth/logout' )); ?>">
+                <a href="{{ site_url( 'auth/logout' ) }}">
                     Personagens
                 </a>
             </li>
             <li>
-                <a href="<?php echo e(site_url( 'auth/logout' )); ?>">
+                <a href="{{ site_url( 'auth/logout' ) }}">
                     Histórias
                 </a>
             </li>
-            <?php endif; ?>
+            @endif
         </ul>
     </div><!-- card de acesso rápido -->
 
@@ -30,18 +30,18 @@
             Acesso rápido            
         </div>
         <ul class="card-ul">
-            <?php if( !auth() ): ?>
+            @if( !auth() )
             <li>
-                <a href="<?php echo e(site_url( 'auth' )); ?>">Login</a>
+                <a href="{{ site_url( 'auth' ) }}">Login</a>
             </li>
             <li>
-                <a href="<?php echo e(site_url( 'auth/signup' )); ?>">Signup</a>
+                <a href="{{ site_url( 'auth/signup' ) }}">Signup</a>
             </li>
-            <?php else: ?>
+            @else
             <li>
-                <a href="<?php echo e(site_url( 'auth/logout' )); ?>">Sair</a>
+                <a href="{{ site_url( 'auth/logout' ) }}">Sair</a>
             </li>
-            <?php endif; ?>
+            @endif
         </ul>
     </div><!-- card de acesso rápido -->
 </div>

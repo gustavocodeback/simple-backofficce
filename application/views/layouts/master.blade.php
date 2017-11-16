@@ -11,7 +11,7 @@
 <body>
 
     @include('components.navbar')
-    <div class="container wrapper">
+    <div class="container mt-2">
         <div class="row">
             <div class="col-4">
                 @include('components.sidebar')

@@ -15,7 +15,7 @@ class Welcome extends SG_Controller {
 	 * @return void
 	 */	
 	public function index() {
-		echo 'Bem-vindo';
+		redirect( site_url( 'auth' ) );
 	}
 }
 

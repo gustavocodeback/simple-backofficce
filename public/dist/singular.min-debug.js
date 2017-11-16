@@ -5897,6 +5897,17 @@ $( document ).ready( function() {
 
 
 
+$( document ).ready(function(){
+    $( '.cropper' ).uploader();
+})
+$( document ).ready( function(){
+
+});
+
+$( document ).ready( function(){
+
+});
+
 $( document ).ready( function(){
 
 });
