@@ -26,9 +26,23 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 	public function __construct() {
 		parent::__construct();
 
+		// Seta o contexto
+		context( '%_MODEL_FILE_%' );
+
 		// carrega a model
 		$this->load->model( '%_MODEL_FILE_%' );
 		$this->model = $this->%_MODEL_CLASS_%;
+
+		// Verifica se existe um id
+		$id = $this->input->get( 'id' );
+		$model = $this->model;
+		if ( $id ) {
+			if ( $md = $this->model->findById( $id ) ) $model = $md;
+		}
+		
+		// Seta a model do grid
+		setItem( 'url', '%_MODEL_FILE_%/datatables' );
+		setItem( 'modelGrid', $model );
 	}
 
 	/**
@@ -47,6 +61,19 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 	}
 
 	/**
+	 * datatables
+	 * 
+	 * Volta a tabela
+	 *
+	 * @return void
+	 */
+	public function datatables() {
+		
+		// Chama o método da datatables
+		echo $this->model->DataTables();
+	}
+
+	/**
 	 * list
 	 * 
 	 * lista os dados
@@ -54,15 +81,11 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 	 * @return void
 	 */
 	public function list() {
+		$this->protectIt( 'read' ); 
+		setTitle( 'Listagem' );
 		
-		// lista os dados
-		$list = $this->model->paginate();
-
-		// seta na view
-		$this->view->set( 'list', $list );
-
-		// carrega a view
-		$this->view->render( 'default-list-view' );
+		// Carrega o grid
+		view( 'grid/grid' );
 	}
 
 	/**
@@ -74,55 +97,25 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 	 * @return void
 	 */
 	public function delete( $id = false ) {
+		$this->protectIt( 'delete' ); 
 
 		// carrega a entidade
 		$item = $this->model->findById( $id );
 		if ( !$item ) close_page( 'home' );
 
 		// deleta o item
-		$item->delete();
+		if( $item->delete() ) {
+
+			// Seta a mensagem
+			flash( 'swaSuccessBody', 'Item excluido com sucesso' );
+		} else {
+
+			// Seta a mensagem
+			flash( 'swaErrorBody', 'Erro ao excluir o item' );
+		}
 
 		// carrega a view
-		$this->view->render( 'default-item-view' );
-	}
-
-	/**
-	 * create
-	 * 
-	 * cria um dado
-	 *
-	 * @return void
-	 */
-	public function create() {
-
-		// carrega o item
-		$item = $this->model->new();
-
-		// seta na view
-		$this->view->set( 'item', $item );
-
-		// carrega o formulario de criacao
-		$this->view->render( 'default-create-view' );
-	}
-
-	/**
-	 * update
-	 * 
-	 * faz a atualização de um dado
-	 *
-	 * @param boolean $id
-	 * @return void
-	 */
-	public function update( $id = false ) {
-
-		// carrega a entidade
-		$item = $this->model->findById( $id );
-
-		// seta na view
-		$this->view->set( 'item', $item );
-
-		// carrega a view
-		$this->view->render( 'default-view-item' );
+		close_page( '%_MODEL_FILE_%/list' );
 	}
 
 	/**
@@ -134,12 +127,14 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 	 * @return void
 	 */
 	public function save( $id = false ) {
-
+		
 		// verifica se existe um id
 		if ( $id ) {
 			$item = $this->model->findById( $id );
+			$this->protectIt( 'edit' );
 		} else {
 			$item = $this->model->new();
+			$this->protectIt( 'add' ); 			
 		}
 
 		// valida o formulario
@@ -150,17 +145,21 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 
 			// tenta salvar o item
 			if ( $item->save() ) {
-				$this->view->set( 'success', 'Item salvo com sucesso' );
+				
+				// Seta a mensagem
+				flash( 'swaSuccessBody', 'Item salvo com sucesso' );
 			} else {
-				$this->view->set( 'errors', 'Erro ao salvar o item' );
+
+				// Seta a mensagem
+				flash( 'swaErrorBody', 'Erro ao salvar o item' );
 			}
 		} else {
-			$this->view->set( 'errors', validation_errors() );
+			flash( 'swaErrorBody', validation_errors() );
 		}
 
 		// carrega a view
-		$this->view->render( 'view-default' );
+		view( 'grid/grid' );
 	}
 }
 
-/* end of file */
+// End of file

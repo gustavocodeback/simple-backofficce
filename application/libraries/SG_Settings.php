@@ -39,6 +39,7 @@ class SG_Settings {
         $this->ci->db->query( " CREATE TABLE IF NOT EXISTS `sg_settings` (
             `id` int(11) NOT NULL,
             `key` varchar(255) NOT NULL,
+            `slug` varchar(255) NOT NULL,
             `val` text NOT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;" );
 
@@ -75,7 +76,7 @@ class SG_Settings {
      * @param [type] $value
      * @return void
      */
-    public function set( $key, $value ) {
+    public function set( $key, $value, $slug = 'system' ) {
 
         // pega o valor
         $val = $this->get( $key );
@@ -85,7 +86,7 @@ class SG_Settings {
             $this->ci->db->where( [ 'key' => $key ] );
             $this->ci->db->update( 'sg_settings', [ 'val' => $value ] );
         } else {
-            $this->ci->db->insert( 'sg_settings', [ 'key' => $key, 'val' => $value ] );            
+            $this->ci->db->insert( 'sg_settings', [ 'key' => $key, 'val' => $value, 'slug' => $slug ] );            
         }
     }
 
@@ -97,12 +98,15 @@ class SG_Settings {
      * @param string $key
      * @return void
      */
-    public function get( string $key, $default = null ) {
+    public function get( string $key, $default = null, $slug = false ) {
         
         // prepara a busca
         $this->ci->db->from( 'sg_settings' )
                  ->select( '*' )
                  ->where( " key = '$key' " );
+        
+        // Verifica se existe um slug
+        if ( $slug ) $this->ci->db->where( " $slug = '$slug' " );
 
         // faz a busca
         $busca = $this->ci->db->get();
@@ -112,6 +116,28 @@ class SG_Settings {
             return $busca->result_array()[0]['val'];
         } else return $default;
     }
+
+    /**
+     * getBySlug
+     * 
+     * Pega pelo slug
+     * 
+     */
+    public function getBySlug( $slug ) {
+
+        // prepara a busca
+        $this->ci->db->from( 'sg_settings' )
+        ->select( '*' )
+        ->where( " slug = '$slug' " );
+
+        // faz a busca
+        $busca = $this->ci->db->get();
+
+        // verifica se existem resultados
+        if ( $busca->num_rows() > 0  ) {
+            return $busca->result_array();
+        } else return null;
+    }
 };
 
-/* end of file */
+// End of file

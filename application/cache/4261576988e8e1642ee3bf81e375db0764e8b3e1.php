@@ -11,7 +11,7 @@
 <body>
 
     <?php echo $__env->make('components.navbar', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-    <div class="container mt-2">
+    <div class="container wrapper">
         <div class="row">
             <div class="col-4">
                 <?php echo $__env->make('components.sidebar', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

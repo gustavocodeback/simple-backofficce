@@ -15,7 +15,7 @@ $config['schema'] = array (
     'auto_increment' => true,
     'null' => false,
   ),
-  'routine_id' => 
+  'component_id' => 
   array (
     'type' => 'int',
     'constraint' => 11,

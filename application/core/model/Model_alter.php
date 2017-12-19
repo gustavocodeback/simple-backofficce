@@ -57,6 +57,33 @@ class Model_alter extends CI_Model {
     }
 
     /**
+     * registerLog
+     * 
+     * Registra o log
+     *
+     * @param [type] $action
+     * @param [type] $text
+     * @param string $color
+     * @return void
+     */
+    public function registerLog( $params ) {
+
+        // Verifica se a tabela é diferente da tabela de log
+        if ( strtolower( $this->table() ) !== 'log' ) {
+
+            // Carrega a model de log
+            $logModel = model( 'log' );
+
+            // Seta o usuário
+            $params['user_id'] = auth() ? auth()->id : null;
+
+            // Seta os atributos
+            $log = $logModel->new();
+            $log->fill( $params )->save();
+        } else return false;
+    }
+
+    /**
      * hooks
      *
      * volta os hooks
@@ -157,6 +184,7 @@ class Model_alter extends CI_Model {
 
         // pega os dados
         $insertData = $this->serialize();
+        $jsonString = safe_json_encode( $insertData );
 
         // verifica se é um update
         if ( $this->id ) {
@@ -170,6 +198,14 @@ class Model_alter extends CI_Model {
 
             // verifica se conseguiu fazer o update
             if ( $result ) {
+
+                // Registra o log
+                $this->registerLog([
+                    'color'  => 'success',
+                    'action' => 'ATUALIZOU '.strtoupper( $this->table() ),
+                    'text'   => 'O registro de ID '.$this->id.' foi atualizado',
+                    'json'   => $jsonString
+                ]);
 
                 // atualiza o update
                 $this->updated_at = $insertData['updated_at'];
@@ -191,6 +227,14 @@ class Model_alter extends CI_Model {
 
                 // seta o id
                 $this->id = $this->db->insert_id();
+
+                // Registra o log
+                $this->registerLog([
+                    'color'  => 'primary',
+                    'action' => 'CRIOU '.strtoupper( $this->table() ),
+                    'text'   => 'O registro de ID '.$this->id.' foi criado',
+                    'json'   => $jsonString
+                ]);
 
                 // atualiza o update
                 $this->created_at = $insertData['created_at'];
@@ -217,11 +261,31 @@ class Model_alter extends CI_Model {
             // executa o hook
             $this->useHook( 'beforeDelete', null );
 
+            // pega os dados
+            $deleteData = $this->serialize();
+            $jsonString = safe_json_encode( $deleteData );
+
             // exclui o item
             $result = $this->db->delete( $this->table(), [ 'id' => $this->id ] );
 
             // verifica o resultado
-            if ( $result ) $this->useHook( 'afterDelete', $this->id );
+            if ( $result ) {
+                
+                // Grava o hook
+                // Registra o log
+                $this->registerLog([
+                    'color'  => 'danger',
+                    'action' => 'DELETOU '.strtoupper( $this->table() ),
+                    'text'   => 'O registro de ID '.$this->id.' foi excluido',
+                    'json'   => $jsonString
+                ]);
+
+                // Seta o hook
+                $this->useHook( 'afterDelete', $this->id );
+            }
+
+            // Verifica o que deve ser retornado
+            return $result ? true : false;
 
         } else return false;
     }
@@ -278,11 +342,13 @@ class Model_alter extends CI_Model {
 
                 // adiciona a classe
                 $this->$classField = $data[$classField];
+                $this->$classField = empty( $data[$classField] ) ? null : $data[$classField];
 
             } else if ( isset( $data[$tableField ] ) ) {
                 
                 // adiciona a classe
                 $this->$classField = $data[$tableField];
+                $this->$classField = empty( $data[$tableField] ) ? null : $data[$tableField];                
             }
         }
 
@@ -292,6 +358,55 @@ class Model_alter extends CI_Model {
         // volta a instancia
         return $this;
     }
+
+    /**
+     * permissions
+     * 
+     * Permissoes de alteracoes na model
+     * 
+     */
+    public function permissions() {
+        return [];
+    }
+
+    /**
+     * authorize
+     * 
+     * Verifica se um usuário tem permissão para realizar
+     * uma ação especifica na model
+     * 
+     */
+    public function authorize( $action = 'any' ) {
+
+        // Obtem as permissoes
+        $permissions = $this->permissions();
+        $canAccess   = false;
+
+        // Verifica se exis a ação
+        if ( !isset( $permissions[$action] ) ) return false;
+
+        // Pega os grupos
+        $groups = $permissions[$action];
+
+        // Percorre todas as ações
+        foreach( $groups as $group ) {
+
+            // Verifica se esta livre para usuário não logados
+            if ( $group === 'unlogged' && !auth() ) return true;
+            
+            // Verifica se esta livre para usuario logados
+            if ( $group === 'logged' && auth() ) return true;
+
+            // Verifica se esta livre para qualquer grupo
+            if ( $group === 'any' ) return true;
+            
+            // Verifica se o usuário esta no grupo
+            if ( inGroup( $group ) ) return true;
+        }
+
+        // Volta false por padrão
+        return false;
+    }
 }
 
-/* end of file */
+// End of file

@@ -52,6 +52,18 @@ class Group_finder extends SG_Model {
     }
 
     /**
+     * nonAdmin
+     * 
+     * Busca os grupos que não são admin
+     *
+     * @param [type] $slug
+     * @return void
+     */
+    public function nonAdmin() {
+        return $this->where( " slug != 'admin' " )->find();
+    }
+
+    /**
      * defaultGroup
      * 
      * pega o grupo padrao
@@ -63,4 +75,4 @@ class Group_finder extends SG_Model {
     }
 }
 
-/* end of file */
+// End of file

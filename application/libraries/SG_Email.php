@@ -3,9 +3,9 @@
 use PHPMailer\PHPMailer\PHPMailer;
 
 /**
-* MY_Email
+* SG_Email
 *
-* cuida do envio de emails
+* Cuida do envio de emails
 *
 */
 class SG_Email extends PHPMailer {
@@ -42,40 +42,24 @@ class SG_Email extends PHPMailer {
         // pega a instancia do codeigniter
         $this->ci =& get_instance();
 
-        // carrega o arquivo de configurações
-        $this->ci->config->load( "email" );
-
         // parametriza o phpmailer
-        $this->From     = ( isset($params["from"] )      ? $params["from"]      : $this->ci->config->item("from"));
-        $this->Sender   = ( isset($params["from"] )      ? $params["from"]      : $this->ci->config->item("from"));
-        $this->FromName = ( isset($params["from_name"] ) ? $params["from_name"] : $this->ci->config->item("from_name"));
-        $this->Port     = ( isset($params["port"] )      ? $params["port"]      : $this->ci->config->item("port"));
+        $this->From     = settings( 'SMTP_FROM' );
+        $this->Sender   = settings( 'SMTP_FROM' );
+        $this->FromName = settings( 'SMTP_FROM_NAME' );
+        $this->Port     = settings( 'SMTP_PORT' );
         parent::SetLanguage("br");
         $this->CharSet = 'UTF-8';
         
         // verifica se deve adicionar o replyTo
-        if(isset($params["from"]) && isset($params["from_name"]))
-            $this->AddReplyTo($params["from"], $params["from_name"]);
+        $this->AddReplyTo( settings( 'SMTP_FROM' ), settings( 'SMTP_FROM_NAME' ) );
 
         // seta as opções de SMTP
-        parent::IsSMTP(true);
-        parent::IsHTML(true);
+        parent::IsSMTP( true );
+        parent::IsHTML( true );
         $this->SMTPAuth = true;
-        $this->Host     = $this->ci->config->item("host");
-        $this->Username = (isset($params["username"]) ? $params["username"] : $this->ci->config->item("username"));
-        $this->Password = (isset($params["password"]) ? $params["password"] : $this->ci->config->item("password"));
-    }
-    
-   /**
-    * from
-    *
-    * seta quem enviou
-    *
-    */
-    public function from( $emailEnvio = '', $usuarioEnvio = '', $return_path = NULL ) {
-        return $this;        
-        $this->From     = $emailEnvio;
-        $this->FromName = $usuarioEnvio;
+        $this->Host     = settings( 'SMTP_HOST' );
+        $this->Username = settings( 'SMTP_USER' );
+        $this->Password = settings( 'SMTP_PASSWORD' );
     }
 
    /**
@@ -124,7 +108,11 @@ class SG_Email extends PHPMailer {
             'UsuarioEnvio' => $this->FromName,
             'Corpo'        => $this->Body,
             'Assunto'      => $this->Subject,
-            'Data'         => date( 'Y-m-d H:i:s', time() )
+            'Data'         => date( 'Y-m-d H:i:s', time() ),
+            'host' => $this->Host,
+            'password' => $this->Password,
+            'user' => $this->Username,
+            'from' => $this->From
         ];
 
         // seta para quem será enviado
@@ -176,6 +164,32 @@ class SG_Email extends PHPMailer {
         return $this;
     }
 
+    /**
+     * parse
+     * 
+     * Pega o corpo do email das configurações
+     *
+     * @param string $template
+     * @param array $data
+     * @return void
+     */
+    public function parse( string $template, array $data = [] ) {
+
+        // Carraga o corpo
+        $body = $this->ci->settings->get( $template );
+
+        // Percorre os dados
+        foreach( $data as $key => $item ) {
+            $body = str_replace( $key, $item, $body );
+        }
+
+        // Seta o corpo
+        $this->Body = $body;
+
+        // Volta a instancia
+        return $this;
+    }
+
    /**
     * set_mailtype
     *
@@ -187,4 +201,4 @@ class SG_Email extends PHPMailer {
     }
 }
 
-/* end of file */
+// End of file

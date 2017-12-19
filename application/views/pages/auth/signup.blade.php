@@ -1,6 +1,5 @@
 @extends('layouts.login')
 @section('content')
-
     {!! form_open( 'auth/signup', [ 'class' => 'pb-5 col-md-4 offset-md-4'] ) !!}
 
         {!! inputText( 'Nome', 'name', [ 'icon' => 'user', 'attr' => [ 'value' => $user->name ] ] ) !!}
@@ -13,8 +12,6 @@
                 <a class="text-light" href="{{ site_url( 'auth' ) }}">Voltar ao login</a>
             </div>
         </div><!-- links de ação -->
-
-        @include( 'components.error-alert' )
 
         <div class="row mt-3" style="padding-bottom: 100px">
             <div class="col">

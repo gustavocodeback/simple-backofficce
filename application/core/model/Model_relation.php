@@ -86,9 +86,6 @@ class Model_relation extends Model_finder {
         // seta a chave
         $me = strtolower( str_replace( '_model', '', $this->entity ) );
         $key = $me.'_id';
-
-        // seta o plural
-        $pl = plural( $model );
         
         // verifica se existe instancias
         if ( $instances ) {
@@ -113,4 +110,4 @@ class Model_relation extends Model_finder {
     }
 }
 
-/* end of file */
+// End of file

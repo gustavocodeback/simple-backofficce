@@ -33,6 +33,21 @@ class User_model extends User_finder {
     );
 
     /**
+     * visibles
+     * 
+     * Campos visiveis no grid
+     *
+     * @var array
+     */
+    public $visibles = [
+        'ID',
+        'Nome',
+        'E-mail',
+        'Grupos',        
+        'Ações'
+    ];
+
+    /**
      * __construct
      * 
      * Método construtor
@@ -153,6 +168,77 @@ class User_model extends User_finder {
             'logged_at'  => $this->logged_at,
         ];
     }
+
+    /**
+     * columns
+     * 
+     * Colunas para o DataTables
+     *
+     * @return void
+     */
+    public function DataTables() {
+        
+        // Carrega a library
+        $this->load->library( 'DataTables' );
+
+        // Columns
+        $columns = [
+            [   'db' => 'id',    'dt' => 0 ],
+            [   'db' => 'name',  'dt' => 1 ],
+            [   'db' => 'email', 'dt' => 2 ],
+            [   'db' => 'id',    
+                'dt' => 3,
+                'formatter' => function( $d, $row ) {
+
+                    // Carrega a model
+                    $groups = groups( $d );
+
+                    // Percorre os grupos
+                    $tpl = '';
+                    foreach( $groups as $group ) {
+                        $tpl .= " <span class='badge badge-success'>$group->slug</span> ";
+                    }
+                    return $tpl;
+                }
+            ],  [   
+                'db' => 'id',    
+                'dt' => 4,
+                'formatter' => function( $d, $row ) {
+
+                    // Verifica se não é admin
+                    if ( !admin() ) return '<small>-- Nenhuma ação --</small>';
+
+                    // Formata os botoes
+                    $del  = rmButton( 'user/delete/'.$d );
+                    $group = "<a href='".site_url( 'user/list/'.$d )."' class='btn btn-sm text-light btn-warning' title='Grupos de acesso'>
+                                    <i class='fa fa-users'></i>
+                              </a>";
+
+                    // Volta os botões
+                    return $del.'&nbsp'.$group;
+                }
+            ]
+        ];
+
+        // Volta o resultado
+        return $this->datatables->send( $this->table(), $columns );
+    }
+
+    /**
+     * permissions
+     * 
+     * Verifica as permissoes do usuário
+     * 
+     */
+    public function permissions() {
+        return [
+            'read'       => [ 'logged' ],
+            'delete'     => [ 'admin' ],
+            'add'        => [ 'any' ],
+            'edit'       => [ 'logged' ],
+            'putOnGroup' => [ 'admin' ]
+        ];
+    }
 }
 
-/* end of file */
+// End of file

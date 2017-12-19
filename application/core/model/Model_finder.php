@@ -262,6 +262,24 @@ class Model_finder extends Model_alter
     }
 
     /**
+     * order
+     * 
+     * Seta a ordenação dos resultados
+     *
+     * @param [type] $field
+     * @param [type] $asc
+     * @return void
+     */
+    public function order( $field, $order = 'ASC' ) {
+
+        // Seta o order_by
+        $this->db->order_by( $field, $order );
+
+        // Volta a instancia
+        return $this;
+    }
+
+    /**
      * paginate
      *
      * pagina os resultados
@@ -276,8 +294,8 @@ class Model_finder extends Model_alter
         $this->count = 0;
 
         // seta a pagina
-        $this->page   = $this->input->get( 'page' ) ? $this->input->get( 'page' ) : $page;
-        $this->offset = ( $page - 1 ) * $qtde;
+        $this->page   = $this->input->get( 'per_page' ) ? $this->input->get( 'per_page' ) : $page;
+        $this->offset = ( $this->page - 1 ) * $qtde;
 
         // seta a quantidade por pagina
         $this->perPage = $qtde;
@@ -304,22 +322,81 @@ class Model_finder extends Model_alter
             $query      = $this->db->last_query();
             $total      = $this->getCount( $query );
             $total_page = ceil( $total / $this->perPage );
+            $result     = $src->result_array();
             
+            // percorre todos os resultados
+            $data = [];
+            foreach ( $result as $item ) {
+                
+                // instancia uma nova entidade
+                $entity = $this->new();
+        
+                // faz o parse
+                $entity->load( $item );
+        
+                // retorna a entidade
+                $data[] = $entity;
+            }
+
             // volta o objeto de paginação
             return (object) [
-                'page'        => $page,
-                'total_pages' => $total_page,
-                'total_itens' => $total,
-                'data'        => $this->get()
+                'page'        => $this->page == 0 ? 1 : $this->page,
+                'per_page'    => (int) $this->perPage,
+                'offset'      => (int) $this->offset,            
+                'total_pages' => (int) $total_page,
+                'total_itens' => (int) $total,
+                'data'        => $data
             ];
 
         } else return (object) [
             'page'        => $page,
+            'per_page'    => (int) $this->perPage,            
+            'offset'      => (int) $this->offset,            
             'total_pages' => 0,
             'total_itens' => 0,
             'data'        => []
         ];
     }
+
+    /**
+     * createLinks
+     * 
+     * Cria os links de paginação
+     *
+     * @param [type] $pagination
+     * @return void
+     */
+    public function createLinks( $pagination ) {
+
+        // Carrega a library
+        $this->load->library( 'pagination' );
+        
+        // Configura a lib
+        $config['per_page']           = $pagination->per_page;
+        $config['use_page_numbers']   = TRUE;
+        $config['page_query_string']  = TRUE;
+        $config['reuse_query_string'] = TRUE;  
+        $config['base_url']           = site_url( 'grid/index/component' );        
+        $config['num_tag_open'] 	  = '<li class="page-item"><span class="page-link">';                
+        $config['cur_tag_open'] 	  = '<li class="page-item active"><span class="page-link">';        
+        $config['num_tag_close'] 	  = '</span></li>';        
+        $config['full_tag_open'] 	  = '<div class="pagging text-center"><nav><ul class="pagination">';
+        $config['full_tag_close'] 	  = '</ul></nav></div>';
+        $config['cur_tag_close'] 	  = '<span class="sr-only">(current)</span></span></li>';
+        $config['next_tag_open'] 	  = '<li class="page-item"><span class="page-link">';
+        $config['next_tagl_close'] 	  = '<span aria-hidden="true">&raquo;</span></span></li>';
+        $config['prev_tag_open'] 	  = '<li class="page-item"><span class="page-link">';
+        $config['prev_tagl_close'] 	  = '</span></li>';
+        $config['first_tag_open'] 	  = '<li class="page-item"><span class="page-link">';
+        $config['first_tagl_close']   = '</span></li>';
+        $config['last_tag_open'] 	  = '<li class="page-item"><span class="page-link">';
+        $config['last_tagl_close'] 	  = '</span></li>';
+        $config['total_rows']         = $pagination->total_itens;
+        $this->pagination->initialize( $config );
+        
+        // Volta os links
+        return $this->pagination->create_links();
+    }
 }
 
-/* end of file */
+// End of file

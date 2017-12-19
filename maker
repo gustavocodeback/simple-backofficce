@@ -19,7 +19,7 @@ foreach( $argv as $ind => $arg ) {
 }
 
 // execucao
-passthru( "php index.php cmd/maker ".$params );
+passthru( "php index.php cmd/loaderCMD run ".$params );
 exec( "cd .. && chown ".$_config['user'] .":".$_config['group']." -Rf ".$_config['project_folder'] );
 
 /* end of file */

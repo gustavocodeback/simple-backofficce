@@ -17,11 +17,51 @@ if ( ! function_exists( 'auth' ) ) {
     }
 }
 
+/**
+ * admin
+ * 
+ * Verifica se o usuário logado é admin
+ * 
+ */
+if ( ! function_exists( 'admin' ) ) {
+    function admin() {
+        return inGroup( 'admin' );
+    }
+}
+
 
 /**
- * auth
+ * groups
  * 
- * verifica se o esta logado
+ * Pega os grupos de um usuário
+ * 
+ */
+if ( ! function_exists( 'groups' ) ) {
+    function groups( $user_id ) {
+
+        // seta a instancia do codeignite
+        $ci =& get_instance();
+        $ci->load->model( [ 'user', 'user_group' ] );
+
+        // Pega o usuário logado
+        $user = $ci->User->findById( $user_id );
+        if ( !$user ) return false;
+
+        // Pega os grupos
+        $groups = $user->hasMany( 'user_group' )->find();
+        if ( !$groups ) return false;
+
+        // Carrega os grupos
+        return array_map( function( $item ) {
+            return $item->belongsTo( 'group' );
+        }, $groups );
+    }
+}
+
+/**
+ * send
+ * 
+ * Envia dados pela API
  * 
  */
 if ( ! function_exists( 'send' ) ) {
@@ -180,19 +220,76 @@ if ( ! function_exists( 'can' ) ) {
 }
 
 /**
- * auth
+ * inGroup
  * 
- * verifica se o esta logado
+ * Verifica se um usuário está em um dos grupos listados
  * 
  */
-if ( ! function_exists( 'protect' ) ) {
-    function protect() {
+if ( ! function_exists( 'inGroup' ) ) {
+    function inGroup( $group, $user_id = false ) {
 
-        // verifica se existe um usuário
+        // Pega a instância do CI
+        $ci =& get_instance();
+        $ci->load->model( [ 'user_group', 'user' ] );
+
+        // Verififca se $group é um array
+        $groups = ( is_array( $group ) ) ? $group : [ $group ];
+
+        // Verifica se foi informado um usuário
+        $user = ( $user_id ) ? $ci->user->findById( $user_id ) : auth();
+        if ( !$user ) return false;
+
+        // Pega os grupos do usuário
+        $userGroups = $user->hasMany( 'user_group' )->find();
+        if ( !$userGroups ) return false;
+
+        // Percorre todos os grupos
+        $canAccess = false;
+        foreach( $groups as $group ) {
+
+             // Percorre os grupos do usuário
+            foreach( $userGroups as $userGroup ) {
+
+                // Verifica os slug
+                if ( $userGroup->belongsTo( 'group' )->slug === $group ) $canAccess = true;
+            }
+        }
+
+        // Volta a variavel de status
+        return $canAccess;
+    }
+}
+
+/**
+ * unloggedOnly
+ * 
+ * Permite acesso apenas de usuário não logados
+ * 
+ */
+if ( ! function_exists( 'unloggedOnly' ) ) {
+    function unloggedOnly() {
+
+        // Verifica se o usuário está logado
+        if ( auth() ) {
+            close_page( 'home' );
+            exit();
+        } else return true;
+    }
+}
+
+/**
+ * loggedOnly
+ * 
+ * Permite acesso apenas de usuário logados
+ * 
+ */
+if ( ! function_exists( 'loggedOnly' ) ) {
+    function loggedOnly() {
+
+        // Verifica se o usuário está logado
         if ( !auth() ) {
             close_page( 'auth' );
             exit();
-            return;
         } else return true;
     }
 }

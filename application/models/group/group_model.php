@@ -25,6 +25,20 @@ class Group_model extends Group_finder {
     );
 
     /**
+     * visibles
+     * 
+     * Campos visiveis no grid
+     *
+     * @var array
+     */
+    public $visibles = [
+        'ID',
+        'Nome',
+        'Slug',       
+        'Ações'
+    ];
+
+    /**
      * __construct
      * 
      * Método construtor
@@ -67,6 +81,108 @@ class Group_model extends Group_finder {
 
         // salva o grupo
         return $assoc->save();
+    }
+
+    /**
+     * canUseComponent
+     * 
+     * Verifica se um grupo tem acesso á um componente
+     *
+     * @param [type] $component_id
+     * @return void
+     */
+    public function canUseComponent( $component_id = null ) {
+
+        // Verifica se foi informado um componente
+        if ( !$component_id ) return false;
+
+        // Carrega a model de permissao
+        $this->load->model( 'permission' );
+
+        // Verifica se existe
+        if ( $this->Permission->byComponentGroup( $component_id, $this->id ) ) {
+            return true;
+        } else return false;
+    }
+
+    /**
+     * columns
+     * 
+     * Colunas para o DataTables
+     *
+     * @return void
+     */
+    public function DataTables() {
+        
+        // Carrega a library
+        $this->load->library( 'DataTables' );
+
+        // Columns
+        $columns = [
+            [   'db' => 'id',   'dt' => 0 ],
+            [   'db' => 'name', 'dt' => 1 ],
+            [   'db' => 'slug', 'dt' => 2 ],  
+            [   
+                'db' => 'id',    
+                'dt' => 3,
+                'formatter' => function( $d, $row ) {
+
+                    // Formata a data
+                    $del  = ( $row['slug'] === 'admin' ) ? '' : rmButton( 'group/delete/'.$d );
+                    $edit = ( $row['slug'] === 'admin' ) ? '<small>-- Grupo não é editavel --</small>' : editButton( 'group/list?addModal=true&id='.$d );
+
+                    // Volta os botões
+                    return $del.'&nbsp'.$edit;
+                }
+            ]
+        ];
+
+        // Volta o resultado
+        return $this->datatables->send( $this->table(), $columns );
+    }
+
+    /**
+     * form
+     * 
+     * Form de inserção
+     *
+     * @return void
+     */
+    public function form( $key ) {
+        $url = $this->id ? 'group/save/'.$this->id : 'group/save';
+        $data = [
+            'url'    => $url,
+            'fields' => [
+                'name' => [
+                    'label' => 'Nome',
+                    'rules' => 'required|max_length[20]|min_length[2]|alpha',
+                    'type'  => 'text',
+                    'name'  => 'name'
+                ],
+                'slug' => [
+                    'label' => 'Slug',
+                    'rules' => 'required|max_length[20]|min_length[2]|alpha',
+                    'type'  => 'text',
+                    'name'  => 'slug'
+                ]
+            ]
+        ];
+        return $data[$key];
+    }
+
+    /**
+     * permissions
+     * 
+     * Verifica as permissoes do usuário
+     * 
+     */
+    public function permissions() {
+        return [
+            'read'       => [ 'admin' ],
+            'delete'     => [ 'admin' ],
+            'add'        => [ 'admin' ],
+            'edit'       => [ 'admin' ]
+        ];
     }
 }
 

@@ -18,11 +18,11 @@ class User_group_model extends User_group_finder {
      * @var array
      */
     public $fields = array (
-  'user_id' => 'user_id',
-  'group_id' => 'group_id',
-  'created_at' => 'created_at',
-  'updated_at' => 'updated_at',
-);
+        'user_id' => 'user_id',
+        'group_id' => 'group_id',
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at',
+    );
 
     /**
      * __construct

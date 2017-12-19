@@ -17,8 +17,9 @@ if ( !function_exists( 'defaultInput' ) ) {
         $template = '';
 
         // verifica o grid
-        if ( isset( $row ) && $row ) $template .= '<div class="row mt-3">';
-        if ( isset( $col ) && $col ) $template .= "<div class='$col'>";
+        if ( isset( $row ) && $row )     $template .= '<div class="row mt-3">';
+        if ( isset( $col ) && $col )     $template .= "<div class='$col'>";
+        if ( isset( $label ) && $label ) $template .= '<label for="basic-url">'.$label.'</label>';
         if ( isset( $group ) && $group ) $template .= "<div class='$group'>";
         
         // seta os atributos padroes
@@ -125,6 +126,29 @@ if ( ! function_exists( 'inputPassword' ) ) {
         // chama a funcao;
         echo defaultInput( $params );
     }
+}
+
+/**
+ * inputHidden
+ * 
+ * imprime o input hidden
+ * 
+ */
+if ( ! function_exists( 'inputHidden' ) ) {
+   function inputHidden( $name, $value = false, $params = [] ) {
+       
+        // prepara os parametros
+        $params['type']         = 'hidden';
+        $params['attr']['name'] = $name;
+    
+        // Verifica se existe um valor
+        if ( $value ) {
+            $params['attr']['value'] = $value;
+        }
+
+        // chama a funcao;
+        echo defaultInput( $params );
+   }
 }
 
 /* end of file */

@@ -51,4 +51,4 @@ if ( !function_exists( 'file_force_contents' ) ) {
     }
 }
 
-/* end of file */
+// End of file

@@ -62,9 +62,8 @@ $autoload['libraries'] = array( 'database',
                                 'session',
                                 'View',
                                 'form_validation',
-                                'SG_Auth',
-                                'Picture',
                                 'SG_Settings' => 'settings',  
+                                'SG_Auth',  
                                 'errors' );
 
 /*
@@ -101,8 +100,11 @@ $autoload['helper'] = array(  'url',
                               'cmd',
                               'form',
                               'input',
-                              'email',
-                              'auth' );
+                              'view',
+                              'auth',
+                              'edit',
+                              'grid',
+                              'email' );
 
 /*
 | -------------------------------------------------------------------

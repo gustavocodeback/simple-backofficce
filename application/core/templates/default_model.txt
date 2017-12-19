@@ -20,6 +20,15 @@ class %_MODEL_NAME_% extends %_FINDER_NAME_% {
     public $fields = %_FIELDS_%;
 
     /**
+     * visibles
+     * 
+     * Campos visiveis no grid
+     *
+     * @var array
+     */
+    public $visibles = [];
+
+    /**
      * __construct
      * 
      * Método construtor
@@ -39,6 +48,70 @@ class %_MODEL_NAME_% extends %_FINDER_NAME_% {
     public function table() {
         return '%_TABLE_NAME_%';
     }
+
+    /**
+     * main
+     * 
+     * Pega o campo principal
+     *
+     * @return void
+     */
+    public function main() {
+        return $this->id;
+    }
+
+    /**
+     * columns
+     * 
+     * Colunas para o DataTables
+     *
+     * @return void
+     */
+    public function DataTables() {
+        
+        // Carrega a library
+        $this->load->library( 'DataTables' );
+
+        // Columns
+        $columns = [
+            [ 'db' => 'id', 'dt' => 0 ],
+        ];
+
+        // Volta o resultado
+        return $this->datatables->send( $this->table(), $columns );
+    }
+    
+    /**
+     * form
+     * 
+     * Form de inserção
+     *
+     * @return void
+     */
+    public function form( $key ) {
+        $url = $this->id ? 'controller/save/'.$this->id : 'controller/save';
+        $data = [
+            'url'    => $url,
+            'fields' => []
+        ];
+        return $data[$key];
+    }
+
+    /**
+     * permissions
+     * 
+     * Volta o array de permissões
+     *
+     * @return Array
+     */
+    public function permissions() {
+        return [
+            'add'    => [ 'any' ],
+            'edit    => [ 'any' ],
+            'delete' => [ 'any' ],
+            'read'   => [ 'any' ]
+        ];
+    }
 }
 
-/* end of file */
+// End of file

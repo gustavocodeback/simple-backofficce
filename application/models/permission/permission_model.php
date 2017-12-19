@@ -18,15 +18,15 @@ class Permission_model extends Permission_finder {
      * @var array
      */
     public $fields = array (
-  'routine_id' => 'routine_id',
-  'group_id' => 'group_id',
-  'read' => 'read',
-  'update' => 'update',
-  'create' => 'create',
-  'delete' => 'delete',
-  'created_at' => 'created_at',
-  'updated_at' => 'updated_at',
-);
+        'component_id' => 'component_id',
+        'group_id' => 'group_id',
+        'read' => 'read',
+        'update' => 'update',
+        'create' => 'create',
+        'delete' => 'delete',
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at',
+    );
 
     /**
      * __construct

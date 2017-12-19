@@ -38,7 +38,7 @@ class View {
      *
      * @var string
      */
-    public $titlePrefix = 'Singular - ';
+    public $titlePrefix;
 
     /**
      * __construct
@@ -49,8 +49,11 @@ class View {
     public function __construct() {
         $this->ci =& get_instance();
 
+        // Seta o prefixo do titlo
+        $this->titlePrefix = sitename().' - ';
+
         // inicializa a instancia do blade 
-        $this->blade = new Blade( VIEWPATH, APPPATH.'/cache/' );
+        $this->blade = new Blade( FCPATH.DIRECTORY_SEPARATOR.'frontend', APPPATH.'/cache/' );
     }
 
     /**
@@ -101,7 +104,7 @@ class View {
         
         // verifica se o titulo foi setado
         $this->data['title'] = isset( $this->data['title'] ) ? $this->data['title'] : $this->titlePrefix;
-
+        
         // seta o caminho da view
         $view = 'pages/'.$view;
 

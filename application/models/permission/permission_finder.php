@@ -28,16 +28,28 @@ class Permission_finder extends SG_Model {
     }
 
     /**
-     * byRoutineGroup
+     * byComponent
      * 
-     * pega a permissao do grupo na rotina
+     * Busca pelo ID do componente
+     *
+     * @param [type] $component_id
+     * @return void
+     */
+    public function byComponent( $component_id ) {
+        return $this->where( " component_id = $component_id " )->find();
+    }
+
+    /**
+     * byComponentGroup
+     * 
+     * pega o componente
      *
      * @param [type] $routine_id
      * @param [type] $group_id
      * @return void
      */
-    public function byRoutineGroup( $routine_id, $group_id ) {
-        return $this->where( " routine_id = $routine_id AND group_id = $group_id " )->findOne();
+    public function byComponentGroup( $routine_id, $group_id ) {
+        return $this->where( " component_id = $routine_id AND group_id = $group_id " )->findOne();
     }
 }
 

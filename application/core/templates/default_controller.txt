@@ -11,6 +11,9 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+
+		// Seta o contexto
+		context( strtolower( '%_CONTROLLER_NAME_%' ) );
 	}
 	
 	/**
@@ -25,4 +28,4 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 	}
 }
 
-/* end of file */
+// End of file

@@ -145,12 +145,19 @@ class Auth extends SG_Controller {
 			}
 
 			// seta a mensagem de erro
-			$this->view->set( 'errors',  $error->message );
+			$this->view->set( 'errorTitle', 'Erro ao logar' );
+			$this->view->set( 'errorBody',  $error->message );
 			return false;
 		} else {
-			auth()->resetAttempts();
-			close_page( 'home' );
-			return true;
+
+			// Verifica se o usuário está nos grupos de login
+			if ( inGroup( [ 'admin', 'redator', 'suporte' ] ) ) {
+				auth()->resetAttempts();
+				close_page( 'home' );
+				return true;
+			} else {
+				$this->logout();
+			}
 		}
 	}
 
@@ -209,12 +216,15 @@ class Auth extends SG_Controller {
 	 * @return void
 	 */
 	public function index() {
-		$this->view->setTitle( 'Login' );
+		unloggedOnly();
+
+		// Seta o titulo
+		setTitle( 'Login' );
 
 		// cria um novo usuário
 		$user = $this->User->new();
 		$user->fill( $this->input->post(NULL, TRUE) ) ;
-		$this->view->set( 'user', $user );
+		setItem( 'user', $user );
 
 		// valida o formulário
 		if ( $this->__validLoginForm() ) {
@@ -249,11 +259,11 @@ class Auth extends SG_Controller {
 		} else {
 
 			// seta o usuário
-			$this->view->set( 'errors', validation_errors() );
+			setItem( 'errors', validation_errors() );
 		}
 
 		// renderiza 
-		$this->view->render( 'auth/login' );
+		view( 'auth/login' );
 	}
 
 	/**
@@ -264,12 +274,15 @@ class Auth extends SG_Controller {
 	 * @return void
 	 */
 	public function signup() {
-		$this->view->setTitle( 'Signup' );
+		unloggedOnly();
+
+		// Seta o titulo
+		setTitle( 'Signup' );
 
 		// cria um novo usuário
 		$user = $this->User->new();
 		$user->fill( $this->input->post(NULL, TRUE) ) ;
-		$this->view->set( 'user', $user );
+		setItem( 'user', $user );
 
 		// valida o formulário
 		if ( $this->__validSignupForm() ) {
@@ -293,11 +306,12 @@ class Auth extends SG_Controller {
 		} else {
 
 			// seta o usuário
-			$this->view->set( 'errors', validation_errors() );
+			setItem( 'errorTitle', 'Erro ao criar conta' );
+			setItem( 'errorBody', validation_errors() );
 		}
 
 		// carrega a view
-		$this->view->render( 'auth/signup' );
+		view( 'auth/signup' );
 	}
 
 	/**
@@ -308,11 +322,14 @@ class Auth extends SG_Controller {
 	 * @return void
 	 */
 	public function forgot_password() {
-		$this->view->setTitle( 'Equeci minha senha' );
+		unloggedOnly();
+
+		// Seta o titulo
+		setTitle( 'Equeci minha senha' );
 		
 		// seta o usuário padrão
 		$user = $this->User->new();
-		$this->view->set( 'user', $user );
+		setItem( 'user', $user );
 
 		// pega o email
 		$email = $this->input->post( 'email' );
@@ -325,7 +342,8 @@ class Auth extends SG_Controller {
 
 			// se não existir o usuário
 			if ( !$user ) {
-				$this->view->set( 'errors', 'E-mail não cadastrado' );
+				setItem( 'errorTitle', 'Erro ao recuperar a senha' );
+				setItem( 'errorBody', 'E-mail não cadastrado' );
 			} else {
 
 				// seta o token
@@ -333,22 +351,23 @@ class Auth extends SG_Controller {
 
 				// envia o e-mail
 				$this->load->library( 'email' );
-				$this->email->from( 'postmaster@sandbox1fe1cc36a08141f28e9102e42b635f3a.mailgun.org', $this->config->item( 'site_name' ) );
 				$this->email->to( $user->email, $user->name );
-				$this->email->render( 'recovery', [ 'token' => $user->forgot_password_token, 'user_name' => $user->name ] );
-				$this->email->subject( 'Recuperação de senha '.$this->config->item( 'site_name' ) );
+				$this->email->parse( 'RECOVERY_EMAIL', [ '%_TOKEN_%' => $user->forgot_password_token, '%_USER_%' => $user->name ] );
+				$this->email->subject( 'Recuperação de senha '.sitename() );
 
 				// seta a mensagem de sucesso
 				if ( $this->email->send() ) {
-					$this->view->set( 'success', "E-mail enviado com sucesso para <b>$user->email</b>" );
-				} else {
-					$this->view->set( 'errors', 'Erro ao enviar o e-mail' );
+					setItem( 'successTitle', 'Sucesso ao recuperar a senha' );
+					setItem( 'successBody', "E-mail enviado com sucesso para <b>$user->email</b>" );
+				} else {	
+					setItem( 'errorTitle', 'Erro ao recuperar a senha' );
+					setItem( 'errorBody', 'Erro ao enviar o e-mail' );
 				}
 			}
 		}
 		
 		// renderiza a view
-		$this->view->render( 'auth/forgot-password' );
+		view( 'auth/forgot_password' );
 	}
 
 	/**
@@ -360,6 +379,9 @@ class Auth extends SG_Controller {
 	 * @return void
 	 */
 	public function change_password( $token = false ) {
+		unloggedOnly();
+
+		// Seta o titulo
 		$this->view->setTitle( 'Mudar senha' );
 		if ( !$token ) return close_page();
 
@@ -368,7 +390,8 @@ class Auth extends SG_Controller {
 		if ( !$user ) return close_page();
 
 		// seta os dados da view
-		$this->view->set( 'user', $user )->set( 'token', $token );
+		setItem( 'user', $user );
+		setItem( 'token', $token );
 
 		// valida o formulário
 		if ( $this->__validChangePasswordForm() ) {
@@ -388,14 +411,26 @@ class Auth extends SG_Controller {
 
 				// salva o usuário
 				if ( $user->save() ) {
-					// faz o login
+
+					// Faz o login
 					if ( $this->__login( $user->email, $senha ) ) return;
-				} else $this->view->set( 'errors', 'Houve um erro ao tentar alterar essa senha' );
+				} else {
+
+					// Seta as mensagens de erro
+					setItem( 'errorTitle', 'Erro ao alterar a senha' );				
+					setItem( 'errorBody', 'Houve um erro ao tentar alterar essa senha' );
+				}
 			} else {
-				$this->view->set( 'errors', 'O e-mail digitado está incorreto' );
+
+				// Seta as mensagens de erro
+				setItem( 'errorTitle', 'Erro ao alterar a senha' );
+				setItem( 'errorBody', 'O e-mail digitado está incorreto' );
 			}
 		} else {
-			$this->view->set( 'errors', validation_errors() );
+
+			// Seta as mensagens de erro
+			setItem( 'errorTitle', 'Erro ao alterar a senha' );
+			setItem( 'errorBody', validation_errors() );
 		}
 
 		// renderiza a pagina
@@ -410,9 +445,10 @@ class Auth extends SG_Controller {
 	 * @return void
 	 */
 	public function logout() {
+		loggedOnly();
 		$this->sg_auth->logout();
 		close_page( 'auth' );
 	}
 }
 
-/* end of file */
+// End of file
