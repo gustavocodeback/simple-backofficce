@@ -1,5 +1,16 @@
+$theme-colors: (
+    "light" : #e6e6e6,
+    "primary": #49B792,
+    "title": #777,
+    "title-light": #999,
+    "border-light": #d6d6d6
+);
+
 .container {
     max-width: 1000px;
+}
+body {
+    background: #EAEAEA;
 }
 
 // Bootstrap select

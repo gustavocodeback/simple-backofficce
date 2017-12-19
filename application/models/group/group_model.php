@@ -35,7 +35,7 @@ class Group_model extends Group_finder {
         'ID',
         'Nome',
         'Slug',       
-        'Ações'
+        'Ações',
     ];
 
     /**
@@ -129,10 +129,19 @@ class Group_model extends Group_finder {
 
                     // Formata a data
                     $del  = ( $row['slug'] === 'admin' ) ? '' : rmButton( 'group/delete/'.$d );
-                    $edit = ( $row['slug'] === 'admin' ) ? '<small>-- Grupo não é editavel --</small>' : editButton( 'group/list?addModal=true&id='.$d );
+                    $edit = ( $row['slug'] === 'admin' ) ? '<small>-- Não editavel --</small>' : editButton( 'group/list?addModal=true&id='.$d );
 
                     // Volta os botões
                     return $del.'&nbsp'.$edit;
+                }
+            ], [   
+                'db' => 'id',    
+                'dt' => 4,
+                'formatter' => function( $d, $row ) {
+                    return '<label class="custom-control custom-checkbox">
+                                <input value="'.$d.'" type="checkbox" name="ids[]" class="custom-control-input bulkCheckbox">
+                                <span class="custom-control-indicator"></span>
+                            </label>';
                 }
             ]
         ];
@@ -182,6 +191,19 @@ class Group_model extends Group_finder {
             'delete'     => [ 'admin' ],
             'add'        => [ 'admin' ],
             'edit'       => [ 'admin' ]
+        ];
+    }
+
+    /**
+     * bulkActions
+     * 
+     * Ações em massa
+     *
+     * @return void
+     */
+    public function bulkActions() {
+        return [
+            'Excluir' => site_url( 'group/delete_mutiples' )
         ];
     }
 }

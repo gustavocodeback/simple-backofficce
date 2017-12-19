@@ -1,4 +1,4 @@
-<div id="helpbar" class="bg-primary">
+<div id="helpbar">
     <div class="container">
         <div class="row">
             <div class="nav-content text-left col">

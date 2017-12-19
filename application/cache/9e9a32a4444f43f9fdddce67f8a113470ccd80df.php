@@ -20,12 +20,11 @@
 
     <div class="container">
         <?php echo $__env->make( 'components.header.header' , array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-        <?php echo $__env->make( 'components.navbar.navbar' , array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
         <div class="row">
-            <div class="col-md-9 pt-3" style="min-height: 500px;">
+            <div class="col-md-9 p-1">
                 <?php echo $__env->yieldContent( 'content' ); ?>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 p-1">
                 <?php echo $__env->make( 'components.sidebar.sidebar' , array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>  
             </div>
         </div>

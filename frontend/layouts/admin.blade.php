@@ -20,12 +20,11 @@
 
     <div class="container">
         @include( 'components.header.header' )
-        @include( 'components.navbar.navbar' )
         <div class="row">
-            <div class="col-md-9 pt-3" style="min-height: 500px;">
+            <div class="col-md-9 p-1">
                 @yield( 'content' )
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 p-1">
                 @include( 'components.sidebar.sidebar' )  
             </div>
         </div>

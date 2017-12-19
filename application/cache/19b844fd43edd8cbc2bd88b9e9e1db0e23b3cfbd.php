@@ -1,4 +1,4 @@
-<div id="sidebar" class="pt-3">
+<div id="sidebar" class="pl-2 pr-2 pb-5 z-depth-1">
 
     <?php $__currentLoopData = components( 'sidebar-group'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ordem => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     <div class="group-divider">

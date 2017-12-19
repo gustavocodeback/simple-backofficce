@@ -43,8 +43,8 @@
     </div><!-- dados do sistema -->
 
     <?php if( admin() ): ?>
-    <div class="row">
-        <div class="col pt-5">
+    <div class="row mt-3 p-3">
+        <div class="col bg-light pt-3 pl-5 pr-5 z-depth-1">
             <div class="page-header">
                 <h3>Últimos logs</h3>
             </div>
@@ -90,7 +90,7 @@
         </div>
     </div><!-- logs -->
 
-    <div class="row">
+    <div class="row mt-5">
         <div class="col text-center">
             <a href="<?php echo e(site_url( 'log/list' )); ?>">Ver todos os logs</a>
         </div>

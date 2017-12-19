@@ -1,4 +1,4 @@
-<div id="sidebar" class="pt-3">
+<div id="sidebar" class="pl-2 pr-2 pb-5 z-depth-1">
 
     @foreach( components( 'sidebar-group') as $ordem => $item )
     <div class="group-divider">

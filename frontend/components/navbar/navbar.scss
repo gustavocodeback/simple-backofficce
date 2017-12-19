@@ -1,6 +1,6 @@
 // Access do topo da página
 #navbar {
-    border-bottom: 1px solid theme-color( "light" );
+    border-bottom: 1px solid theme-color( "border-light" );
 
     .access-content {
         .access-link {
@@ -10,7 +10,7 @@
             font-size: 16px;
             color: theme-color( "title" );
             padding: 10px 20px;
-            border-right: 1px solid theme-color( "light" );
+            border-right: 1px solid theme-color( "border-light" );
             transition: .25s;
 
             &:hover {
