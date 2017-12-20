@@ -478,7 +478,7 @@ class MakeCMD extends CI_Controller {
     public function serve() {
 
         // executa o compilador
-        passthru( 'gulp compile && gulp serve:watch' );
+        passthru( 'gulp connect' );
     }
 
     /**
