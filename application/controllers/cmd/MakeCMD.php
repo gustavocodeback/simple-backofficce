@@ -73,10 +73,7 @@ class MakeCMD extends CI_Controller {
     public function model($name = false) {
 
         // se não existir um nome
-        if (!$name) {
-            print 'Você deve informar um nome ....';
-            return;
-        }
+        if (!$name) return cmdLine( 'Você deve informar um nome!' );
 
         // pega o nome da tabela
         $table_name = ucfirst( $name );
@@ -90,8 +87,7 @@ class MakeCMD extends CI_Controller {
 
         // verifica se a model já existe
         if ( file_exists( "application/models/$name/$name"."_model.php" ) ) {
-            print "A model já existe ".PHP_EOL;
-            return;
+            cmdLine( 'A model já existe!' );
         }
 
         // pega os campos da tabela
@@ -127,7 +123,7 @@ class MakeCMD extends CI_Controller {
         file_force_contents( "application/models/$name/$name"."_model.php", $record );
         
         // exibe mensagem de sucesso
-        print "Model $name criada com sucesso".PHP_EOL;
+        cmdLine( "Model $name criada com sucesso" );
     }
 
     /**
@@ -141,15 +137,11 @@ class MakeCMD extends CI_Controller {
     public function finder($name = false) {
 
         // se não existir um nome
-        if (!$name) {
-            print 'Você deve informar um nome ....';
-            return;
-        }
+        if (!$name) return cmdLine( 'Você deve informar um nome para o finder!' );
 
         // verifica se o finder já existe
         if ( file_exists( "application/models/$name/$name"."_finder.php" ) ) {
-            print "O finder já existe ".PHP_EOL;
-            return;
+            return cmdLine( "O finder $name já existe!" );
         }
 
         // seta os atributos velhos
@@ -176,7 +168,7 @@ class MakeCMD extends CI_Controller {
         file_force_contents( "application/models/$name/$name"."_finder.php", $record );
     
         // mensagem de sucesso
-        print "Finder $name criado com sucesso ".PHP_EOL;
+        cmdLine( "Finder $name criado com sucesso" );
     }
 
     /**
@@ -287,7 +279,7 @@ class MakeCMD extends CI_Controller {
         file_force_contents( "application/models/$modelName/$modelName"."_table.php", $record );
     
         // mensagem de sucesso
-        print "Tabela $modelName criada com sucesso ".PHP_EOL;
+        cmdLine( "Tabela $modelName criada com sucesso" );
     }
 
     /**
@@ -315,15 +307,11 @@ class MakeCMD extends CI_Controller {
     public function page( $name = false ) {
         
         // se não existir um nome
-        if (!$name) {
-            print 'Você deve informar um nome ....';
-            return;
-        }
+        if (!$name) return cmdLine( "Voce deve informar um nome para a pagina!" );
 
         // verifica se a página já existe
         if ( file_exists( "frontend/pages/$name/$name.blade.php" ) ) {
-            print "A página já existe ".PHP_EOL;
-            return;
+            return cmdLine( "A pagina $name ja existe!" );
         }
 
         // pega os caminhos dos templates
@@ -360,7 +348,7 @@ class MakeCMD extends CI_Controller {
         }
 
         // imprime a mensagem
-        print "Pagina criada com sucesso".PHP_EOL;
+        cmdLine( "Pagina $name criada com sucesso!" );
     }
 
     /**
@@ -374,15 +362,11 @@ class MakeCMD extends CI_Controller {
     public function component( $name = false ) {
         
         // se não existir um nome
-        if (!$name) {
-            print 'Você deve informar um nome ....';
-            return;
-        }
+        if (!$name) return cmdLine( "Voce deve informar um nome para o componente!" );
 
         // verifica se o componente já existe
         if ( file_exists( "frontend/components/$name/$name.blade.php" ) ) {
-            print "O componente já existe ".PHP_EOL;
-            return;
+            cmdLine( "O componente $name ja existe!" );
         }
 
         // pega os caminhos dos templates
@@ -419,7 +403,7 @@ class MakeCMD extends CI_Controller {
         }
 
         // imprime a mensagem
-        print "Componente criada com sucesso".PHP_EOL;
+        cmdLine( "Componente criada com sucesso" );
     }
 
     /**
@@ -433,15 +417,11 @@ class MakeCMD extends CI_Controller {
     public function layout( $name = false ) {
         
         // se não existir um nome
-        if (!$name) {
-            print 'Você deve informar um nome ....';
-            return;
-        }
+        if (!$name) return cmdLine( "Voce deve informar um nome para o layout!" );
 
         // verifica se o componente já existe
         if ( file_exists( "frontend/layouts/$name.blade.php" ) ) {
-            print "O layout já existe ".PHP_EOL;
-            return;
+            return cmdLine( "O Layout $name ja existe!" );
         }
 
         // pega os caminhos dos templates
@@ -465,7 +445,7 @@ class MakeCMD extends CI_Controller {
         }
 
         // imprime a mensagem
-        print "Layout criado com sucesso".PHP_EOL;
+        cmdLine( "Layout $name criado com sucesso!" );
     }
 
     /**
@@ -478,6 +458,7 @@ class MakeCMD extends CI_Controller {
     public function serve() {
 
         // executa o compilador
+        cmdLine( "Iniciando o servidor ..." );
         passthru( 'gulp connect' );
     }
 
@@ -491,6 +472,7 @@ class MakeCMD extends CI_Controller {
     public function install() {
 
         // executa as instalações
+        cmdLine( "Instalando a aplicacao ..." );
         passthru( 'npm install && composer install' );
     }
 
@@ -503,11 +485,9 @@ class MakeCMD extends CI_Controller {
      */
     public function scafold( $crud = false ) {
 
-        // carrega o inflector
-        $this->load->helper( 'inflector' );
-
         // pega todas as tabelas do banco
         $tables = $this->db->list_tables();
+        cmdLine( 'Iniciando scafold da aplicacao ...' );
         
         // percorre as tabelas
         foreach ( $tables as $table ) {
@@ -516,8 +496,7 @@ class MakeCMD extends CI_Controller {
             if ( in_array( $table, $this->exceptions ) ) continue;
 
             // model name
-            $model_name = singular( $table );
-            $model_name = lcfirst( $model_name );
+            $model_name = lcfirst( $table );
 
             // cria a model para a tabela
             $this->model( $model_name.':'.$table );
@@ -537,6 +516,7 @@ class MakeCMD extends CI_Controller {
      * @return void
      */
     public function migrate( $tables = false ) {
+        cmdLine( 'Iniciando a migracao ...' );
 
         // verifica se foi especificado as tabelas
         if ( $tables ) {
@@ -548,6 +528,7 @@ class MakeCMD extends CI_Controller {
 
         // faz a migração
         $this->migration->start( $tables );
+        cmdLine( 'Migracao feita!' );
     }
 
     /**
@@ -561,18 +542,14 @@ class MakeCMD extends CI_Controller {
     public function library( $name = false ) {
          
         // se não existir um nome
-        if (!$name) {
-            print 'Você deve informar um nome ....';
-            return;
-        }
+        if (!$name) return cmdLine( 'Voce deve informar o nome da library' );
 
         // seta o nome
         $name = ucfirst( $name );
 
         // verifica se a página já existe
         if ( file_exists( "application/libraries/$name.php" ) ) {
-            print "A library já existe ".PHP_EOL;
-            return;
+            return cmdLine( "Library $name foi criada com sucesso!" );
         }
 
         // seta as variaveis do template
@@ -591,7 +568,7 @@ class MakeCMD extends CI_Controller {
         file_force_contents( "application/libraries/$name.php", $record );
 
         // imprime a mensagem
-        print "Library criada com sucesso".PHP_EOL;
+        cmdLine( "Library $name criada com sucesso!" );
     }
 
     /**
