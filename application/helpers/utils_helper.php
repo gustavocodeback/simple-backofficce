@@ -329,4 +329,21 @@ if ( ! function_exists( 'settings' ) ) {
     }
 }
 
+/**
+ * oneLine
+ * 
+ * Imprime uma string em uma linha
+ * 
+ */
+if ( !function_exists( 'oneLine' ) ) {
+    function oneLine( $str ) {
+        $str = strip_tags( $str );
+        $str = filter_var( $str, FILTER_SANITIZE_STRING );
+        $str = preg_replace("/(\/[^>]*>)([^<]*)(<)/","\\1\\3",$str);
+        $str = preg_replace("/[\r\n]*/","",$str);
+        $str = str_replace(array("\r","\n"),"",$str);
+        return trim( $str );
+    }
+}
+
 // End of file

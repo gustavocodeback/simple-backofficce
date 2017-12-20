@@ -26,7 +26,7 @@ class %_MODEL_NAME_% extends %_FINDER_NAME_% {
      *
      * @var array
      */
-    public $visibles = [];
+    public $visibles = %_VISIBLES_%;
 
     /**
      * __construct
@@ -73,8 +73,20 @@ class %_MODEL_NAME_% extends %_FINDER_NAME_% {
         $this->load->library( 'DataTables' );
 
         // Columns
-        $columns = [
-            [ 'db' => 'id', 'dt' => 0 ],
+        $columns = %_DATATABLES_%;
+        $columns[] = 
+        [   
+            'db' => 'id',
+            'dt' => %_ACTION_NUMBER_%,  
+            'formatter' => function( $d, $row ) {
+
+                // Formata a data
+                $del  = rmButton( '%_ENTITY_NAME_%/delete/'.$d );
+                $edit = editButton( '%_ENTITY_NAME_%/list?addModal=true&id='.$d );
+
+                // Volta os botões
+                return $del.'&nbsp'.$edit;
+            }
         ];
 
         // Volta o resultado
@@ -89,10 +101,10 @@ class %_MODEL_NAME_% extends %_FINDER_NAME_% {
      * @return void
      */
     public function form( $key ) {
-        $url = $this->id ? 'controller/save/'.$this->id : 'controller/save';
+        $url = $this->id ? '%_ENTITY_NAME_%/save/'.$this->id : '%_ENTITY_NAME_%/save';
         $data = [
             'url'    => $url,
-            'fields' => []
+            'fields' => %_FORM_FIELDS_%
         ];
         return $data[$key];
     }
@@ -107,7 +119,7 @@ class %_MODEL_NAME_% extends %_FINDER_NAME_% {
     public function permissions() {
         return [
             'add'    => [ 'any' ],
-            'edit    => [ 'any' ],
+            'edit'   => [ 'any' ],
             'delete' => [ 'any' ],
             'read'   => [ 'any' ]
         ];

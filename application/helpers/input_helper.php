@@ -83,6 +83,29 @@ if ( ! function_exists( 'inputText' ) ) {
 }
 
 /**
+ * inputNumber
+ * 
+ * imprime o input numero
+ * 
+ */
+if ( ! function_exists( 'inputNumber' ) ) {
+    function inputNumber( $label, $name, $params = [] ) {
+        
+        // prepara os parametros
+        $params['label'] = $label;
+        $params['placeholder'] = isset( $params['placeholder'] ) ? $params['placeholder'] : $label;
+        $params['type']  = 'number';
+        $params['row']   = isset( $params['row'] ) ? $params['row'] : true;
+        $params['col']   = isset(  $params['col'] ) ? $params['col'] : 'col';
+        $params['group'] = isset(  $params['group'] ) ? $params['group'] : 'input-group';
+        $params['attr']['name'] = $name;
+
+        // chama a funcao;
+        echo defaultInput( $params );
+    }
+}
+
+/**
  * inputEmail
  * 
  * imprime o input de email

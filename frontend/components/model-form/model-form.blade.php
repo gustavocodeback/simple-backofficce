@@ -15,6 +15,9 @@
           @if( $item['type'] == 'text' )
           {!! inputText( $item['label'],  $item['name'], [ 'attr' => [ 'value' => $modelGrid->{$item['name']} ] ] ) !!}
           @endif
+          @if( $item['type'] == 'number' )
+          {!! inputNumber( $item['label'],  $item['name'], [ 'attr' => [ 'value' => $modelGrid->{$item['name']} ] ] ) !!}
+          @endif
         @endforeach
       </div>
       

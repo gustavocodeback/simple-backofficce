@@ -38,7 +38,6 @@
     
     @yield( 'scripts' )
 
-    <!-- Sweet alert body -->
     @if( flash( 'swaSuccessBody' ) )
     <script>
         swal(

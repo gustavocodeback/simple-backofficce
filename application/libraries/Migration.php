@@ -395,7 +395,6 @@ class CI_Migration {
 
             // verifica se existe um arquivo de tabela
             if ( in_array( $dir.'_table.php', $files ) ) {
-                
                 unset( $config );
 
                 // faz o require do documento

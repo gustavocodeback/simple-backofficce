@@ -53,7 +53,7 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 	 * @return void
 	 */
 	public function __validate() {
-		$rules = [];
+		$rules = %_FORM_RULES_%;
 
 		// valida o formulário
         $this->form_validation->set_rules( $rules );
@@ -137,11 +137,12 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 			$this->protectIt( 'add' ); 			
 		}
 
+		// preenche a entidade
+		$item->fill( $this->input->post() );
+		setItem( 'modelGrid', $item );
+
 		// valida o formulario
 		if ( $this->__validate() ) {
-
-			// preenche a entidade
-			$item->fill( $this->input->post() );
 
 			// tenta salvar o item
 			if ( $item->save() ) {
@@ -154,7 +155,7 @@ class %_CONTROLLER_NAME_% extends SG_Controller {
 				flash( 'swaErrorBody', 'Erro ao salvar o item' );
 			}
 		} else {
-			flash( 'swaErrorBody', validation_errors() );
+			flash( 'swaErrorBody', oneLine( validation_errors() ) );
 		}
 
 		// carrega a view

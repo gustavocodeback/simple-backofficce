@@ -63,6 +63,93 @@ class MakeCMD extends CI_Controller {
     }
 
     /**
+     * __getForm
+     * 
+     * Volta o formulário
+     *
+     * @param [type] $schema
+     * @return void
+     */
+    private function __getForm( $schema ) {
+
+        // Seta os campos que aparecem no formulário
+        $schema = array_filter( $schema, function( $key ) {
+            if ( !in_array( $key, [ 'id', 'created_at', 'updated_at' ] ) ) return true;
+        }, ARRAY_FILTER_USE_KEY );
+
+        // Seta os campos no formato correto
+        array_walk( $schema, function( &$value, $key ) {
+            
+            // Seta o tipo padrao
+            $type = 'text';
+            
+            // Seta as regras
+            $rules  = 'trim'; 
+            $rules .= ( isset( $value['null'] ) && $value['null'] ) ? '' : '|required';
+            $rules .= ( isset( $value['constraint'] ) ) ? '|max_length['.$value['constraint'].']' : '';
+
+            // Faz o swictch no tipo
+            switch( $value['type'] ) {
+                case 'int':
+                    $type = 'number';
+                    $rules .= '|integer';
+                break;
+            }
+
+            // Seta os valores
+            $value = [
+                'label' => $key,
+                'name'  => $key,
+                'type'  => $type,
+                'rules' => $rules
+            ];
+        });    
+
+        // Volta o formulário encontrado
+        return $schema;
+    }
+
+    /**
+     * __getDataTable
+     * 
+     * Seta o array de datatable
+     *
+     * @param [type] $model
+     * @param [type] $schema
+     * @return void
+     */
+    private function __getDataTable( $model, $schema ) {
+        
+        // Seta os campos que aparecem no formulário
+        $schema = array_filter( $schema, function( $key ) {
+            if ( !in_array( $key, [ 'id', 'created_at', 'updated_at' ] ) ) return true;
+        }, ARRAY_FILTER_USE_KEY );
+
+        // Seta o schema
+        $schema = $schema ? $schema : [];
+        
+        // Seta o datatables
+        $datatable = [ [ 'db' => 'id', 'dt' => 0 ] ];
+
+        // Campos das tabelas
+        $visibles = [ 'ID' ];
+        $cont = 1;
+        foreach( $schema as $key => $item ) {
+            if ( count( $visibles ) >= 4 ) break;
+            $visibles[] = $key;
+            $datatable[] = [ 'db' => $key, 'dt' => $cont ];
+            $cont++;
+        }
+        $visibles[] = 'Ações';
+
+        // Volta os dados encontrados
+        return [ 
+            'visibles' => $visibles,
+            'datatables' => $datatable
+        ];
+    }
+
+    /**
      * model
      *
      * cria uma nova model
@@ -70,7 +157,7 @@ class MakeCMD extends CI_Controller {
      * @param [type] $modelName
      * @return void
      */
-    public function model($name = false) {
+    public function model($name = false, $schema = false ) {
 
         // se não existir um nome
         if (!$name) return cmdLine( 'Você deve informar um nome!' );
@@ -87,11 +174,15 @@ class MakeCMD extends CI_Controller {
 
         // verifica se a model já existe
         if ( file_exists( "application/models/$name/$name"."_model.php" ) ) {
-            cmdLine( 'A model já existe!' );
+            return cmdLine( 'A model já existe!' );
         }
 
+        // Seta o formulário
+        $form = $schema ? $this->__getForm( $schema ) : [];
+
         // pega os campos da tabela
-        $fields = $this->__getFields( $name );
+        $fields    = $this->__getFields( $name );
+        $datatable = $this->__getDataTable( $name, $schema );
 
         // seta os atributos velhos
         $in_file = [
@@ -100,7 +191,11 @@ class MakeCMD extends CI_Controller {
             '%_MODEL_NAME_%',
             '%_FINDER_NAME_%',
             '%_TABLE_NAME_%',
-            '%_FIELDS_%'
+            '%_FIELDS_%',
+            '%_FORM_FIELDS_%',
+            '%_VISIBLES_%',
+            '%_DATATABLES_%',
+            '%_ACTION_NUMBER_%'
         ];
     
         // seta os atributos novos
@@ -109,8 +204,12 @@ class MakeCMD extends CI_Controller {
             $name,
             ucfirst( $name ).'_model',
             ucfirst( $name ).'_finder',
-            $table_name,
-            var_export( $fields, true )
+            strtolower( $table_name ),
+            var_export( $fields, true ),
+            var_export( $form, true ),
+            var_export( $datatable['visibles'], true ),
+            var_export( $datatable['datatables'], true ),
+            count( $datatable['datatables'] )
         ];
     
         // pega o conteudo do arquivo
@@ -267,7 +366,7 @@ class MakeCMD extends CI_Controller {
         $this->load->helper( 'inflector' );
 
         // nome da model
-        $modelName = lcfirst( singular( $table_name ) );
+        $modelName = lcfirst( $table_name );
 
         // pega o conteudo do arquivo
         $temp = file_get_contents( 'application/core/templates/default_table.txt' );
@@ -280,6 +379,9 @@ class MakeCMD extends CI_Controller {
     
         // mensagem de sucesso
         cmdLine( "Tabela $modelName criada com sucesso" );
+
+        // Volta os campos da tabela
+        return $schema;
     }
 
     /**
@@ -291,9 +393,9 @@ class MakeCMD extends CI_Controller {
      * @return void
      */
     public function dao( $name = false, ...$properties ) {
+        $schema = $this->table( $name, $properties );
         $this->finder( $name );
-        $this->model( $name );
-        $this->table( $name, $properties );
+        $this->model( $name, $schema );
     }
 
     /**
@@ -499,10 +601,10 @@ class MakeCMD extends CI_Controller {
             $model_name = lcfirst( $table );
 
             // cria a model para a tabela
-            $this->model( $model_name.':'.$table );
+            $schema = $this->table( $table );
+            $this->model( $model_name.':'.$table, $schema );
             $this->finder( $model_name );
-            $this->table( $table );
-
+            
             // verifica se deve gerar com crud
             if ( $crud ) $this->controller( 'web:'.$model_name, $model_name );
         }
@@ -625,12 +727,9 @@ class MakeCMD extends CI_Controller {
      * @return void
      */
     public function controller( $name = false, $model = false ) {
-        
+
        // se não existir um nome
-       if (!$name) {
-           print 'Você deve informar um nome ....';
-           return;
-       }
+       if (!$name) return cmdLine( 'Voce deve informar o nome do controller!' );
 
        // paths permitidos
        $paths = [ 'api', 'web' ];
@@ -640,7 +739,7 @@ class MakeCMD extends CI_Controller {
 
        // verifica se é permitidos
        if ( !in_array( $path, $paths ) ) {
-        print "Caminho não permitido ".PHP_EOL;
+        cmdLine( 'Caminho não permitido!' );
         return;
        }
 
@@ -652,8 +751,7 @@ class MakeCMD extends CI_Controller {
 
        // verifica se a página já existe
        if ( file_exists( "application/controllers/$path/$name.php" ) ) {
-           print "O controller já existe ".PHP_EOL;
-           return;
+           return cmdLine( "O controller $name já existe!" );
        }
 
        // seta as variaveis do template
@@ -667,14 +765,32 @@ class MakeCMD extends CI_Controller {
 
        // verifica se é de crud
        if ( $model ) {
+            
+            // carrega a library de migração
+            $this->load->library( 'migration' );
+            $schema = $this->migration->_getNewSchema( [ $model ] );
+            $schema = isset( $schema[$model] ) ? $schema[$model] : [];
+            $schema =  $this->__getForm( $schema );
 
+            // Seta as regras
+            $rules = [];
+            foreach( $schema as $item ) {
+                $rules[] = [
+                    'field' => $item['name'],
+                    'label' => $item['label'],
+                    'rules' => $item['rules']
+                ];
+            }
+            
             // seta as variaveis
             $t_vars[] = '%_MODEL_FILE_%';
             $t_vars[] = '%_MODEL_CLASS_%';
+            $t_vars[] = '%_FORM_RULES_%';
 
             // seta os valores
             $t_val[] = $model;
             $t_val[] = ucfirst( $model );
+            $t_val[] = var_export( $rules, true );
 
             // define o novo template
             $t_path = "application/core/templates/default_crud_controller.txt";
