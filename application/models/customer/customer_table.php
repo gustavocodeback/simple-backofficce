@@ -2,7 +2,7 @@
 
 /*                                                               
  |-------------------------------------------------------------- 
- | TABELA component                                           
+ | TABELA customer                                           
  |-------------------------------------------------------------- 
  |                                                               
 */
@@ -15,41 +15,34 @@ $config['schema'] = array (
     'auto_increment' => true,
     'null' => false,
   ),
-  'component_id' => 
+  'user_id' => 
   array (
     'type' => 'int',
     'constraint' => 11,
-    'null' => true,
+    'null' => false,
   ),
-  'slug' => 
+  'region_id' => 
+  array (
+    'type' => 'int',
+    'constraint' => 11,
+    'null' => false,
+  ),
+  'photo' => 
   array (
     'type' => 'varchar',
     'constraint' => 255,
     'null' => false,
   ),
-  'text' => 
+  'platform' => 
   array (
     'type' => 'varchar',
-    'constraint' => 255,
+    'constraint' => 30,
     'null' => false,
   ),
-  'link' => 
+  'key_phone' => 
   array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => true,
-  ),
-  'icon' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => true,
-  ),
-  'position' => 
-  array (
-    'type' => 'int',
-    'constraint' => 11,
-    'null' => true,
+    'type' => 'text',
+    'null' => false,
   ),
   'created_at' => 
   array (
@@ -59,12 +52,6 @@ $config['schema'] = array (
   'updated_at' => 
   array (
     'type' => 'datetime',
-    'null' => true,
-  ),
-  'context' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
     'null' => true,
   ),
 );

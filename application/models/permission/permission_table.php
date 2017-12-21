@@ -15,12 +15,6 @@ $config['schema'] = array (
     'auto_increment' => true,
     'null' => false,
   ),
-  'component_id' => 
-  array (
-    'type' => 'int',
-    'constraint' => 11,
-    'null' => false,
-  ),
   'group_id' => 
   array (
     'type' => 'int',
@@ -60,6 +54,12 @@ $config['schema'] = array (
   array (
     'type' => 'datetime',
     'null' => true,
+  ),
+  'component_id' => 
+  array (
+    'type' => 'int',
+    'constraint' => 11,
+    'null' => false,
   ),
 );
 

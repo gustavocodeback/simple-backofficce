@@ -2,7 +2,7 @@
 
 /*                                                               
  |-------------------------------------------------------------- 
- | TABELA component                                           
+ | TABELA gateway                                           
  |-------------------------------------------------------------- 
  |                                                               
 */
@@ -15,41 +15,41 @@ $config['schema'] = array (
     'auto_increment' => true,
     'null' => false,
   ),
-  'component_id' => 
+  'region_id' => 
   array (
     'type' => 'int',
     'constraint' => 11,
-    'null' => true,
+    'null' => false,
   ),
-  'slug' => 
+  'category_id' => 
+  array (
+    'type' => 'int',
+    'constraint' => 11,
+    'null' => false,
+  ),
+  'name' => 
+  array (
+    'type' => 'varchar',
+    'constraint' => 60,
+    'null' => false,
+  ),
+  'image' => 
   array (
     'type' => 'varchar',
     'constraint' => 255,
     'null' => false,
   ),
-  'text' => 
+  'rss' => 
   array (
     'type' => 'varchar',
     'constraint' => 255,
     'null' => false,
   ),
-  'link' => 
+  'default' => 
   array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => true,
-  ),
-  'icon' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => true,
-  ),
-  'position' => 
-  array (
-    'type' => 'int',
-    'constraint' => 11,
-    'null' => true,
+    'type' => 'binary',
+    'constraint' => 1,
+    'null' => false,
   ),
   'created_at' => 
   array (
@@ -59,12 +59,6 @@ $config['schema'] = array (
   'updated_at' => 
   array (
     'type' => 'datetime',
-    'null' => true,
-  ),
-  'context' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
     'null' => true,
   ),
 );

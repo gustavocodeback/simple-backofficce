@@ -2,7 +2,7 @@
 
 /*                                                               
  |-------------------------------------------------------------- 
- | TABELA component                                           
+ | TABELA customer_notice                                           
  |-------------------------------------------------------------- 
  |                                                               
 */
@@ -15,41 +15,17 @@ $config['schema'] = array (
     'auto_increment' => true,
     'null' => false,
   ),
-  'component_id' => 
+  'customer_id' => 
   array (
     'type' => 'int',
     'constraint' => 11,
-    'null' => true,
-  ),
-  'slug' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
     'null' => false,
   ),
-  'text' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => false,
-  ),
-  'link' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => true,
-  ),
-  'icon' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => true,
-  ),
-  'position' => 
+  'notice_id' => 
   array (
     'type' => 'int',
     'constraint' => 11,
-    'null' => true,
+    'null' => false,
   ),
   'created_at' => 
   array (
@@ -59,12 +35,6 @@ $config['schema'] = array (
   'updated_at' => 
   array (
     'type' => 'datetime',
-    'null' => true,
-  ),
-  'context' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
     'null' => true,
   ),
 );

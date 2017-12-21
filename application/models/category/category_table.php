@@ -2,7 +2,7 @@
 
 /*                                                               
  |-------------------------------------------------------------- 
- | TABELA component                                           
+ | TABELA category                                           
  |-------------------------------------------------------------- 
  |                                                               
 */
@@ -15,40 +15,16 @@ $config['schema'] = array (
     'auto_increment' => true,
     'null' => false,
   ),
-  'component_id' => 
-  array (
-    'type' => 'int',
-    'constraint' => 11,
-    'null' => true,
-  ),
-  'slug' => 
+  'name' => 
   array (
     'type' => 'varchar',
-    'constraint' => 255,
+    'constraint' => 60,
     'null' => false,
   ),
-  'text' => 
+  'image' => 
   array (
     'type' => 'varchar',
     'constraint' => 255,
-    'null' => false,
-  ),
-  'link' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => true,
-  ),
-  'icon' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => true,
-  ),
-  'position' => 
-  array (
-    'type' => 'int',
-    'constraint' => 11,
     'null' => true,
   ),
   'created_at' => 
@@ -59,12 +35,6 @@ $config['schema'] = array (
   'updated_at' => 
   array (
     'type' => 'datetime',
-    'null' => true,
-  ),
-  'context' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
     'null' => true,
   ),
 );

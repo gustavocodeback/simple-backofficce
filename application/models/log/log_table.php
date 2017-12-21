@@ -15,33 +15,16 @@ $config['schema'] = array (
     'auto_increment' => true,
     'null' => false,
   ),
-  'user_id' => 
-  array (
-    'type' => 'int',
-    'constraint' => 11,
-    'null' => true,
-  ),
   'text' => 
   array (
     'type' => 'text',
     'null' => false,
   ),
-  'json' => 
-  array (
-    'type' => 'text',
-    'null' => true,
-  ),
   'action' => 
   array (
-    'type'       => 'varchar',
+    'type' => 'varchar',
     'constraint' => 60,
-    'null'       => false,
-  ),
-  'color' => 
-  array (
-    'type'       => 'varchar',
-    'constraint' => 20,
-    'null'       => false,
+    'null' => false,
   ),
   'created_at' => 
   array (
@@ -51,6 +34,23 @@ $config['schema'] = array (
   'updated_at' => 
   array (
     'type' => 'datetime',
+    'null' => true,
+  ),
+  'color' => 
+  array (
+    'type' => 'varchar',
+    'constraint' => 20,
+    'null' => false,
+  ),
+  'json' => 
+  array (
+    'type' => 'text',
+    'null' => true,
+  ),
+  'user_id' => 
+  array (
+    'type' => 'int',
+    'constraint' => 11,
     'null' => true,
   ),
 );

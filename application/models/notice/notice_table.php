@@ -2,7 +2,7 @@
 
 /*                                                               
  |-------------------------------------------------------------- 
- | TABELA component                                           
+ | TABELA notice                                           
  |-------------------------------------------------------------- 
  |                                                               
 */
@@ -15,41 +15,46 @@ $config['schema'] = array (
     'auto_increment' => true,
     'null' => false,
   ),
-  'component_id' => 
+  'gateway_id' => 
   array (
     'type' => 'int',
     'constraint' => 11,
-    'null' => true,
+    'null' => false,
   ),
-  'slug' => 
+  'tittle' => 
+  array (
+    'type' => 'varchar',
+    'constraint' => 120,
+    'null' => false,
+  ),
+  'notice_link' => 
   array (
     'type' => 'varchar',
     'constraint' => 255,
     'null' => false,
   ),
-  'text' => 
+  'image_link' => 
   array (
     'type' => 'varchar',
     'constraint' => 255,
     'null' => false,
   ),
-  'link' => 
+  'description' => 
   array (
     'type' => 'varchar',
     'constraint' => 255,
-    'null' => true,
+    'null' => false,
   ),
-  'icon' => 
+  'date' => 
   array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => true,
+    'type' => 'datetime',
+    'null' => false,
   ),
-  'position' => 
+  'shared' => 
   array (
     'type' => 'int',
     'constraint' => 11,
-    'null' => true,
+    'null' => false,
   ),
   'created_at' => 
   array (
@@ -59,12 +64,6 @@ $config['schema'] = array (
   'updated_at' => 
   array (
     'type' => 'datetime',
-    'null' => true,
-  ),
-  'context' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
     'null' => true,
   ),
 );
