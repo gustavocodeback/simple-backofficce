@@ -181,11 +181,6 @@ class Group extends SG_Controller {
 		// carrega a view
 		view( 'grid/grid' );
 	}
-
-	public function delete_mutiples() {
-		$ids = $this->input->post( 'ids' );
-		debug( $ids );
-	}
 }
 
 // End of file

@@ -1,4 +1,6 @@
 @extends( 'layouts.admin' )
 @section( 'content' )
-    <h1>PHPMaker</h1>
+    <div class="page-header">
+        <h1>Simple News Admin</h1>
+    </div>
 @endsection

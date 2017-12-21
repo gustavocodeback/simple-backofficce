@@ -5,11 +5,11 @@
  */
 
 // conexao
-$config['ftp']['hostname'] = 'phpmaker-com-br.umbler.net';
-$config['ftp']['username'] = 'phpmaker-com-br';
-$config['ftp']['password'] = 'vV?D$s*@Uz^Lcm)';
+$config['ftp']['hostname'] = 'ftp.simplenews.hospedagemdesites.ws';
+$config['ftp']['username'] = 'simplenews';
+$config['ftp']['password'] = 'G8WQzoehOOsHVD';
 $config['ftp']['port']     = 21;
-$config['ftp']['site_dir'] = '/public/';
+$config['ftp']['site_dir'] = '/public_html/';
 $config['ftp']['debug']    = TRUE;
 
 // End of file

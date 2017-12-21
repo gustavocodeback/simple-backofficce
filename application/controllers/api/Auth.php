@@ -312,4 +312,4 @@ class Auth extends SG_Controller {
 	}
 }
 
-/* end of file */
+// End of file

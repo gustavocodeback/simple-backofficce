@@ -1,6 +1,11 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * Home
+ * 
+ * Controller para a home
+ * 
+ */
 class Home extends SG_Controller {
 
 	/**
@@ -17,9 +22,6 @@ class Home extends SG_Controller {
 
 		// Seta a navbar
 		navbar( 'Inicio' );
-
-		$this->load->library( 'DataTables' );
-		$this->datatables;
 	}
 	
 	/**
@@ -32,12 +34,8 @@ class Home extends SG_Controller {
 	public function index() {
 		setTitle( 'Inicio' );
 
-		// Seta a model do grid
-		$this->load->model( 'component' );
-		setItem( 'modelGrid', $this->Component );
-
 		// Carrega o grid
-		view( 'grid/grid' );
+		view( 'home/home' );
 	}
 
 	/**
@@ -61,15 +59,6 @@ class Home extends SG_Controller {
 
 		// redireciona para a url
 		close_page( $url );
-	}
-
-	public function datatables() {
-
-		// Carrega a model
-		$this->load->model( 'component' );
-
-		// Chama o método da datatables
-		echo $this->Component->DataTables();
 	}
 }
 
