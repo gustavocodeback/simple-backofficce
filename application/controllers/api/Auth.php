@@ -273,31 +273,31 @@ class Auth extends SG_Controller {
 	 * @return void
 	 */
 	public function forgot_password() {
-
+		unloggedOnly();
+		
 		// pega o email
 		$email = $this->input->post( 'email' );
-
+		
 		// verifica se é um email válido
 		if ( valid_email( $email ) ) {
-
+			
 			// pega o usuário
 			$user = $this->User->email( $email );
-
+			
 			// se não existir o usuário
 			if ( !$user ) {
 				return reject( 'E-mail não cadastrado' );
 			} else {
-
+				
 				// seta o token
 				$user->setForgotPasswordToken()->save();
-
+				
 				// envia o e-mail
 				$this->load->library( 'email' );
-				$this->email->from( 'postmaster@sandbox1fe1cc36a08141f28e9102e42b635f3a.mailgun.org', $this->config->item( 'site_name' ) );
 				$this->email->to( $user->email, $user->name );
-				$this->email->render( 'recovery', [ 'token' => $user->forgot_password_token, 'user_name' => $user->name ] );
-				$this->email->subject( 'Recuperação de senha '.$this->config->item( 'site_name' ) );
-
+				$this->email->parse( 'RECOVERY_EMAIL', [ '%_TOKEN_%' => $user->forgot_password_token, '%_USER_%' => $user->name ] );
+				$this->email->subject( 'Recuperação de senha '.sitename() );
+				
 				// seta a mensagem de sucesso
 				if ( $this->email->send() ) {
 					return resolve( "E-mail enviado com sucesso para <b>$user->email</b>" );
