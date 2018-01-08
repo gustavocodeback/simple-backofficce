@@ -54,13 +54,13 @@ class Region extends SG_Controller {
 	 */
 	public function __validate() {
 		$rules = array (
-  0 => 
-  array (
-    'field' => 'name',
-    'label' => 'name',
-    'rules' => 'trim|required|max_length[60]',
-  ),
-);
+			0 => 
+			array (
+				'field' => 'name',
+				'label' => 'name',
+				'rules' => 'trim|required|max_length[60]',
+			),
+		);
 
 		// valida o formulário
         $this->form_validation->set_rules( $rules );

@@ -45,9 +45,9 @@ $config['schema'] = array (
     'constraint' => 255,
     'null' => false,
   ),
-  'default' => 
+  'default_gateway' => 
   array (
-    'type' => 'binary',
+    'type' => 'char',
     'constraint' => 1,
     'null' => false,
   ),

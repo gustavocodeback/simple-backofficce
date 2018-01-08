@@ -18,15 +18,15 @@ class Gateway_model extends Gateway_finder {
      * @var array
      */
     public $fields = array (
-  'region_id' => 'region_id',
-  'category_id' => 'category_id',
-  'name' => 'name',
-  'image' => 'image',
-  'rss' => 'rss',
-  'default' => 'default',
-  'created_at' => 'created_at',
-  'updated_at' => 'updated_at',
-);
+      'region_id' => 'region_id',
+      'category_id' => 'category_id',
+      'name' => 'name',
+      'image' => 'image',
+      'rss' => 'rss',
+      'default_gateway' => 'default_gateway',
+      'created_at' => 'created_at',
+      'updated_at' => 'updated_at',
+    );
 
     /**
      * visibles
@@ -36,12 +36,14 @@ class Gateway_model extends Gateway_finder {
      * @var array
      */
     public $visibles = array (
-  0 => 'ID',
-  1 => 'region_id',
-  2 => 'category_id',
-  3 => 'name',
-  4 => 'Ações',
-);
+      0 => 'ID',
+      1 => 'Foto',
+      2 => 'Nome',
+      3 => 'Categoria',
+      4 => 'Região',
+      5 => 'Padrão',
+      6 => 'Ações',
+    );
 
     /**
      * __construct
@@ -89,31 +91,59 @@ class Gateway_model extends Gateway_finder {
 
         // Columns
         $columns = array (
-  0 => 
-  array (
-    'db' => 'id',
-    'dt' => 0,
-  ),
-  1 => 
-  array (
-    'db' => 'region_id',
-    'dt' => 1,
-  ),
-  2 => 
-  array (
-    'db' => 'category_id',
-    'dt' => 2,
-  ),
-  3 => 
-  array (
-    'db' => 'name',
-    'dt' => 3,
-  ),
-);
+          0 => 
+          array (
+            'db' => 'id',
+            'dt' => 0,
+          ),
+          1 => 
+          array (
+            'db' => 'image',
+            'dt' => 1,
+          ),
+          2 => 
+          array (
+            'db' => 'name',
+            'dt' => 2,
+          ),
+          3 => 
+          array (
+            'db' => 'category_id',
+            'dt' => 3,
+            'formatter' => function( $d, $row ) {
+
+                    // Carrega a model
+		                $this->load->model( 'category' );
+
+                    $category = $this->Category->findById( $d );
+
+                    return $category->name;
+                }
+          ),
+          4 => 
+          array (
+            'db' => 'region_id',
+            'dt' => 4,
+            'formatter' => function( $d, $row ) {
+
+                    // Carrega a model
+		                $this->load->model( 'region' );
+
+                    $region = $this->Region->findById( $d );
+
+                    return $region->name;
+                }
+          ),
+          5 => 
+          array (
+            'db' => 'default_gateway',
+            'dt' => 5,
+          ),
+        );
         $columns[] = 
         [   
             'db' => 'id',
-            'dt' => 4,  
+            'dt' => 6,  
             'formatter' => function( $d, $row ) {
 
                 // Formata a data
@@ -141,49 +171,55 @@ class Gateway_model extends Gateway_finder {
         $data = [
             'url'    => $url,
             'fields' => array (
-  'region_id' => 
-  array (
-    'label' => 'region_id',
-    'name' => 'region_id',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  'category_id' => 
-  array (
-    'label' => 'category_id',
-    'name' => 'category_id',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  'name' => 
-  array (
-    'label' => 'name',
-    'name' => 'name',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[60]',
-  ),
-  'image' => 
-  array (
-    'label' => 'image',
-    'name' => 'image',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  'rss' => 
-  array (
-    'label' => 'rss',
-    'name' => 'rss',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  'default' => 
-  array (
-    'label' => 'default',
-    'name' => 'default',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[1]',
-  ),
-)
+            'region_id' => 
+            array (
+              'label' => 'Região',
+              'model' => [ 'name' => 'region' , 'call' => 'Region' ],
+              'name' => 'region_id',
+              'type' => 'select',
+              'rules' => 'trim|required|max_length[11]|integer',
+            ),
+            'category_id' => 
+            array (
+              'label' => 'Categoria',
+              'model' => [ 'name' => 'category' , 'call' => 'Category' ],
+              'name' => 'category_id',
+              'type' => 'select',
+              'rules' => 'trim|required|max_length[11]|integer',
+            ),
+            'name' => 
+            array (
+              'label' => 'Nome',
+              'name' => 'name',
+              'type' => 'text',
+              'rules' => 'trim|required|max_length[60]',
+            ),
+            'image' => 
+            array (
+              'label' => 'Foto',
+              'name'  => 'image',
+              'type'  => 'text',
+              'rules' => 'trim|required|max_length[255]',
+            ),
+            'rss' => 
+            array (
+              'label' => 'RSS',
+              'name'  => 'rss',
+              'type'  => 'text',
+              'rules' => 'trim|required|max_length[255]',
+            ),
+            'default_gateway' => 
+            array (
+              'label'  => 'Padrão',
+              'name'   => 'default_gateway',
+              'opcoes' => [ 
+                  [ 'label' => 'Sim', 'value' => 'S' ],
+                  [ 'label' => 'Não', 'value' => 'N' ]
+                ],
+              'type'   => 'select',
+              'rules'  => 'trim|required|max_length[1]',
+            ),
+          )
         ];
         return $data[$key];
     }

@@ -13,7 +13,7 @@ const server = new connect();
  * 
  */
 gulp.task('connect', function() {
-  server.server();
+  server.server( { port : 9999 } );
 });
 
 /**

@@ -18,10 +18,10 @@ class Region_model extends Region_finder {
      * @var array
      */
     public $fields = array (
-  'name' => 'name',
-  'created_at' => 'created_at',
-  'updated_at' => 'updated_at',
-);
+        'name' => 'name',
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at',
+    );
 
     /**
      * visibles
@@ -31,10 +31,10 @@ class Region_model extends Region_finder {
      * @var array
      */
     public $visibles = array (
-  0 => 'ID',
-  1 => 'name',
-  2 => 'Ações',
-);
+        0 => 'ID',
+        1 => 'Nome',
+        2 => 'Ações',
+    );
 
     /**
      * __construct
@@ -82,17 +82,17 @@ class Region_model extends Region_finder {
 
         // Columns
         $columns = array (
-  0 => 
-  array (
-    'db' => 'id',
-    'dt' => 0,
-  ),
-  1 => 
-  array (
-    'db' => 'name',
-    'dt' => 1,
-  ),
-);
+            0 => 
+            array (
+                'db' => 'id',
+                'dt' => 0,
+            ),
+            1 => 
+            array (
+                'db' => 'name',
+                'dt' => 1,
+            ),
+        );
         $columns[] = 
         [   
             'db' => 'id',
@@ -124,14 +124,14 @@ class Region_model extends Region_finder {
         $data = [
             'url'    => $url,
             'fields' => array (
-  'name' => 
-  array (
-    'label' => 'name',
-    'name' => 'name',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[60]',
-  ),
-)
+            'name' => 
+                array (
+                    'label' => 'Nome',
+                    'name' => 'name',
+                    'type' => 'text',
+                    'rules' => 'trim|required|max_length[60]',
+                ),
+            )
         ];
         return $data[$key];
     }

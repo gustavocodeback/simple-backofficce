@@ -18,11 +18,11 @@ class Category_model extends Category_finder {
      * @var array
      */
     public $fields = array (
-  'name' => 'name',
-  'image' => 'image',
-  'created_at' => 'created_at',
-  'updated_at' => 'updated_at',
-);
+        'name' => 'name',
+        'image' => 'image',
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at',
+    );
 
     /**
      * visibles
@@ -32,11 +32,11 @@ class Category_model extends Category_finder {
      * @var array
      */
     public $visibles = array (
-  0 => 'ID',
-  1 => 'name',
-  2 => 'image',
-  3 => 'Ações',
-);
+        0 => 'ID',
+        1 => 'Nome',
+        2 => 'Foto',
+        3 => 'Ações',
+    );
 
     /**
      * __construct
@@ -84,22 +84,22 @@ class Category_model extends Category_finder {
 
         // Columns
         $columns = array (
-  0 => 
-  array (
-    'db' => 'id',
-    'dt' => 0,
-  ),
-  1 => 
-  array (
-    'db' => 'name',
-    'dt' => 1,
-  ),
-  2 => 
-  array (
-    'db' => 'image',
-    'dt' => 2,
-  ),
-);
+        0 => 
+            array (
+                'db' => 'id',
+                'dt' => 0,
+            ),
+        1 => 
+            array (
+                'db' => 'name',
+                'dt' => 1,
+            ),
+        2 => 
+            array (
+                'db' => 'image',
+                'dt' => 2,
+            ),
+        );
         $columns[] = 
         [   
             'db' => 'id',
@@ -131,21 +131,21 @@ class Category_model extends Category_finder {
         $data = [
             'url'    => $url,
             'fields' => array (
-  'name' => 
-  array (
-    'label' => 'name',
-    'name' => 'name',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[60]',
-  ),
-  'image' => 
-  array (
-    'label' => 'image',
-    'name' => 'image',
-    'type' => 'text',
-    'rules' => 'trim|max_length[255]',
-  ),
-)
+            'name' => 
+                array (
+                    'label' => 'Nome',
+                    'name' => 'name',
+                    'type' => 'text',
+                    'rules' => 'trim|required|max_length[60]',
+                ),
+            'image' => 
+                array (
+                    'label' => 'Foto',
+                    'name' => 'image',
+                    'type' => 'file',
+                    'rules' => 'trim|max_length[255]',
+                ),
+            )
         ];
         return $data[$key];
     }

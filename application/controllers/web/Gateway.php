@@ -54,43 +54,43 @@ class Gateway extends SG_Controller {
 	 */
 	public function __validate() {
 		$rules = array (
-  0 => 
-  array (
-    'field' => 'region_id',
-    'label' => 'region_id',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  1 => 
-  array (
-    'field' => 'category_id',
-    'label' => 'category_id',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  2 => 
-  array (
-    'field' => 'name',
-    'label' => 'name',
-    'rules' => 'trim|required|max_length[60]',
-  ),
-  3 => 
-  array (
-    'field' => 'image',
-    'label' => 'image',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  4 => 
-  array (
-    'field' => 'rss',
-    'label' => 'rss',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  5 => 
-  array (
-    'field' => 'default',
-    'label' => 'default',
-    'rules' => 'trim|required|max_length[1]',
-  ),
-);
+			0 => 
+			array (
+				'field' => 'region_id',
+				'label' => 'region_id',
+				'rules' => 'trim|required|max_length[11]|integer',
+			),
+			1 => 
+			array (
+				'field' => 'category_id',
+				'label' => 'category_id',
+				'rules' => 'trim|required|max_length[11]|integer',
+			),
+			2 => 
+			array (
+				'field' => 'name',
+				'label' => 'name',
+				'rules' => 'trim|required|max_length[60]',
+			),
+			3 => 
+			array (
+				'field' => 'image',
+				'label' => 'image',
+				'rules' => 'trim|required|max_length[255]',
+			),
+			4 => 
+			array (
+				'field' => 'rss',
+				'label' => 'rss',
+				'rules' => 'trim|required|max_length[255]',
+			),
+			5 => 
+			array (
+				'field' => 'default_gateway',
+				'label' => 'default_gateway',
+				'rules' => 'trim|required|max_length[1]',
+			),
+		);
 
 		// valida o formulário
         $this->form_validation->set_rules( $rules );
