@@ -11,6 +11,13 @@
     @yield( 'styles' )
 </head>
 <body>
+    <script>
+        var Site = {
+            url: '{{ site_url() }}',
+            base: '{{ base_url() }}',
+        };
+    </script>
+
     @yield( 'content' )
 
     <script src="{{ base_url( 'public/dist/js/app.js') }}"></script>

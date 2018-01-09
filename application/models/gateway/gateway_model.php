@@ -200,9 +200,10 @@ class Gateway_model extends Gateway_finder {
             'image' => 
             array (
                 'label' => 'Foto',
-                'name' => 'image',
-                'type' => 'file',
-                'rules' => 'trim|max_length[255]',
+                'name'  => 'image',
+                'type'  => 'midia',
+                'size'  => '1',
+                'ratio' => '1:1'
             ),
             'rss' => 
             array (

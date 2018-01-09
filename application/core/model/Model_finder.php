@@ -189,6 +189,26 @@ class Model_finder extends Model_alter
     }
 
     /**
+     * Pega os registros mais novos primeiros
+     *
+     * @return void
+     */
+    public function newer() {
+        $this->db->order_by( 'created_at', 'DESC' );
+        return $this;
+    }
+
+    /**
+     * Pega os registros mais antigos primeiro
+     *
+     * @return void
+     */
+    public function older() {
+        $this->db->order_by( 'created_at', 'ASC' );
+        return $this;
+    }
+
+    /**
      * get
      *
      * faz a busca

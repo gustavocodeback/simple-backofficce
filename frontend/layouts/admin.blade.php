@@ -11,11 +11,16 @@
     @yield( 'styles' )
 </head>
 <body>
+    <script>
+        var Site = {
+            url: '{{ site_url() }}',
+            base: '{{ base_url() }}',
+        };
+    </script>
 
     @if( editMode() )
         @include( 'components.edit-mode.edit-mode' )
     @endif
-
     @include( 'components.helpbar.helpbar' )
 
     <div class="container">
@@ -30,6 +35,8 @@
         </div>
         @include( 'components.footer.footer' )        
     </div>
+
+    @include( 'components.midia-modal.midia-modal' )    
     
     <script src="{{ base_url( 'public/dist/js/app.js') }}"></script>
     <script src="https://unpkg.com/sweetalert2@7.0.9/dist/sweetalert2.all.js"></script>

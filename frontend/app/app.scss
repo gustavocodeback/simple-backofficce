@@ -10,7 +10,13 @@
 // Bootstrap
 @import "node_modules/bootstrap/scss/bootstrap";
 @import "node_modules/bootstrap-select/sass/bootstrap-select";
+
+// Libs
 @import "node_modules/summernote/dist/summernote-bs4";
+@import "node_modules/lightbox2/dist/css/lightbox";
+
+// Slim
+@import "slim/slim";
 
 // Theme
 @import "theme/resets";
@@ -24,5 +30,9 @@
 @import "../components/navbar/navbar";
 @import "../components/footer/footer";
 @import "../components/sidebar/sidebar";
+@import "../components/midia-modal/midia-modal";
+
+// Pages
+@import "../pages/midias/midias";
 
 // End of file

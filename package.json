@@ -12,6 +12,10 @@
     "bootstrap-select": "^1.12.4",
     "codemirror": "^5.32.0",
     "datatables.net-dt": "^1.10.16",
+    "emitter-js": "^2.0.1",
+    "lightbox2": "^2.10.0",
+    "random-string": "^0.2.0",
+    "randomstring": "^1.1.5",
     "summernote": "^0.8.8"
   },
   "devDependencies": {

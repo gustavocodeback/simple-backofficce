@@ -347,14 +347,14 @@ if ( !function_exists( 'oneLine' ) ) {
 }
 
 /**
- * formatDate
+ * getToken
  * 
- * Formata a data vinda do banco de dados
+ * Pega um token aleatório
  * 
  */
-if ( !function_exists( 'formatDate' ) ) {
-    function formatDate( $date ) {
-        return date( 'd/m/Y H:i:s', strtotime( $date ) );
+if ( !function_exists( 'getToken' ) ) {
+    function getToken() {
+        return md5( uniqid( rand() * time() ) );
     }
 }
 
