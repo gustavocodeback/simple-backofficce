@@ -54,19 +54,19 @@ class Category extends SG_Controller {
 	 */
 	public function __validate() {
 		$rules = array (
-  0 => 
-  array (
-    'field' => 'name',
-    'label' => 'name',
-    'rules' => 'trim|required|max_length[60]',
-  ),
-  1 => 
-  array (
-    'field' => 'image',
-    'label' => 'image',
-    'rules' => 'trim|max_length[255]',
-  ),
-);
+			0 => 
+			array (
+				'field' => 'name',
+				'label' => 'name',
+				'rules' => 'trim|required|max_length[60]',
+			),
+			1 => 
+			array (
+				'field' => 'image',
+				'label' => 'image',
+				'rules' => 'trim|max_length[255]',
+			),
+		);
 
 		// valida o formulário
         $this->form_validation->set_rules( $rules );
@@ -153,6 +153,8 @@ class Category extends SG_Controller {
 		// preenche a entidade
 		$item->fill( $this->input->post() );
 		setItem( 'modelGrid', $item );
+
+		$item->image = 'https://dcomercio.com.br/public/upload/gallery/2017/tecnologia/tecnologia.jpg';
 
 		// valida o formulario
 		if ( $this->__validate() ) {

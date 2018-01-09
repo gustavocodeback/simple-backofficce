@@ -37,12 +37,12 @@ class Notice_model extends Notice_finder {
      * @var array
      */
     public $visibles = array (
-  0 => 'ID',
-  1 => 'gateway_id',
-  2 => 'tittle',
-  3 => 'notice_link',
-  4 => 'Ações',
-);
+      0 => 'ID',
+      1 => 'gateway_id',
+      2 => 'tittle',
+      3 => 'notice_link',
+      4 => 'Ações',
+    );
 
     /**
      * __construct
@@ -90,27 +90,27 @@ class Notice_model extends Notice_finder {
 
         // Columns
         $columns = array (
-  0 => 
-  array (
-    'db' => 'id',
-    'dt' => 0,
-  ),
-  1 => 
-  array (
-    'db' => 'gateway_id',
-    'dt' => 1,
-  ),
-  2 => 
-  array (
-    'db' => 'tittle',
-    'dt' => 2,
-  ),
-  3 => 
-  array (
-    'db' => 'notice_link',
-    'dt' => 3,
-  ),
-);
+        0 => 
+        array (
+          'db' => 'id',
+          'dt' => 0,
+        ),
+        1 => 
+        array (
+          'db' => 'gateway_id',
+          'dt' => 1,
+        ),
+        2 => 
+        array (
+          'db' => 'tittle',
+          'dt' => 2,
+        ),
+        3 => 
+        array (
+          'db' => 'notice_link',
+          'dt' => 3,
+        ),
+      );
         $columns[] = 
         [   
             'db' => 'id',

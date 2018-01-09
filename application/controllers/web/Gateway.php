@@ -76,7 +76,7 @@ class Gateway extends SG_Controller {
 			array (
 				'field' => 'image',
 				'label' => 'image',
-				'rules' => 'trim|required|max_length[255]',
+				'rules' => 'trim|max_length[255]',
 			),
 			4 => 
 			array (
@@ -173,11 +173,13 @@ class Gateway extends SG_Controller {
 			$item = $this->model->new();
 			$this->protectIt( 'add' ); 			
 		}
-
+		
 		// preenche a entidade
 		$item->fill( $this->input->post() );
 		setItem( 'modelGrid', $item );
-
+		
+		$item->image = 'https://scontent.fsod3-1.fna.fbcdn.net/v/t1.0-9/16406937_1290704314340740_2719589786923735387_n.png?oh=78ac04b2bcb8d38bd0ba7a44f75bd488&oe=5AF15EA1';
+		
 		// valida o formulario
 		if ( $this->__validate() ) {
 

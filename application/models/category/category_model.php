@@ -98,6 +98,9 @@ class Category_model extends Category_finder {
             array (
                 'db' => 'image',
                 'dt' => 2,
+                'formatter' => function( $d, $row ) {
+                    return "<img src='$d' width='100px'>";
+                }
             ),
         );
         $columns[] = 

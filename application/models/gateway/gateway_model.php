@@ -100,6 +100,9 @@ class Gateway_model extends Gateway_finder {
           array (
             'db' => 'image',
             'dt' => 1,
+            'formatter' => function( $d, $row ) {
+                return "<img src='$d' width='100px'>";
+            }
           ),
           2 => 
           array (
@@ -196,10 +199,10 @@ class Gateway_model extends Gateway_finder {
             ),
             'image' => 
             array (
-              'label' => 'Foto',
-              'name'  => 'image',
-              'type'  => 'text',
-              'rules' => 'trim|required|max_length[255]',
+                'label' => 'Foto',
+                'name' => 'image',
+                'type' => 'file',
+                'rules' => 'trim|max_length[255]',
             ),
             'rss' => 
             array (
