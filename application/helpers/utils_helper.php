@@ -346,4 +346,16 @@ if ( !function_exists( 'oneLine' ) ) {
     }
 }
 
+/**
+ * formatDate
+ * 
+ * Formata a data vinda do banco de dados
+ * 
+ */
+if ( !function_exists( 'formatDate' ) ) {
+    function formatDate( $date ) {
+        return date( 'd/m/Y H:i:s', strtotime( $date ) );
+    }
+}
+
 // End of file
