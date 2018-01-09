@@ -21,10 +21,10 @@ $config['schema'] = array (
     'constraint' => 60,
     'null' => false,
   ),
-  'image' => 
+  'midia_id' => 
   array (
-    'type' => 'varchar',
-    'constraint' => 255,
+    'type' => 'int',
+    'constraint' => 11,
     'null' => true,
   ),
   'created_at' => 

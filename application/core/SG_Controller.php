@@ -11,6 +11,13 @@ class SG_Controller extends CI_Controller {
     public $model = null;
 
     /**
+     * Indica se deve pernmitir exclusao multipla
+     *
+     * @var boolean
+     */
+    public $enableMultipleDelete = false;
+
+    /**
      * __construct
      * 
      * Método construtor
@@ -79,6 +86,36 @@ class SG_Controller extends CI_Controller {
             }
         } else return true;
     }
+
+    /**
+	 * Deleta mais de um item
+	 *
+	 * @return void
+	 */
+	public function delete_mutiples() {
+        if ( !$this->enableMultipleDelete ) return;
+
+		$this->protectIt( 'delete' ); 
+
+		// Carrega os ids
+		$ids = $this->input->post( 'ids' );
+		$ids = $ids ? $ids : [];
+
+		// Percorre o array
+		foreach( $ids as $id ) {
+
+			// Carrega o item
+			$item = $this->model->findById( $id );
+			if ( !$item ) continue;
+
+			// Deleta o item
+			$item->delete();
+		}
+
+		// Seta a mensagem
+		flash( 'swaSuccessBody', 'Ação em massa realizada com sucesso!' );
+		close_page( 'category/list' );
+	}
 }
 
 // End of file

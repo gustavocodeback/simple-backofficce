@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{{ base_url( 'public/dist/css/app.css') }}"></link>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"></link>
     @yield( 'styles' )
+
+    @yield( 'headScripts' )
 </head>
 <body>
     <script>

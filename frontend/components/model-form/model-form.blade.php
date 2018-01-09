@@ -13,6 +13,20 @@
       <div class="modal-body">
         @foreach( $modelGrid->form( 'fields' ) as $item )
           @if( $item['type'] == 'midia' )
+
+          @section( 'headScripts' )
+            @php
+              $midia = $modelGrid->belongsTo( 'midia' );
+            @endphp
+            @if( $midia )
+              <script>
+              var selectedMidias = [
+                {!! json_encode( $midia->metadata() ) !!}
+              ];
+              </script>
+            @endif
+          @endsection
+
           <div  class="midiaInput"         
                 {!! isset( $item['size'] ) ? 'data-size="'.$item['size'].'"' : 'data-size="1"' !!}
                 {!! isset( $item['ratio'] ) ? 'data-ratio="'.$item['ratio'].'"' : '' !!}>

@@ -128,10 +128,11 @@ class Gateway_model extends Gateway_finder {
 
                     // Carrega a model
 		                $this->load->model( 'category' );
-
                     $category = $this->Category->findById( $d );
-
-                    return $category->name;
+                    if ( $category )
+                      return $category->name;
+                    else
+                      return '';
                 }
           ),
           4 => 
@@ -153,6 +154,16 @@ class Gateway_model extends Gateway_finder {
             'db' => 'default_gateway',
             'dt' => 5,
           ),
+          array (  
+            'db' => 'id',    
+            'dt' => 7,
+            'formatter' => function( $d, $row ) {
+                return '<label class="custom-control custom-checkbox">
+                            <input value="'.$d.'" type="checkbox" name="ids[]" class="custom-control-input bulkCheckbox">
+                            <span class="custom-control-indicator"></span>
+                        </label>';
+            }
+          )
         );
         $columns[] = 
         [   
@@ -211,7 +222,7 @@ class Gateway_model extends Gateway_finder {
             'image' => 
             array (
                 'label' => 'Foto',
-                'name'  => 'image',
+                'name'  => 'midia_id',
                 'type'  => 'midia',
                 'size'  => '1',
                 'ratio' => '1:1'
@@ -254,6 +265,19 @@ class Gateway_model extends Gateway_finder {
             'read'   => [ 'any' ]
         ];
     }
+
+    /**
+     * bulkActions
+     * 
+     * Ações em massa
+     *
+     * @return void
+     */
+    public function bulkActions() {
+      return [
+          'Excluir' => site_url( 'gateway/delete_mutiples' )
+      ];
+  }
 }
 
 // End of file

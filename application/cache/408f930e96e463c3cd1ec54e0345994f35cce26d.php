@@ -14,6 +14,21 @@
       <div class="modal-body">
         <?php $__currentLoopData = $modelGrid->form( 'fields' ); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <?php if( $item['type'] == 'midia' ): ?>
+
+          <?php $__env->startSection( 'headScripts' ); ?>
+            <?php
+              $midia = $modelGrid->belongsTo( 'midia' );
+            ?>
+            <?php if( $midia ): ?>
+              <script>
+              var selectedMidias = [
+                <?php echo json_encode( $midia->metadata() ); ?>
+
+              ];
+              </script>
+            <?php endif; ?>
+          <?php $__env->stopSection(); ?>
+
           <div  class="midiaInput"         
                 <?php echo isset( $item['size'] ) ? 'data-size="'.$item['size'].'"' : 'data-size="1"'; ?>
 

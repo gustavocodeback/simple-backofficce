@@ -27,7 +27,7 @@ class Notice extends SG_Controller {
 		parent::__construct();
 
 		// Seta o contexto
-		context( 'notice' );
+		sidebar( 'Notícias cadastradas' );
 
 		// carrega a model
 		$this->load->model( 'notice' );

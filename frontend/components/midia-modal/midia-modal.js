@@ -34,6 +34,11 @@ var midiaInput = new Vue({
             self.picked = obj.picked;
             $( '#midiaModal' ).modal( 'hide' );
         });
+
+        // Verifica se já existe midia
+        if ( typeof selectedMidias != 'undefined' ) {
+            this.picked = selectedMidias;
+        }
     },
     methods: {
         open: function() {

@@ -18,8 +18,8 @@ class Category_model extends Category_finder {
      * @var array
      */
     public $fields = array (
-        'name' => 'name',
-        'image' => 'image',
+        'name'       => 'name',
+        'midia_id'   => 'midia_id',
         'created_at' => 'created_at',
         'updated_at' => 'updated_at',
     );
@@ -84,24 +84,40 @@ class Category_model extends Category_finder {
 
         // Columns
         $columns = array (
-        0 => 
             array (
                 'db' => 'id',
                 'dt' => 0,
             ),
-        1 => 
             array (
                 'db' => 'name',
                 'dt' => 1,
             ),
-        2 => 
             array (
-                'db' => 'image',
+                'db' => 'midia_id',
                 'dt' => 2,
                 'formatter' => function( $d, $row ) {
-                    return "<img src='$d' width='100px'>";
+
+                    // Verifica se existe uma midia
+                    if ( $d ) {
+                        $this->load->model( 'midia' );
+                        $midia = $this->Midia->findById( $d );
+                        return "<img src='".$midia->path()."' width='50px'>";
+                    }
+
+                    // Volta o resultado
+                    return '';
                 }
             ),
+            array (  
+                'db' => 'id',    
+                'dt' => 4,
+                'formatter' => function( $d, $row ) {
+                    return '<label class="custom-control custom-checkbox">
+                                <input value="'.$d.'" type="checkbox" name="ids[]" class="custom-control-input bulkCheckbox">
+                                <span class="custom-control-indicator"></span>
+                            </label>';
+                }
+            )
         );
         $columns[] = 
         [   
@@ -144,9 +160,9 @@ class Category_model extends Category_finder {
             'image' => 
                 array (
                     'label' => 'Foto',
-                    'name' => 'image',
-                    'type' => 'file',
-                    'rules' => 'trim|max_length[255]',
+                    'name'  => 'midia_id',
+                    'type'  => 'midia',
+                    'size'  => '1'
                 ),
             )
         ];
@@ -166,6 +182,19 @@ class Category_model extends Category_finder {
             'edit'   => [ 'any' ],
             'delete' => [ 'any' ],
             'read'   => [ 'any' ]
+        ];
+    }
+
+    /**
+     * bulkActions
+     * 
+     * Ações em massa
+     *
+     * @return void
+     */
+    public function bulkActions() {
+        return [
+            'Excluir' => site_url( 'category/delete_mutiples' )
         ];
     }
 }

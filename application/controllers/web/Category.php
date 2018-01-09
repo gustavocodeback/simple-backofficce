@@ -18,6 +18,13 @@ class Category extends SG_Controller {
 	public $model;
 
 	/**
+     * Indica se deve pernmitir exclusao multipla
+     *
+     * @var boolean
+     */
+    public $enableMultipleDelete = true;
+
+	/**
 	 * __construct
 	 * 
 	 * método construtor
@@ -25,9 +32,7 @@ class Category extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
-
-		// Seta o contexto
-		context( 'category' );
+		sidebar( 'Categorias de veículos' );
 
 		// carrega a model
 		$this->load->model( 'category' );
@@ -154,7 +159,9 @@ class Category extends SG_Controller {
 		$item->fill( $this->input->post() );
 		setItem( 'modelGrid', $item );
 
-		$item->image = 'https://dcomercio.com.br/public/upload/gallery/2017/tecnologia/tecnologia.jpg';
+		// Pega as midias
+		$midias = $this->input->post( 'midia' );
+		if ( count( $midias ) > 0 ) $item->midia_id = $midias[0];
 
 		// valida o formulario
 		if ( $this->__validate() ) {

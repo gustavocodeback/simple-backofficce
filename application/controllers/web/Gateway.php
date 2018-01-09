@@ -18,6 +18,13 @@ class Gateway extends SG_Controller {
 	public $model;
 
 	/**
+     * Indica se deve pernmitir exclusao multipla
+     *
+     * @var boolean
+     */
+    public $enableMultipleDelete = true;
+
+	/**
 	 * __construct
 	 * 
 	 * método construtor
@@ -25,6 +32,7 @@ class Gateway extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+		sidebar( 'Veículos de notícias' );
 
 		// carrega a model
 		$this->load->model( 'gateway' );
