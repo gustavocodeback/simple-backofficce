@@ -51,6 +51,14 @@ require( '../pages/midias/midias' );
  * 
  */
 $( document ).ready( function() {
+    $( ".modal" ).on("hidden.bs.modal", function () {
+        if ( !$('.modal').is( ':visible' ) ) {
+            $( "body" ).removeClass( "has-modal-open" );
+        } else {
+            $("body").addClass( "modal-open" );
+        }
+    });
+
     window.slimConfig = {
         label: 'Clique ou arraste sua imagem aqui',
         buttonConfirmLabel: 'Confirmar',

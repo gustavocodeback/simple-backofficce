@@ -13349,6 +13349,10 @@ body {
   background: #EAEAEA;
 }
 
+body.has-modal-open {
+  overflow: hidden;
+}
+
 .bootstrap-select.show > .dropdown-menu > .dropdown-menu {
   display: block;
 }
@@ -13397,11 +13401,6 @@ select.input-sm {
 textarea.input-sm,
 select[multiple].input-sm {
   height: auto;
-}
-
-.midia-input {
-  width: 100%;
-  border: 1px solid #e6e6e6;
 }
 
 .timeline {

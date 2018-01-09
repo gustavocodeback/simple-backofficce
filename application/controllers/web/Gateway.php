@@ -26,9 +26,6 @@ class Gateway extends SG_Controller {
 	public function __construct() {
 		parent::__construct();
 
-		// Seta o contexto
-		context( 'gateway' );
-
 		// carrega a model
 		$this->load->model( 'gateway' );
 		$this->model = $this->Gateway;
@@ -39,7 +36,7 @@ class Gateway extends SG_Controller {
 		if ( $id ) {
 			if ( $md = $this->model->findById( $id ) ) $model = $md;
 		}
-		
+
 		// Seta a model do grid
 		setItem( 'url', 'gateway/datatables' );
 		setItem( 'modelGrid', $model );
@@ -178,8 +175,10 @@ class Gateway extends SG_Controller {
 		$item->fill( $this->input->post() );
 		setItem( 'modelGrid', $item );
 		
-		$item->image = 'https://scontent.fsod3-1.fna.fbcdn.net/v/t1.0-9/16406937_1290704314340740_2719589786923735387_n.png?oh=78ac04b2bcb8d38bd0ba7a44f75bd488&oe=5AF15EA1';
-		
+		// Pega as midias
+		$midias = $this->input->post( 'midia' );
+		if ( count( $midias ) > 0 ) $item->midia_id = $midias[0];
+
 		// valida o formulario
 		if ( $this->__validate() ) {
 

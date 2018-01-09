@@ -13,6 +13,10 @@ body {
     background: #EAEAEA;
 }
 
+body.has-modal-open {
+    overflow: hidden;
+}
+
 // Bootstrap select
 .bootstrap-select.show>.dropdown-menu>.dropdown-menu {
     display: block;

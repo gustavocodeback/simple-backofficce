@@ -27,16 +27,16 @@ $config['schema'] = array (
     'constraint' => 11,
     'null' => false,
   ),
+  'midia_id' => 
+  array (
+    'type' => 'int',
+    'constraint' => 11,
+    'null' => true,
+  ),
   'name' => 
   array (
     'type' => 'varchar',
     'constraint' => 60,
-    'null' => false,
-  ),
-  'image' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
     'null' => false,
   ),
   'rss' => 

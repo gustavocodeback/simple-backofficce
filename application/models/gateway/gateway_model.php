@@ -20,8 +20,8 @@ class Gateway_model extends Gateway_finder {
     public $fields = array (
       'region_id' => 'region_id',
       'category_id' => 'category_id',
+      'midia_id' => 'midia_id',
       'name' => 'name',
-      'image' => 'image',
       'rss' => 'rss',
       'default_gateway' => 'default_gateway',
       'created_at' => 'created_at',
@@ -98,10 +98,21 @@ class Gateway_model extends Gateway_finder {
           ),
           1 => 
           array (
-            'db' => 'image',
+            'db' => 'midia_id',
             'dt' => 1,
             'formatter' => function( $d, $row ) {
-                return "<img src='$d' width='100px'>";
+
+                // Verifica se existe uma midia
+                if ( $d ) {
+
+                  // Carrega a model
+                  $this->load->model( 'midia' );
+                  $midia = $this->Midia->findById( $d );
+                  return "<img src='".$midia->path()."' width='50px'>";
+                }
+
+                // Volta o resultado
+                return '';
             }
           ),
           2 => 
