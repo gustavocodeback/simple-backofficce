@@ -18,16 +18,16 @@ class Notice_model extends Notice_finder {
      * @var array
      */
     public $fields = array (
-  'gateway_id' => 'gateway_id',
-  'tittle' => 'tittle',
-  'notice_link' => 'notice_link',
-  'image_link' => 'image_link',
-  'description' => 'description',
-  'date' => 'date',
-  'shared' => 'shared',
-  'created_at' => 'created_at',
-  'updated_at' => 'updated_at',
-);
+      'gateway_id' => 'gateway_id',
+      'title' => 'title',
+      'notice_link' => 'notice_link',
+      'image_link' => 'image_link',
+      'description' => 'description',
+      'date' => 'date',
+      'shared' => 'shared',
+      'created_at' => 'created_at',
+      'updated_at' => 'updated_at',
+    );
 
     /**
      * visibles
@@ -102,7 +102,7 @@ class Notice_model extends Notice_finder {
         ),
         2 => 
         array (
-          'db' => 'tittle',
+          'db' => 'title',
           'dt' => 2,
         ),
         3 => 
@@ -142,56 +142,56 @@ class Notice_model extends Notice_finder {
         $data = [
             'url'    => $url,
             'fields' => array (
-  'gateway_id' => 
-  array (
-    'label' => 'gateway_id',
-    'name' => 'gateway_id',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  'tittle' => 
-  array (
-    'label' => 'tittle',
-    'name' => 'tittle',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[120]',
-  ),
-  'notice_link' => 
-  array (
-    'label' => 'notice_link',
-    'name' => 'notice_link',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  'image_link' => 
-  array (
-    'label' => 'image_link',
-    'name' => 'image_link',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  'description' => 
-  array (
-    'label' => 'description',
-    'name' => 'description',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  'date' => 
-  array (
-    'label' => 'date',
-    'name' => 'date',
-    'type' => 'text',
-    'rules' => 'trim|required',
-  ),
-  'shared' => 
-  array (
-    'label' => 'shared',
-    'name' => 'shared',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-)
+              'gateway_id' => 
+              array (
+                'label' => 'gateway_id',
+                'name' => 'gateway_id',
+                'type' => 'number',
+                'rules' => 'trim|required|max_length[11]|integer',
+              ),
+              'title' => 
+              array (
+                'label' => 'title',
+                'name' => 'title',
+                'type' => 'text',
+                'rules' => 'trim|required|max_length[120]',
+              ),
+              'notice_link' => 
+              array (
+                'label' => 'notice_link',
+                'name' => 'notice_link',
+                'type' => 'text',
+                'rules' => 'trim|required|max_length[255]',
+              ),
+              'image_link' => 
+              array (
+                'label' => 'image_link',
+                'name' => 'image_link',
+                'type' => 'text',
+                'rules' => 'trim|required|max_length[255]',
+              ),
+              'description' => 
+              array (
+                'label' => 'description',
+                'name' => 'description',
+                'type' => 'text',
+                'rules' => 'trim|required|max_length[255]',
+              ),
+              'date' => 
+              array (
+                'label' => 'date',
+                'name' => 'date',
+                'type' => 'text',
+                'rules' => 'trim|required',
+              ),
+              'shared' => 
+              array (
+                'label' => 'shared',
+                'name' => 'shared',
+                'type' => 'number',
+                'rules' => 'trim|required|max_length[11]|integer',
+              ),
+            )
         ];
         return $data[$key];
     }

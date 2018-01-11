@@ -26,6 +26,16 @@ class Notice_finder extends SG_Model {
     public function __construct() {
         parent::__construct();
     }
+
+    /**
+     * Pega uma noticia pelo link
+     *
+     * @param [type] $link
+     * @return void
+     */
+    public function getByLink( $link ) {
+        return $this->where( "notice_link = '$link'" )->findOne();
+    }
 }
 
 /* end of file */

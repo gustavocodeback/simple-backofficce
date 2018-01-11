@@ -21,7 +21,7 @@ $config['schema'] = array (
     'constraint' => 11,
     'null' => false,
   ),
-  'tittle' => 
+  'title' => 
   array (
     'type' => 'varchar',
     'constraint' => 120,
@@ -37,13 +37,13 @@ $config['schema'] = array (
   array (
     'type' => 'varchar',
     'constraint' => 255,
-    'null' => false,
+    'null' => true,
   ),
   'description' => 
   array (
     'type' => 'varchar',
     'constraint' => 255,
-    'null' => false,
+    'null' => true,
   ),
   'date' => 
   array (
@@ -54,7 +54,7 @@ $config['schema'] = array (
   array (
     'type' => 'int',
     'constraint' => 11,
-    'null' => false,
+    'null' => true,
   ),
   'created_at' => 
   array (

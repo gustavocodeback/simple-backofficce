@@ -379,6 +379,41 @@ class Model_finder extends Model_alter
     }
 
     /**
+     * Aplica uma função para todas as linhas da tabela,
+     * porém carregando um por vez
+     *
+     * @param [type] $callback
+     * @return void
+     */
+    public function chunckRows( $callback ) {
+
+        // Carrega a primeira página
+        $pages = $this->paginate( 1, 1 );
+        $total = $pages->total_pages;
+
+        // Verifica se existem paginas
+        if ( $total == 0 ) return;
+
+        // Verifica se não existe somente uma página
+        if ( $total == 1 ) {
+            $callback( $pages->data[0] );
+            return;
+        }
+
+        // Percorre todas as páginas
+        for( $i = 1; $i <= $total; $i++ ) {
+            
+            // Verifica se é a primeira página
+            if ( $i == 1 ) {
+                $callback( $pages->data[0] );
+            } else {
+                $pages = $this->paginate( $i, 1 );
+                $callback( $pages->data[0] );                
+            }
+        }
+    }
+
+    /**
      * createLinks
      * 
      * Cria os links de paginação
