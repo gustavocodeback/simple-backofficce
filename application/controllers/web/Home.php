@@ -33,6 +33,15 @@ class Home extends SG_Controller {
 	 */
 	public function index() {
 		setTitle( 'Inicio' );
+		$this->load->model( ['gateway', 'notice' ] );
+
+		// Carrega as noticias mais novas
+		$notices  = $this->Notice->newer()->paginate( 1, 15 );
+		$gateways = $this->Gateway->paginate( 1, 1 );
+		setItem( 'numOfNotices', $notices->total_itens );
+		setItem( 'numOfGateways', $gateways->total_itens );
+		setItem( 'lastUpdate', $this->settings->get( 'news_last_update', time() ) );
+		setItem( 'notices', $notices->data );
 
 		// Carrega o grid
 		view( 'home/home' );

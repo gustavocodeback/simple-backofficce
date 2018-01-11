@@ -51,6 +51,9 @@ class Crons extends SG_Controller {
 			]);
 			$notice->save();
 		}
+
+		// Salva a data da atualização
+		$this->settings->set( 'news_last_update', time() );
 	}
 	
 	/**
