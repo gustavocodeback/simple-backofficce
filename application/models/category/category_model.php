@@ -32,10 +32,10 @@ class Category_model extends Category_finder {
      * @var array
      */
     public $visibles = array (
-        0 => 'ID',
-        1 => 'Nome',
-        2 => 'Foto',
-        3 => 'Ações',
+        'ID',
+        'Nome',
+        'Foto',
+        'Ações',
     );
 
     /**

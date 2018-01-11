@@ -13353,6 +13353,10 @@ body.has-modal-open {
   overflow: hidden;
 }
 
+.clicable:hover {
+  cursor: pointer;
+}
+
 .bootstrap-select.show > .dropdown-menu > .dropdown-menu {
   display: block;
 }

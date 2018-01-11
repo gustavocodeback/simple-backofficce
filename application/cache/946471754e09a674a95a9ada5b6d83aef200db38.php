@@ -11,6 +11,13 @@
     <?php echo $__env->yieldContent( 'styles' ); ?>
 </head>
 <body>
+    <script>
+        var Site = {
+            url: '<?php echo e(site_url()); ?>',
+            base: '<?php echo e(base_url()); ?>',
+        };
+    </script>
+
     <?php echo $__env->yieldContent( 'content' ); ?>
 
     <script src="<?php echo e(base_url( 'public/dist/js/app.js')); ?>"></script>

@@ -32,7 +32,7 @@ class DataTables {
      * @param [type] $columns
      * @return void
      */
-    public function send( $table, $columns ) {
+    public function send( $table, $columns, $whereResult = false, $whereAll = false ) {
 
         // SQL server connection information
         $sql_details = array(
@@ -43,7 +43,11 @@ class DataTables {
         );
 
         // Chama o método do DataTables
-        $json = SSP::simple( $_GET, $sql_details, $table, 'id', $columns );
+        if ( $whereResult || $whereAll ){
+            $json = SSP::complex( $_GET, $sql_details, $table, 'id', $columns, $whereResult, $whereAll );        
+        } else {
+            $json = SSP::simple( $_GET, $sql_details, $table, 'id', $columns );
+        }
 
         // Volta os dados
         return safe_json_encode( $json );

@@ -37,13 +37,12 @@ class Gateway_model extends Gateway_finder {
      * @var array
      */
     public $visibles = array (
-      0 => 'ID',
-      1 => 'Foto',
-      2 => 'Nome',
-      3 => 'Categoria',
-      4 => 'Região',
-      5 => 'Padrão',
-      6 => 'Ações',
+      'ID',
+      'Foto',
+      'Nome',
+      'Categoria',
+      'Região',
+      'Ações',
     );
 
     /**
@@ -85,7 +84,7 @@ class Gateway_model extends Gateway_finder {
      *
      * @return void
      */
-    public function DataTables() {
+    public function DataTables( $cat_id = false ) {
         
         // Carrega a library
         $this->load->library( 'DataTables' );
@@ -150,14 +149,9 @@ class Gateway_model extends Gateway_finder {
                     return $region->name;
                 }
           ),
-          5 => 
-          array (
-            'db' => 'default_gateway',
-            'dt' => 5,
-          ),
           array (  
             'db' => 'id',    
-            'dt' => 7,
+            'dt' => 6,
             'formatter' => function( $d, $row ) {
                 return '<label class="custom-control custom-checkbox">
                             <input value="'.$d.'" type="checkbox" name="ids[]" class="custom-control-input bulkCheckbox">
@@ -169,20 +163,23 @@ class Gateway_model extends Gateway_finder {
         $columns[] = 
         [   
             'db' => 'id',
-            'dt' => 6,  
+            'dt' => 5,  
             'formatter' => function( $d, $row ) {
 
                 // Formata a data
                 $del  = rmButton( 'gateway/delete/'.$d );
                 $edit = editButton( 'gateway/list?addModal=true&id='.$d );
+                $list = '<a href="'.site_url( 'gateway/last_news/'.$d ).'" class="btn btn-sm btn-primary text-light">
+                          <i class="fa fa-list"></i>
+                        </a>';
 
                 // Volta os botões
-                return $del.'&nbsp'.$edit;
+                return $del.'&nbsp'.$edit.'&nbsp'.$list;
             }
         ];
 
         // Volta o resultado
-        return $this->datatables->send( $this->table(), $columns );
+        return $this->datatables->send( $this->table(), $columns, false, "category_id = $cat_id" );
     }
     
     /**

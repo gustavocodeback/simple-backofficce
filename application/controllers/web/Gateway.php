@@ -109,10 +109,10 @@ class Gateway extends SG_Controller {
 	 *
 	 * @return void
 	 */
-	public function datatables() {
+	public function datatables( $id ) {
 		
 		// Chama o método da datatables
-		echo $this->model->DataTables();
+		echo $this->model->DataTables( $id );
 	}
 
 	/**
@@ -122,9 +122,10 @@ class Gateway extends SG_Controller {
 	 *
 	 * @return void
 	 */
-	public function list() {
+	public function list( $id = false ) {
 		$this->protectIt( 'read' ); 
 		setTitle( 'Listagem' );
+		setItem( 'url', 'gateway/datatables/'.$id );
 		
 		// Carrega o grid
 		view( 'grid/grid' );
@@ -206,6 +207,54 @@ class Gateway extends SG_Controller {
 
 		// carrega a view
 		view( 'grid/grid' );
+	}
+
+	/**
+	 * Lista as ultimas noticias de um canal
+	 *
+	 * @param boolean $id
+	 * @return void
+	 */
+	public function last_news( $id = false ) {
+		setTitle( 'Últimas noticias' );
+
+		// Pega um item
+		$item = $this->model->findById( $id );
+		if ( !$item ) return;
+
+		// Carrega a library de rss
+		$this->load->library( 'rss' );
+		$rss = $this->rss->load( $item->rss );
+
+		// Verifica o status	
+		if ( !$rss->status ) {
+			flash( 'swaErrorBody', $rss->error );
+			return;
+		}
+
+		// Seta na view
+		setItem( 'rss', $rss );
+
+		// Carrega a view
+		view( 'gateway/gateway' );
+	}
+
+	/**
+	 * Carrega a lista
+	 *
+	 * @return void
+	 */
+	public function list_categories() {
+		setTitle( 'Escolha uma categoria' );
+
+		// Carrega a model
+		$this->load->model( 'category' );
+		$categories = $this->Category->find();
+		$categories = $categories ? $categories : [];
+		setItem( 'categories', $categories );
+
+		// Carrega a view
+		view( 'gateway/section' );
 	}
 }
 
