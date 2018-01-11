@@ -2,7 +2,7 @@
 
 /*                                                               
  |-------------------------------------------------------------- 
- | TABELA gateway                                           
+ | TABELA personal_category                                           
  |-------------------------------------------------------------- 
  |                                                               
 */
@@ -15,46 +15,16 @@ $config['schema'] = array (
     'auto_increment' => true,
     'null' => false,
   ),
-  'region_id' => 
-  array (
-    'type' => 'int',
-    'constraint' => 11,
-    'null' => false,
-  ),
-  'category_id' => 
-  array (
-    'type' => 'int',
-    'constraint' => 11,
-    'null' => false,
-  ),
-  'midia_id' => 
-  array (
-    'type' => 'int',
-    'constraint' => 11,
-    'null' => true,
-  ),
   'name' => 
   array (
-    'type' => 'varchar',
+    'type' => 'text',
     'constraint' => 60,
     'null' => false,
   ),
-  'url' => 
+  'user_id' => 
   array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => false,
-  ),
-  'rss' => 
-  array (
-    'type' => 'varchar',
-    'constraint' => 255,
-    'null' => false,
-  ),
-  'default_gateway' => 
-  array (
-    'type' => 'char',
-    'constraint' => 1,
+    'type' => 'int',
+    'constraint' => 11,
     'null' => false,
   ),
   'created_at' => 

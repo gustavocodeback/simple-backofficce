@@ -22,6 +22,7 @@ class Gateway_model extends Gateway_finder {
       'category_id' => 'category_id',
       'midia_id' => 'midia_id',
       'name' => 'name',
+      'url' => 'url',
       'rss' => 'rss',
       'default_gateway' => 'default_gateway',
       'created_at' => 'created_at',
@@ -216,6 +217,13 @@ class Gateway_model extends Gateway_finder {
             array (
               'label' => 'Nome',
               'name' => 'name',
+              'type' => 'text',
+              'rules' => 'trim|required|max_length[60]',
+            ),
+            'url' => 
+            array (
+              'label' => 'Url',
+              'name' => 'url',
               'type' => 'text',
               'rules' => 'trim|required|max_length[60]',
             ),

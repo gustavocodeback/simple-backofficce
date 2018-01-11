@@ -12,7 +12,7 @@ class Notice extends SG_Controller {
 	public function __construct() {
 		parent::__construct();
 
-		// carrega a model de usuários
+		// carrega a model de noticias
 		$this->load->model( 'notice' );
 	}
 
@@ -38,6 +38,9 @@ class Notice extends SG_Controller {
 				// busca o veiculo de noticia
 				$veiculo = $notice->belongsTo( 'gateway' );
 
+				// busca a imagem do veiculo de noticia
+				$image = $veiculo->belongsTo( 'midia' );
+
 				// formata as informações
 				$notices_formated[] = [
 					'id'            => $notice->id,
@@ -47,7 +50,7 @@ class Notice extends SG_Controller {
 					'description'   => $notice->description,
 					'created'       => date( 'd/m/Y H:i:s', strtotime( $notice->created_at ) ),
 					'gateway_name'  => $veiculo->name,
-					'gateway_image' => $veiculo->image,
+					'gateway_image' => $image->path(),
 					'gateway_id'    => $notice->gateway_id,
 				];
 			}
