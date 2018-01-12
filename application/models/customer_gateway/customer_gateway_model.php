@@ -20,6 +20,7 @@ class Customer_gateway_model extends Customer_gateway_finder {
     public $fields = array (
   'customer_id' => 'customer_id',
   'gateway_id' => 'gateway_id',
+  'status' => 'status',
   'created_at' => 'created_at',
   'updated_at' => 'updated_at',
 );
@@ -35,7 +36,8 @@ class Customer_gateway_model extends Customer_gateway_finder {
   0 => 'ID',
   1 => 'customer_id',
   2 => 'gateway_id',
-  3 => 'Ações',
+  3 => 'status',
+  4 => 'Ações',
 );
 
     /**
@@ -99,11 +101,16 @@ class Customer_gateway_model extends Customer_gateway_finder {
     'db' => 'gateway_id',
     'dt' => 2,
   ),
+  3 => 
+  array (
+    'db' => 'status',
+    'dt' => 3,
+  ),
 );
         $columns[] = 
         [   
             'db' => 'id',
-            'dt' => 3,  
+            'dt' => 4,  
             'formatter' => function( $d, $row ) {
 
                 // Formata a data
@@ -144,6 +151,13 @@ class Customer_gateway_model extends Customer_gateway_finder {
     'name' => 'gateway_id',
     'type' => 'number',
     'rules' => 'trim|required|max_length[11]|integer',
+  ),
+  'status' => 
+  array (
+    'label' => 'status',
+    'name' => 'status',
+    'type' => 'char',
+    'rules' => 'trim|required|max_length[1]|integer',
   ),
 )
         ];

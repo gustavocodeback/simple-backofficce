@@ -25,6 +25,7 @@ class Notice_model extends Notice_finder {
       'description' => 'description',
       'date' => 'date',
       'shared' => 'shared',
+      'default_notice' => 'default_notice',
       'created_at' => 'created_at',
       'updated_at' => 'updated_at',
     );

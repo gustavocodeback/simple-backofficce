@@ -21,10 +21,12 @@ class Notice extends SG_Controller {
 	 * 
 	 * pega todas as noticias
 	 */
-	public function get_notices() {
+	public function get_notices( $page = 1 ) {
 
 		// busca as noticias
-		$notices = $this->Notice->order( 'created_at', 'DESC' )->paginate();
+		$notices = $this->Notice->where( "default_notice = 'S'" )
+								->order('date', 'DESC')
+								->paginate( $page, 10 );
 
 		// verifica se tem noticias
 		if( $notices ) {
@@ -44,7 +46,7 @@ class Notice extends SG_Controller {
 				// formata as informações
 				$notices_formated[] = [
 					'id'            => $notice->id,
-					'tittle'        => $notice->tittle,
+					'title'         => $notice->title,
 					'notice_link'   => $notice->notice_link,
 					'image_link'    => $notice->image_link,
 					'description'   => $notice->description,
@@ -54,7 +56,8 @@ class Notice extends SG_Controller {
 					'gateway_id'    => $notice->gateway_id,
 				];
 			}
-			return resolve( $notices_formated );
+			$notices->data = $notices_formated;
+			return resolve( $notices );
 		} else {
 			return reject( false );
 		}

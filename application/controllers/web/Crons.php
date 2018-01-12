@@ -46,6 +46,7 @@ class Crons extends SG_Controller {
 				'title'       => $item['title'] ? $item['title'] : null,
 				'notice_link' => $item['link'] ? $item['link'] : null,
 				'image_link'  => $item['cover'] ? $item['cover'] : null,
+				'default_notice' => $row->default_gateway,
 				'description'  => $item['description'] ? $item['description'] : null,
 				'date' => isset( $item['pubDate'] ) ? date( 'Y-m-d H:i:s', strtotime( $item['pubDate'] ) ) : now(),
 			]);

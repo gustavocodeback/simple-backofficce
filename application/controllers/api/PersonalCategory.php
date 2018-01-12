@@ -28,7 +28,7 @@ class PersonalCategory extends SG_Controller {
 			[
 				'field' => 'name',
 				'label' => 'Nome',
-				'rules' => 'min_length[60]|max_length[40]|required'
+				'rules' => 'min_length[3]|max_length[40]|required'
 			]
 		];
 
@@ -51,9 +51,11 @@ class PersonalCategory extends SG_Controller {
 		if( $this->__validPersonalCategoryForm() ) {
 
 			// sava a categoria
-			$categoria->save();
-
-			return resolve( 'success' );
+			if( $categoria->save() ){
+				return resolve( 'success' );
+			} else {
+				return reject( 'Erro ao salvar a cateogria' );
+			}
 		} else {
 			return reject( validation_errors() );
 		}
