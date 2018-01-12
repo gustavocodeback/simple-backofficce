@@ -48,6 +48,19 @@ class Personal_category_model extends Personal_category_finder {
         parent::__construct();
     }
 
+    /** 
+     * Volta os metodos
+     * 
+     */
+    public function parse() {
+        return [
+            'name'       => $this->name,
+            'user_id'    => $this->user_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
+    }
+
     /**
      * table
      *

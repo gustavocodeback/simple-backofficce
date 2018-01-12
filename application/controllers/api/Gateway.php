@@ -1,5 +1,4 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Gateway extends SG_Controller {
 
@@ -11,6 +10,7 @@ class Gateway extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+		valid_api_request();
 
 		// carrega a model de veiculos de noticias
 		$this->load->model( [ 'gateway', 'customer_gateway' ] );
@@ -22,99 +22,77 @@ class Gateway extends SG_Controller {
 	 * retorna um veiculo de noticia pelo id
 	 */
 	public function get( $id ) {
-
-		// busca o veiculo pelo id
-		$gateway = $this->Gateway->findById( $id );
-	
+		
 		// verifica se veio veiculo
-		if( $gateway ) {
+		if( $gateway = $this->Gateway->findById( $id ) ) {
 
 			// busca a imagem e acategoria
-			$image = $gateway->belongsTo( 'midia' );
+			$image    = $gateway->belongsTo( 'midia' );
 			$category = $gateway->belongsTo( 'category' );
 
 			// formata os dados
 			$gateway_data = [
-				'id' => $gateway->id,
-				'name' => $gateway->name,
-				'url' => $gateway->url,
-				'image' => $image->path(),
-				'category' => $category->name
+				'id'        => $gateway->id,
+				'name'      => $gateway->name,
+				'url'       => $gateway->url,
+				'image'     => $image->path(),
+				'category'  => $category->name,
+				'status'    => $gateway->status( auth() ),
+				'crated_at' => $gateway->created_at
 			];
 
 			return resolve( $gateway_data );
-		} else {
-			return reject( 'O veículo desejado não existe.' );
-		}
+		} else return reject( 'O veículo desejado não existe.' );
 	}
 
 	/**
 	 * Salva o follow
+	 *
 	 */
-	public function save_follow() {
+	public function follow( $gateway_id ) {
+		loggedOnly();
+		
+		// Carrega a model
+		if ( $gateway = $this->Gateway->findById( $gateway_id ) ) {
 
-		// cria um novo follower
-		$follow = $this->Customer_gateway->new();
-		$follow->fill( $this->input->post(NULL, TRUE) );
-
-		// verifica se salvou
-		if( $follow ) {
-
-			// salva o follow
-			if( $follow->save() ) {
-				return resolve( true );
-			} else {
-				return reject( 'Erro ao salvar o follow' );
-			}
-		} else {
-			return reject( false );
-		}
-	}
-
-	/**
-	 * Verifica se esta seguindo
-	 */
-	public function is_following() {
-
-		// pega os dados
-		$dados = $this->input->post();
-
-		// monta a query
-		$where = 'customer_id = '.$dados['customer_id']. ' AND gateway_id = '.$dados['gateway_id'];
-
-		// busca o status da relação id id
-		$ret = $this->Customer_gateway->where( $where )->findOne();
-		if( !$ret ) return reject( 'Nada encontrado' );
-
-		// verifica se esta seguindo
-		if( $ret->status == 'F' ) {
-			return resolve( 'true' );
-		} else {
-			return reject( 'false' );
-		}
+			// Seta o unfollow
+			if ( $gateway->follow( auth() ) ) {
+				return resolve( 'Ação realizada com sucesso' );
+			} else return reject( 'Não foi possivel realizar essa ação' );
+		} else return reject( 'O Gateway informado não existe' );
 	}
 	
 	/**
 	 * Deixa de seguir um veiculo
+	 *
 	 */
-	public function unfollow() {
+	public function unfollow( $gateway_id ) {
+		loggedOnly();
 
-		// pega os dados
-		$dados = $this->input->post();
+		// Carrega a model
+		if ( $gateway = $this->Gateway->findById( $gateway_id ) ) {
+
+			// Seta o unfollow
+			if ( $gateway->unfollow( auth() ) ) {
+				return resolve( 'Ação realizada com sucesso' );
+			} else return reject( 'Não foi possivel realizar essa ação' );
+		} else return reject( 'O Gateway informado não existe' );
+	}
+
+	/**
+	 * Silenciar veiculo
+	 */
+	public function mute( $gateway_id ) {
+		loggedOnly();
 		
-		// monta a query
-		$where = 'customer_id = '.$dados['customer_id']. ' AND gateway_id = '.$dados['gateway_id'];
+		// Carrega a model
+		if ( $gateway = $this->Gateway->findById( $gateway_id ) ) {
 
-		// busca o status da relação id id
-		$ret = $this->Customer_gateway->where( $where )->findOne();
-		if( !$ret ) return reject( 'Nada encontrado' );
-
-		// verifica se esta seguindo
-		if( $ret->delete() ) {
-			return resolve( 'true' );
-		} else {
-			return reject( 'false' );
-		}
+			// Seta o unfollow
+			if ( $gateway->mute( auth() ) ) {
+				return resolve( 'Ação realizada com sucesso' );
+			} else return reject( 'Não foi possivel realizar essa ação' );
+		} else return reject( 'O Gateway informado não existe' );
 	}
 }
 

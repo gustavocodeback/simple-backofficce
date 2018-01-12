@@ -11,6 +11,7 @@ class Notice extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+		valid_api_request();
 
 		// carrega a model de noticias
 		$this->load->model( 'notice' );
@@ -50,7 +51,7 @@ class Notice extends SG_Controller {
 					'notice_link'   => $notice->notice_link,
 					'image_link'    => $notice->image_link,
 					'description'   => $notice->description,
-					'created'       => date( 'd/m/Y H:i:s', strtotime( $notice->created_at ) ),
+					'created'       => date( 'd/m/Y H:i:s', strtotime( $notice->date ) ),
 					'gateway_name'  => $veiculo->name,
 					'gateway_image' => $image->path(),
 					'gateway_id'    => $notice->gateway_id,
@@ -58,12 +59,8 @@ class Notice extends SG_Controller {
 			}
 			$notices->data = $notices_formated;
 			return resolve( $notices );
-		} else {
-			return reject( false );
-		}
+		} else return reject( false );
 	}
-	
-	
 }
 
 // End of file

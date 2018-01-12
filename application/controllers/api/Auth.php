@@ -25,6 +25,7 @@ class Auth extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+		valid_api_request();
 
 		// carrega a model de usuários
 		$this->load->model( 'user' );

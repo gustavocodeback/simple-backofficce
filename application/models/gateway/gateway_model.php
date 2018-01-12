@@ -56,6 +56,102 @@ class Gateway_model extends Gateway_finder {
     }
 
     /**
+     * Deixa de seguir um gateway
+     * 
+     * @return void
+     */
+    public function unfollow( $customer ) {
+
+      // Carrega a model de relacao
+      $this->load->model( 'customer_gateway' );
+
+      // monta a query
+		  $where = 'customer_id = '.$customer->id. ' AND gateway_id = '.$this->id;    
+
+      // busca o status da relação id id
+      $ret = $this->Customer_gateway->where( $where )->findOne();
+      if( !$ret ) return true;
+
+      // verifica se esta seguindo
+      return $ret->delete();
+    }
+
+    /**
+     * Comeca a seguir um gateway
+     * 
+     * @return void
+     */
+     public function follow( $customer ) {
+      
+      // Carrega a model de relacao
+      $this->load->model( 'customer_gateway' );
+
+      // monta a query
+      $where = 'customer_id = '.$customer->id. ' AND gateway_id = '.$this->id;    
+
+      // busca o status da relação id id
+      $ret = $this->Customer_gateway->where( $where )->findOne();
+      
+      // Verifica se existe a seguida
+      if( $ret ) {
+        if ( $ret->status != 'F' ) {
+          $ret->status = 'F';
+          return $ret->save();
+        } else return true;
+      };
+      
+      // Salva a seguida
+      $seg = $this->Customer_gateway->new();
+      $seg->fill([
+        'customer_id' => $customer->id,
+        'gateway_id'  => $this->id,
+        'status'      => 'F'
+      ]);
+      return $seg->save();
+    }
+
+    /**
+     * Deixa de seguir um gateway
+     * 
+     * @return void
+     */
+    public function mute( $customer ) {
+      
+      // Carrega a model de relacao
+      $this->load->model( 'customer_gateway' );
+
+      // monta a query
+      $where = 'customer_id = '.$customer->id. ' AND gateway_id = '.$this->id;    
+
+      // busca o status da relação id id
+      $ret = $this->Customer_gateway->where( $where )->findOne();
+      if( !$ret ) return false;
+
+      // Salva o novo status
+      $ret->status = 'S';
+      return $ret->save();
+    }
+
+    /**
+     * Pega o status em relacao a um usuario
+     * 
+     * @return void
+     */
+    public function status( $customer ) {
+      if ( !$customer ) return 'U';
+      
+      // Carrega a model de relacao
+      $this->load->model( 'customer_gateway' );
+      
+      // monta a query
+      $where = 'customer_id = '.$customer->id. ' AND gateway_id = '.$this->id;    
+
+      // busca o status da relação id id
+      $ret = $this->Customer_gateway->where( $where )->findOne();
+      return $ret ? $ret->status : 'U';
+    }
+
+    /**
      * table
      *
      * pega a tabela

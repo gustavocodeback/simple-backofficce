@@ -153,7 +153,7 @@ if ( ! function_exists( 'valid_api_request' ) ) {
         if ( $header !== $ci->config->item( 'api_key' ) ) {
             reject( 'A chave da API foi configurada de forma incorreta' );
             die();
-        }
+        } else return true;
     }
 }
 
@@ -288,8 +288,13 @@ if ( ! function_exists( 'loggedOnly' ) ) {
 
         // Verifica se o usuário está logado
         if ( !auth() ) {
-            close_page( 'auth' );
-            exit();
+            if ( valid_api_request() ) {
+                reject( 'Usuário não autorizado' );
+                exit();
+            } else {
+                close_page( 'auth' );
+                exit();
+            }
         } else return true;
     }
 }

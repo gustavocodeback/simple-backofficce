@@ -89,7 +89,6 @@ class SG_Auth {
         } else {
             $user = $this->user;
         }
-        
 
         // verifica se o email esta certo
         if ( $email != $user->email ) return null;
