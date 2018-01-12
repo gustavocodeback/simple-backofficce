@@ -147,10 +147,11 @@ class Rss {
     public function load( $url ) {
         
         // Carrega a URL
-        $feed = file_get_contents( $url );
+        $feed = get_web_page( $url );
+        if ( !isset( $feed['content'] ) && is_string( $feed['content'] ) ) return;
 
         // Converte o XML para array
-        $xml = $this->__parseXML( $feed );
+        $xml = $this->__parseXML( $feed['content'] );
         if ( is_bool( $xml ) ) return $this;
 
         // Verifica se existe o canal
