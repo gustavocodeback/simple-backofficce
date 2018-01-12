@@ -210,7 +210,7 @@ class Auth extends SG_Controller {
 					return;
 
 				} else {
-					if ( $this->attempts_limit ) $user->resetAttempts();
+					if ( $this->attempts_limit ) $this->User->apiUser->resetAttempts();
 					return;
 				}
 			}
