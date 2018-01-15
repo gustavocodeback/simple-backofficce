@@ -55,7 +55,7 @@ class Gateway extends SG_Controller {
 		// Carrega a model
 		if ( $gateway = $this->Gateway->findById( $gateway_id ) ) {
 
-			// Seta o unfollow
+			// Seta o follow
 			if ( $gateway->follow( auth() ) ) {
 				return resolve( 'Ação realizada com sucesso' );
 			} else return reject( 'Não foi possivel realizar essa ação' );
