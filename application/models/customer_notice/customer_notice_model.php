@@ -49,6 +49,19 @@ class Customer_notice_model extends Customer_notice_finder {
     }
 
     /**
+     * Busca as relações pelo usuario
+     */
+    public function getSavedNotices( $customer, $page = 1 ) {
+
+        // busca as relaçoes
+        $relations = $this->Customer_notice->where( "customer_id = ".$customer->id )
+                                           ->order('created_at', 'DESC')
+                                           ->paginate( $page, 10 );  
+        // Retorna as relaçoes
+        return ( $relations ) ? $relations : false;
+    }
+
+    /**
      * table
      *
      * pega a tabela
