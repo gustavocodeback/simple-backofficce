@@ -77,6 +77,26 @@ class Notice extends SG_Controller {
 		} else return reject( false );
 	}
 
+	/**
+	 * Pega as noticias de um veiculo
+	 */
+	public function get_gateway_notices( $gateway_id, $page = 1 ) {
+
+		// Busca as noticias
+		$notices = $this->Notice->where( "gateway_id = ".$gateway_id )
+								->order('date', 'DESC')
+								->paginate( $page, 10 );
+
+		// Verifica se retornou alguma noticia
+		if( $notices ) {
+			$notices->data = $this->__formatNotices( $notices->data );
+			return resolve( $notices );
+		} else return reject( false );
+	}
+
+	/**
+	 * Pega as noticias salvas
+	 */
 	public function get_saved_notices( $page = 1 ) {
 		loggedOnly();
 
