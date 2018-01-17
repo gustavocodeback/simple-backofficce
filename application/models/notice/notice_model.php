@@ -56,6 +56,71 @@ class Notice_model extends Notice_finder {
     }
 
     /**
+     * Salva uma noticia para ler mais tarde
+     * 
+     */
+    public function saveForLater( $customer ) {
+      if( !$customer ) return false;
+
+      // Carrega o model de relação
+      $this->load->model( 'customer_notice' );
+
+      // Monta a query
+      $where = "customer_id = " .$customer->id. " AND notice_id = " .$this->id;
+      
+      // busca a relação customer gateway
+      $saveForLater = $this->Customer_notice->where( $where )->findOne();
+
+      // verifica se ja foi salvo
+      if( $saveForLater ) return true;
+
+      $saved = $this->Customer_notice->new();
+      $saved->fill([
+        'customer_id' => $customer->id,
+        'notice_id'   => $this->id
+      ]);
+      return $saved->save();
+    }
+
+    /**
+     * Verifica se foi salvo para ler mais tarde
+     * 
+     */
+    public function status( $customer ) {
+      if( !$customer ) return false;
+
+      //Carrega o model de relação
+      $this->load->model( 'customer_notice' );
+
+      // Monta a query
+      $where = 'customer_id = ' .$customer->id. ' AND notice_id = ' .$this->id;
+
+      // Verifica se ja foi salvo
+      $dados = $this->Customer_notice->where( $where )->findOne();
+      return $dados ? true : false;
+    }
+
+    /**
+     * Tira a noticia da lista para ler mais tarde
+     * 
+     */
+    public function unsaveForLater( $customer ) {
+
+      // Carrega a model de relação
+      $this->load->model( 'customer_notice' );
+
+      // Monta a query
+      $where = 'customer_id = '.$customer->id. ' AND notice_id = '.$this->id;    
+      
+      // verifica se existe
+      $ret = $this->Customer_notice->where( $where )->findOne();
+      if( !$ret ) return true;
+
+      // deleta
+      return $ret->delete();
+    }
+
+    /**
      * table
      *
      * pega a tabela
