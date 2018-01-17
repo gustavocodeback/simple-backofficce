@@ -17,6 +17,9 @@ class Notice extends SG_Controller {
 		$this->load->model( 'notice' );
 	}
 
+	/**
+	 * Formata os dados da noticia
+	 */
 	private function __formatNotices( $notices ) {
 		
 		// inicializa o array
@@ -62,9 +65,7 @@ class Notice extends SG_Controller {
 	}
 
 	/**
-	 * getNotices
-	 * 
-	 * pega todas as noticias
+	 * Pega todas as noticias
 	 */
 	public function get_notices( $page = 1 ) {
 
@@ -178,6 +179,23 @@ class Notice extends SG_Controller {
 				return resolve( 'Açaõ realizada com sucesso' );
 			} else reject( 'Não foi possivel realizar a ação' );
 		} else reject( 'O Gateway informado não existe' );
+	}
+
+	/**
+	 * Faz a busca das noticias pelo titulo
+	 */
+	public function search_notice( $string, $page = 1 ) {
+		
+		// Busca os registros
+		$notices = $this->Notice->where( 'title LIKE "%'.$string.'%"' )
+								->order('date', 'DESC')
+								->paginate( $page, 10 );
+
+		// verifica se tem noticias
+		if( $notices ) {
+		$notices->data = $this->__formatNotices( $notices->data );
+		return resolve( $notices );
+		} else return reject( false );
 	}
 }
 
