@@ -199,6 +199,16 @@ class Model_finder extends Model_alter
     }
 
     /**
+     * Pega os registros atualizados mais recentemente
+     *
+     * @return void
+     */
+    public function last_updated() {
+        $this->db->order_by( 'updated_at', 'DESC' );
+        return $this;
+    }
+
+    /**
      * Pega os registros mais antigos primeiro
      *
      * @return void
