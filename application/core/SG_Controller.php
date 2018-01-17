@@ -25,7 +25,8 @@ class SG_Controller extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
-
+        cors();
+        
         // Seta os grupos
         $this->setGroups();
     }
