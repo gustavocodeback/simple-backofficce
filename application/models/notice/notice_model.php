@@ -121,6 +121,41 @@ class Notice_model extends Notice_finder {
     }
 
     /**
+     * Denuncia a noticia
+     */
+     public function report( $customer ) {
+      
+      // Carrega a model de denuncias
+      $this->load->model( 'report_notice' );
+
+      // Salva a denuncia
+      $report = $this->Report_notice->new();
+      $report->fill([
+        'customer_id' => $customer->id,
+        'notice_id'  => $this->id
+      ]);
+      return $report->save();
+    }
+
+    /**
+     * Verifica se foi denunciado por
+     * um usuario especifico
+     */
+    public function reported( $customer ) {
+
+      // Carrega a model de denuncias
+      $this->load->model( 'report_notice' );
+
+      // Monta a query
+      $where = 'customer_id = '.$customer->id.' AND notice_id = '.$this->id;
+
+      // Busca a denuncia
+      if( $report = $this->Report_notice->where( $where )->findOne() ) {
+        return true;
+      } else return false;
+    }
+
+    /**
      * table
      *
      * pega a tabela

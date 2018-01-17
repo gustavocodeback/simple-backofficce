@@ -152,6 +152,41 @@ class Gateway_model extends Gateway_finder {
     }
 
     /**
+     * Denuncia o veiculo de noticia
+     */
+     public function report( $customer ) {
+      
+      // Carrega a model de denuncias
+      $this->load->model( 'report_gateway' );
+
+      // Salva a denuncia
+      $report = $this->Report_gateway->new();
+      $report->fill([
+        'customer_id' => $customer->id,
+        'gateway_id'  => $this->id
+      ]);
+      return $report->save();
+    }
+
+    /**
+     * Verifica se foi denunciado por
+     * um usuario especifico
+     */
+    public function reported( $customer ) {
+
+      // Carrega a model de denuncias
+      $this->load->model( 'report_gateway' );
+
+      // Monta a query
+      $where = 'customer_id = '.$customer->id.' AND gateway_id = '.$this->id;
+
+      // Busca a denuncia
+      if( $report = $this->Report_gateway->where( $where )->findOne() ) {
+        return true;
+      } else return false;
+    }
+
+    /**
      * table
      *
      * pega a tabela
