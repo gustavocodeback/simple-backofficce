@@ -69,17 +69,22 @@ class Notice extends SG_Controller {
 	 * Pega todas as noticias
 	 */
 	public function get_notices( $page = 1 ) {
+		$user = auth();
 
 		// Pega as categorias enviadas
 		$categories = $this->input->post( 'categories_ids' );
 
 		// Faz a busca das noticias
 		$notices = $this->Notice->select( 'n.*' )
-					            ->lastPublished()
-					            ->inCategories( $categories );
+								->lastPublished();
+		
+		// Verifica se existem categorias de busca
+		if ( is_array( $categories ) && count( $categories ) > 0 ) {
+			$notices = $notices->inCategories( $categories );
+		}
 
 		// Verifica se existe um usuário
-		if ( auth() ) $notices = $notices->subscribed();
+		if ( $user ) $notices = $notices->subscribed( $user );
 
 		// Busca as noticias
 		$notices = $notices->paginate( $page, 10, 'notice n' );

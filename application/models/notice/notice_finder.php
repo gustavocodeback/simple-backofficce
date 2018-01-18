@@ -82,8 +82,14 @@ class Notice_finder extends SG_Model {
         return $this;
     }
 
+    /**
+     * Pega a assinatura dos itens
+     *
+     * @param [type] $user
+     * @return void
+     */
     public function subscribed( $user ) {
-        $this->db->join( 'customer_gateway cg', 'cg.gateway_id = n.gateway_id && customer_id = '.$user->id );
+        $this->db->join( 'customer_gateway cg', 'cg.gateway_id = n.gateway_id AND customer_id = '.$user->id );
         $this->db->where( 'cg.status = "F" ');
         return $this;
     }
