@@ -17,6 +17,10 @@ class Notice extends SG_Controller {
 		$this->load->model( 'notice' );
 	}
 
+	/**
+	 * Formata as noticias no formato de saida
+	 * 
+	 */
 	private function __formatNotices( $notices ) {
 		
 		// inicializa o array
@@ -65,11 +69,20 @@ class Notice extends SG_Controller {
 	 */
 	public function get_notices( $page = 1 ) {
 
-		// busca as noticias
-		$notices = $this->Notice->where( "default_notice = 'S'" )
-								->order('date', 'DESC')
-								->paginate( $page, 10 );
+		// Pega as categorias enviadas
+		$categories = $this->input->post( 'categories_ids' );
 
+		// Faz a busca das noticias
+		$notices = $this->Notice->select( 'n.*' )
+					            ->lastPublished()
+					            ->inCategories( $categories );
+
+		// Verifica se existe um usuário
+		if ( auth() ) $notices = $notices->subscribed();
+
+		// Busca as noticias
+		$notices = $notices->paginate( $page, 10, 'notice n' );
+		
 		// verifica se tem noticias
 		if( $notices ) {
 			$notices->data = $this->__formatNotices( $notices->data );

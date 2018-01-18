@@ -80,7 +80,7 @@ class Category extends SG_Controller {
 		if ( ( $tsNewer - $tsLastUpdated ) > 0 ) {
 			return resolve( $tsNewer );
 		} else {
-			return reject( $tsLastUpdated );
+			return resolve( $tsLastUpdated );
 		}
 	}
 }

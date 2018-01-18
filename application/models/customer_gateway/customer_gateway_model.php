@@ -18,12 +18,12 @@ class Customer_gateway_model extends Customer_gateway_finder {
      * @var array
      */
     public $fields = array (
-  'customer_id' => 'customer_id',
-  'gateway_id' => 'gateway_id',
-  'status' => 'status',
-  'created_at' => 'created_at',
-  'updated_at' => 'updated_at',
-);
+        'customer_id' => 'customer_id',
+        'gateway_id'  => 'gateway_id',
+        'status'      => 'status',
+        'created_at'  => 'created_at',
+        'updated_at'  => 'updated_at',
+    );
 
     /**
      * visibles
@@ -33,12 +33,12 @@ class Customer_gateway_model extends Customer_gateway_finder {
      * @var array
      */
     public $visibles = array (
-  0 => 'ID',
-  1 => 'customer_id',
-  2 => 'gateway_id',
-  3 => 'status',
-  4 => 'Ações',
-);
+        'ID',
+        'customer_id',
+        'gateway_id',
+        'status',
+        'Ações',
+    );
 
     /**
      * __construct
@@ -86,27 +86,23 @@ class Customer_gateway_model extends Customer_gateway_finder {
 
         // Columns
         $columns = array (
-  0 => 
-  array (
-    'db' => 'id',
-    'dt' => 0,
-  ),
-  1 => 
-  array (
-    'db' => 'customer_id',
-    'dt' => 1,
-  ),
-  2 => 
-  array (
-    'db' => 'gateway_id',
-    'dt' => 2,
-  ),
-  3 => 
-  array (
-    'db' => 'status',
-    'dt' => 3,
-  ),
-);
+            array (
+                'db' => 'id',
+                'dt' => 0,
+            ),
+            array (
+                'db' => 'customer_id',
+                'dt' => 1,
+            ),
+            array (
+                'db' => 'gateway_id',
+                'dt' => 2,
+            ),
+            array (
+                'db' => 'status',
+                'dt' => 3,
+            ),
+        );
         $columns[] = 
         [   
             'db' => 'id',
@@ -138,28 +134,28 @@ class Customer_gateway_model extends Customer_gateway_finder {
         $data = [
             'url'    => $url,
             'fields' => array (
-  'customer_id' => 
-  array (
-    'label' => 'customer_id',
-    'name' => 'customer_id',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  'gateway_id' => 
-  array (
-    'label' => 'gateway_id',
-    'name' => 'gateway_id',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  'status' => 
-  array (
-    'label' => 'status',
-    'name' => 'status',
-    'type' => 'char',
-    'rules' => 'trim|required|max_length[1]|integer',
-  ),
-)
+                'customer_id' => 
+                array (
+                    'label' => 'customer_id',
+                    'name' => 'customer_id',
+                    'type' => 'number',
+                    'rules' => 'trim|required|max_length[11]|integer',
+                ),
+                'gateway_id' => 
+                array (
+                    'label' => 'gateway_id',
+                    'name' => 'gateway_id',
+                    'type' => 'number',
+                    'rules' => 'trim|required|max_length[11]|integer',
+                ),
+                'status' => 
+                array (
+                    'label' => 'status',
+                    'name' => 'status',
+                    'type' => 'char',
+                    'rules' => 'trim|required|max_length[1]|integer',
+                )
+            )
         ];
         return $data[$key];
     }

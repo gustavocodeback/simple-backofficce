@@ -318,7 +318,8 @@ class Model_finder extends Model_alter
     public function paginate( $page = 0, $qtde = 20, $from = true ) {
         
         // seta a tabela
-        if ($from) $this->db->from( $this->table() );
+        if ( $from && is_bool( $from ) ) $this->db->from( $this->table() );
+        if ( is_string( $from ) ) $this->db->from( $from );
         
         // seta os resultados como zero
         $this->count = 0;
@@ -386,6 +387,11 @@ class Model_finder extends Model_alter
             'total_itens' => 0,
             'data'        => []
         ];
+    }
+
+    public function complexQuery( $callback ) {
+        $callback( $this );
+        return $this;
     }
 
     /**

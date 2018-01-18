@@ -16,7 +16,11 @@
         <?php endif; ?>
 
         <?php if( method_exists( $modelGrid, 'form' ) ): ?>
+        <?php if( method_exists( $modelGrid, 'addLink' ) ): ?>
+        <a href="<?php echo e(site_url( $modelGrid->addLink() )); ?>" class="btn btn-success text-light">
+        <?php else: ?>
         <a href="<?php echo e(site_url( $modelGrid->table().'/list?addModal=true' )); ?>" class="btn btn-success text-light">
+        <?php endif; ?>
             Adicionar
         </a>
         <?php endif; ?>

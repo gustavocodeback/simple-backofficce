@@ -152,9 +152,7 @@ class Gateway_model extends Gateway_finder {
     }
 
     /**
-     * table
-     *
-     * pega a tabela
+     * Pega a tabela
      * 
      * @return void
      */
@@ -163,14 +161,31 @@ class Gateway_model extends Gateway_finder {
     }
 
     /**
-     * main
-     * 
      * Pega o campo principal
      *
      * @return void
      */
     public function main() {
         return $this->id;
+    }
+
+    /**
+     * Pega o id da cateogoria pela url
+     *
+     * @return void
+     */
+    private function __getCategoryIdFromUrl() {
+      return $this->uri->segment( 3, 0 );
+    }
+
+    /**
+     * Link de adicionar
+     *
+     * @return void
+     */
+    public function addLink() {
+      $catId = $this->__getCategoryIdFromUrl();
+      return "gateway/list/$catId?addModal=true";
     }
 
     /**
@@ -261,10 +276,11 @@ class Gateway_model extends Gateway_finder {
             'db' => 'id',
             'dt' => 5,  
             'formatter' => function( $d, $row ) {
+                $catId = $this->__getCategoryIdFromUrl();
 
                 // Formata a data
-                $del  = rmButton( 'gateway/delete/'.$d );
-                $edit = editButton( 'gateway/list?addModal=true&id='.$d );
+                $del  = rmButton( "gateway/delete/$catId/".$d );
+                $edit = editButton( "gateway/list/$catId?addModal=true&id=".$d  );
                 $list = '<a href="'.site_url( 'gateway/last_news/'.$d ).'" class="btn btn-sm btn-primary text-light">
                           <i class="fa fa-list"></i>
                         </a>';
@@ -286,8 +302,9 @@ class Gateway_model extends Gateway_finder {
      * @return void
      */
     public function form( $key ) {
-        $url = $this->id ? 'gateway/save/'.$this->id : 'gateway/save';
-        $data = [
+        $catId = $this->__getCategoryIdFromUrl();
+        $url   = $this->id ? "gateway/save/$catId/".$this->id : "gateway/save/$catId";
+        $data  = [
             'url'    => $url,
             'fields' => array (
             'region_id' => 

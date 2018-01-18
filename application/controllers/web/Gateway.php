@@ -139,7 +139,7 @@ class Gateway extends SG_Controller {
 	 * @param boolean $id
 	 * @return void
 	 */
-	public function delete( $id = false ) {
+	public function delete( $catId = false, $id = false ) {
 		$this->protectIt( 'delete' ); 
 
 		// carrega a entidade
@@ -158,7 +158,7 @@ class Gateway extends SG_Controller {
 		}
 
 		// carrega a view
-		close_page( 'gateway/list' );
+		close_page( 'gateway/list/'.$catId );
 	}
 
 	/**
@@ -169,7 +169,7 @@ class Gateway extends SG_Controller {
 	 * @param boolean $id
 	 * @return void
 	 */
-	public function save( $id = false ) {
+	public function save( $catId = false, $id = false ) {
 		
 		// verifica se existe um id
 		if ( $id ) {
@@ -206,6 +206,7 @@ class Gateway extends SG_Controller {
 		}
 
 		// carrega a view
+		setItem( 'url', 'gateway/datatables/'.$catId );
 		view( 'grid/grid' );
 	}
 

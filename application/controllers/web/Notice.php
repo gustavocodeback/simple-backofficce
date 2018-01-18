@@ -54,49 +54,42 @@ class Notice extends SG_Controller {
 	 */
 	public function __validate() {
 		$rules = array (
-  0 => 
-  array (
-    'field' => 'gateway_id',
-    'label' => 'gateway_id',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  1 => 
-  array (
-    'field' => 'tittle',
-    'label' => 'tittle',
-    'rules' => 'trim|required|max_length[120]',
-  ),
-  2 => 
-  array (
-    'field' => 'notice_link',
-    'label' => 'notice_link',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  3 => 
-  array (
-    'field' => 'image_link',
-    'label' => 'image_link',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  4 => 
-  array (
-    'field' => 'description',
-    'label' => 'description',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  5 => 
-  array (
-    'field' => 'date',
-    'label' => 'date',
-    'rules' => 'trim|required',
-  ),
-  6 => 
-  array (
-    'field' => 'shared',
-    'label' => 'shared',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-);
+			array (
+				'field' => 'gateway_id',
+				'label' => 'gateway_id',
+				'rules' => 'trim|required|max_length[11]|integer',
+			),
+			array (
+				'field' => 'tittle',
+				'label' => 'tittle',
+				'rules' => 'trim|required|max_length[120]',
+			),
+			array (
+				'field' => 'notice_link',
+				'label' => 'notice_link',
+				'rules' => 'trim|required|max_length[255]',
+			),
+			array (
+				'field' => 'image_link',
+				'label' => 'image_link',
+				'rules' => 'trim|required|max_length[255]',
+			),
+			array (
+				'field' => 'description',
+				'label' => 'description',
+				'rules' => 'trim|required|max_length[255]',
+			),
+			array (
+				'field' => 'date',
+				'label' => 'date',
+				'rules' => 'trim|required',
+			),
+			array (
+				'field' => 'shared',
+				'label' => 'shared',
+				'rules' => 'trim|required|max_length[11]|integer',
+			)
+		);
 
 		// valida o formulário
         $this->form_validation->set_rules( $rules );

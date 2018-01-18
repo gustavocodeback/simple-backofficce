@@ -17,7 +17,11 @@
         @endif
 
         @if( method_exists( $modelGrid, 'form' ) )
+        @if( method_exists( $modelGrid, 'addLink' ) )
+        <a href="{{ site_url( $modelGrid->addLink() ) }}" class="btn btn-success text-light">
+        @else
         <a href="{{ site_url( $modelGrid->table().'/list?addModal=true' ) }}" class="btn btn-success text-light">
+        @endif
             Adicionar
         </a>
         @endif
