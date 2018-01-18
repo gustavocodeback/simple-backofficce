@@ -30,6 +30,16 @@ class Gateway extends SG_Controller {
 			$image    = $gateway->belongsTo( 'midia' );
 			$category = $gateway->belongsTo( 'category' );
 
+			// Inicia a veriavel
+			$reported = false;
+			
+			// Verifica se tem usuario logado
+			if( auth() ) {
+
+				// Verifica se está denunciado
+				$reported = ( $gateway->reported( auth() ) ) ? true : false ;
+			}
+
 			// formata os dados
 			$gateway_data = [
 				'id'        => $gateway->id,
@@ -38,6 +48,7 @@ class Gateway extends SG_Controller {
 				'image'     => $image->path(),
 				'category'  => $category->name,
 				'status'    => $gateway->status( auth() ),
+				'reported'  => $reported,
 				'crated_at' => $gateway->created_at
 			];
 
@@ -69,7 +80,7 @@ class Gateway extends SG_Controller {
 	public function unfollow( $gateway_id ) {
 		loggedOnly();
 
-		// Carrega a model
+		// Busca o veiculo
 		if ( $gateway = $this->Gateway->findById( $gateway_id ) ) {
 
 			// Seta o unfollow
@@ -77,6 +88,22 @@ class Gateway extends SG_Controller {
 				return resolve( 'Ação realizada com sucesso' );
 			} else return reject( 'Não foi possivel realizar essa ação' );
 		} else return reject( 'O Gateway informado não existe' );
+	}
+
+	/**
+	 * Denuncia o veiculo
+	 */
+	public function report( $gateway_id ) {
+		loggedOnly();
+
+		// Busca o veiculo
+		if( $gateway = $this->Gateway->findById( $gateway_id ) ) {
+
+			// Seta a denuncia
+			if( $gateway->report( auth() ) ) {
+				return resolve( 'Açaõ realizada com sucesso' );
+			} else reject( 'Não foi possivel realizar a ação' );
+		} else reject( 'O Gateway informado não existe' );
 	}
 
 	/**
