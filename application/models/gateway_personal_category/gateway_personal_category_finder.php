@@ -1,12 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Customer_category_finder
+ * Gateway_personal_category_finder
  * 
- * Finder de customer_category
+ * Finder de gateway_personal_category
  * 
  */
-class Customer_category_finder extends SG_Model {
+class Gateway_personal_category_finder extends SG_Model {
 
     /**
      * entity
@@ -15,7 +15,7 @@ class Customer_category_finder extends SG_Model {
      * 
      * @var string
      */
-    public $entity = 'Customer_category_model';
+    public $entity = 'Gateway_personal_category_model';
 
     /**
      * __construct

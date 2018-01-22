@@ -34,10 +34,10 @@ class Gateway extends SG_Controller {
 			$reported = false;
 			
 			// Verifica se tem usuario logado
-			if( auth() ) {
+			if( $user = auth() ) {
 
 				// Verifica se está denunciado
-				$reported = ( $gateway->reported( auth() ) ) ? true : false ;
+				$reported = ( $gateway->reported( $user ) ) ? true : false ;
 			}
 
 			// formata os dados
@@ -54,6 +54,53 @@ class Gateway extends SG_Controller {
 
 			return resolve( $gateway_data );
 		} else return reject( 'O veículo desejado não existe.' );
+	}
+
+	/**
+	 * Busca os gateways pelo ID da categoria
+	 *
+	 * @param [type] $category_id
+	 * @param integer $page
+	 * @return void
+	 */
+	public function get_by_category( $category_id, $page = 1 ) {
+
+		// Carrega a categoria
+		$this->load->model( 'category' );
+		$category = $this->Category->findById( $category_id );
+		if ( !$category ) return reject( 'A categoria pesquisada não existe!' );
+
+		// Obtem as páginas
+		$pages = $this->Gateway->where( " category_id = $category_id " )->paginate( $page, 10 );
+
+		// Percorre todos os itens
+		foreach( $pages->data as $gateway ) {
+
+			// Verifica se tem usuario logado
+			if( $user = auth() ) {
+
+				// Verifica se está denunciado
+				$reported = ( $gateway->reported( $user ) ) ? true : false ;
+			}
+
+			// Pega a imagem do gateway
+			$image = $page->belongsTo( 'midia' );
+
+			// formata os dados
+			$pages->data = [
+				'id'        => $gateway->id,
+				'name'      => $gateway->name,
+				'url'       => $gateway->url,
+				'image'     => $image->path(),
+				'category'  => $category->name,
+				'status'    => $gateway->status( auth() ),
+				'reported'  => $reported,
+				'crated_at' => $gateway->created_at
+			];
+		}
+
+		// Envia os dados
+		return resolve( $pages );
 	}
 
 	/**
@@ -120,6 +167,41 @@ class Gateway extends SG_Controller {
 				return resolve( 'Ação realizada com sucesso' );
 			} else return reject( 'Não foi possivel realizar essa ação' );
 		} else return reject( 'O Gateway informado não existe' );
+	}
+
+	/**
+	 * Obtem inscrições por categoria
+	 *
+	 * @param [type] $category_id
+	 * @return void
+	 */
+	public function get_subscription_by_category( $category_id ) {
+		loggedOnly();
+
+		// Busca as subscriptions
+		$subs = $this->Gateway->where( " category_id = $category_id ")
+							  ->subscribed( auth() )
+							   ->find();
+		$subs = $subs ? $subs : [];
+
+		// Formata os dados
+		$response = [];
+		foreach( $subs as $sub ) {
+
+			// Pega a midia do gateway
+			$midia =  $sub->belongsTo( 'midia' );
+			$path  = $midia ? $midia->path() : base_url( 'public/images/empty.jpg' );
+
+			// Formata os dados
+			$response[] = [
+				'id'    => $sub->id,
+				'name'  => $sub->name,
+				'midia' => $path
+			];
+		}
+		
+		// Volta os dados encontrados
+		return resolve( $response );
 	}
 }
 

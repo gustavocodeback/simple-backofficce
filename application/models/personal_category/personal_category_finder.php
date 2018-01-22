@@ -26,6 +26,16 @@ class Personal_category_finder extends SG_Model {
     public function __construct() {
         parent::__construct();
     }
+
+    /**
+     * Pega as categorias de um usuário
+     *
+     * @param [type] $user
+     * @return void
+     */
+    public function byUser( $user ) {
+        return $this->where( " user_id = ".$user->id )->find();
+    }
 }
 
 /* end of file */

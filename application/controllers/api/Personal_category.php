@@ -59,6 +59,23 @@ class Personal_category extends SG_Controller {
 			} else return reject( 'Erro ao salvar a cateogria' );
 		} else return reject( validation_errors() );
 	}
+
+	public function list() {
+		loggedOnly();
+
+		// Pega as categorias do usuário
+		$categories = $this->Personal_category->byUser( auth() );
+		$categories = $categories ? $categories : [];
+
+		// Percorre um foreach
+		$response = [];
+		foreach( $categories as $category ) {
+			$response[] = [
+				'id' => $category->id,
+				'name' => $caregory->name
+			];
+		}
+	}
 }
 
 // End of file

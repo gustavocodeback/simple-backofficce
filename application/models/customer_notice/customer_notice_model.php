@@ -18,11 +18,11 @@ class Customer_notice_model extends Customer_notice_finder {
      * @var array
      */
     public $fields = array (
-  'customer_id' => 'customer_id',
-  'notice_id' => 'notice_id',
-  'created_at' => 'created_at',
-  'updated_at' => 'updated_at',
-);
+        'customer_id' => 'customer_id',
+        'notice_id' => 'notice_id',
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at',
+    );
 
     /**
      * visibles
@@ -32,11 +32,11 @@ class Customer_notice_model extends Customer_notice_finder {
      * @var array
      */
     public $visibles = array (
-  0 => 'ID',
-  1 => 'customer_id',
-  2 => 'notice_id',
-  3 => 'Ações',
-);
+        'ID',
+        'customer_id',
+        'notice_id',
+        'Ações',
+    );
 
     /**
      * __construct

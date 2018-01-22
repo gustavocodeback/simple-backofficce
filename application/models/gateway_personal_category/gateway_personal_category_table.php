@@ -2,7 +2,7 @@
 
 /*                                                               
  |-------------------------------------------------------------- 
- | TABELA customer_category                                           
+ | TABELA gateway_personal_category                                           
  |-------------------------------------------------------------- 
  |                                                               
 */
@@ -15,13 +15,13 @@ $config['schema'] = array (
     'auto_increment' => true,
     'null' => false,
   ),
-  'customer_id' => 
+  'gateway_id' => 
   array (
     'type' => 'int',
     'constraint' => 11,
     'null' => false,
   ),
-  'category_id' => 
+  'personal_category_id' => 
   array (
     'type' => 'int',
     'constraint' => 11,

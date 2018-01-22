@@ -1,14 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once 'customer_category_finder.php';
+require_once 'gateway_personal_category_finder.php';
 
 /**
- * customer_category
+ * gateway_personal_category
  * 
- * Model de customer_category
+ * Model de gateway_personal_category
  * 
  */
-class Customer_category_model extends Customer_category_finder {
+class Gateway_personal_category_model extends Gateway_personal_category_finder {
 
     /**
      * fields
@@ -18,8 +18,8 @@ class Customer_category_model extends Customer_category_finder {
      * @var array
      */
     public $fields = array (
-  'customer_id' => 'customer_id',
-  'category_id' => 'category_id',
+  'gateway_id' => 'gateway_id',
+  'personal_category_id' => 'personal_category_id',
   'created_at' => 'created_at',
   'updated_at' => 'updated_at',
 );
@@ -33,8 +33,8 @@ class Customer_category_model extends Customer_category_finder {
      */
     public $visibles = array (
   0 => 'ID',
-  1 => 'customer_id',
-  2 => 'category_id',
+  1 => 'gateway_id',
+  2 => 'personal_category_id',
   3 => 'Ações',
 );
 
@@ -56,7 +56,7 @@ class Customer_category_model extends Customer_category_finder {
      * @return void
      */
     public function table() {
-        return 'customer_category';
+        return 'gateway_personal_category';
     }
 
     /**
@@ -91,12 +91,12 @@ class Customer_category_model extends Customer_category_finder {
   ),
   1 => 
   array (
-    'db' => 'customer_id',
+    'db' => 'gateway_id',
     'dt' => 1,
   ),
   2 => 
   array (
-    'db' => 'category_id',
+    'db' => 'personal_category_id',
     'dt' => 2,
   ),
 );
@@ -107,8 +107,8 @@ class Customer_category_model extends Customer_category_finder {
             'formatter' => function( $d, $row ) {
 
                 // Formata a data
-                $del  = rmButton( 'customer_category/delete/'.$d );
-                $edit = editButton( 'customer_category/list?addModal=true&id='.$d );
+                $del  = rmButton( 'gateway_personal_category/delete/'.$d );
+                $edit = editButton( 'gateway_personal_category/list?addModal=true&id='.$d );
 
                 // Volta os botões
                 return $del.'&nbsp'.$edit;
@@ -127,21 +127,21 @@ class Customer_category_model extends Customer_category_finder {
      * @return void
      */
     public function form( $key ) {
-        $url = $this->id ? 'customer_category/save/'.$this->id : 'customer_category/save';
+        $url = $this->id ? 'gateway_personal_category/save/'.$this->id : 'gateway_personal_category/save';
         $data = [
             'url'    => $url,
             'fields' => array (
-  'customer_id' => 
+  'gateway_id' => 
   array (
-    'label' => 'customer_id',
-    'name' => 'customer_id',
+    'label' => 'gateway_id',
+    'name' => 'gateway_id',
     'type' => 'number',
     'rules' => 'trim|required|max_length[11]|integer',
   ),
-  'category_id' => 
+  'personal_category_id' => 
   array (
-    'label' => 'category_id',
-    'name' => 'category_id',
+    'label' => 'personal_category_id',
+    'name' => 'personal_category_id',
     'type' => 'number',
     'rules' => 'trim|required|max_length[11]|integer',
   ),
