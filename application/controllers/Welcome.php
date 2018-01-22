@@ -15,7 +15,8 @@ class Welcome extends SG_Controller {
 	 * @return void
 	 */	
 	public function index() {
-		redirect( site_url( 'auth' ) );
+		view( 'landing-page/landing-page' );
+		// redirect( site_url( 'auth' ) );
 	}
 }
 

@@ -3,8 +3,6 @@
 class SG_Controller extends CI_Controller {
     
     /**
-     * $model
-     * 
      * Model do controller
      * 
      */
@@ -18,8 +16,6 @@ class SG_Controller extends CI_Controller {
     public $enableMultipleDelete = false;
 
     /**
-     * __construct
-     * 
      * Método construtor
      * 
      */

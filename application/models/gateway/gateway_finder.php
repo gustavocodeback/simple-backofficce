@@ -26,6 +26,18 @@ class Gateway_finder extends SG_Model {
     public function __construct() {
         parent::__construct();
     }
+
+    /**
+     * Pega a assinatura dos itens
+     *
+     * @param [type] $user
+     * @return void
+     */
+    public function subscribed( $user ) {
+        $this->db->join( 'customer_gateway', 'customer_gateway.gateway_id = gateway.id AND customer_gateway.customer_id = '.$user->id );
+        $this->db->where( 'customer_gateway.status = "F" ');
+        return $this;
+    }
 }
 
 /* end of file */
