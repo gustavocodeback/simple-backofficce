@@ -70,10 +70,24 @@ class Gateway extends SG_Controller {
 		$category = $this->Category->findById( $category_id );
 		if ( !$category ) return reject( 'A categoria pesquisada não existe!' );
 
+		$query = $this->input->get( 'query' );
+		$query = $query ? $query : '';
+
 		// Obtem as páginas
-		$pages = $this->Gateway->where( " category_id = $category_id " )->paginate( $page, 10 );
+		$pages = $this->Gateway->where( " category_id = $category_id AND name LIKE '%$query%' " )->paginate( $page, 20 );
+
+		// Inicia a veriavel
+		$reported = false;
+			
+		// Verifica se tem usuario logado
+		if( $user = auth() ) {
+
+			// Verifica se está denunciado
+			$reported = ( $gateway->reported( $user ) ) ? true : false ;
+		}
 
 		// Percorre todos os itens
+		$toReturn = [];
 		foreach( $pages->data as $gateway ) {
 
 			// Verifica se tem usuario logado
@@ -84,10 +98,10 @@ class Gateway extends SG_Controller {
 			}
 
 			// Pega a imagem do gateway
-			$image = $page->belongsTo( 'midia' );
+			$image = $gateway->belongsTo( 'midia' );
 
 			// formata os dados
-			$pages->data = [
+			$toReturn[] = [
 				'id'        => $gateway->id,
 				'name'      => $gateway->name,
 				'url'       => $gateway->url,
@@ -98,6 +112,7 @@ class Gateway extends SG_Controller {
 				'crated_at' => $gateway->created_at
 			];
 		}
+		$pages->data = $toReturn;
 
 		// Envia os dados
 		return resolve( $pages );
