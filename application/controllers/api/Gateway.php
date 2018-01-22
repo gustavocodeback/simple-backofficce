@@ -78,13 +78,6 @@ class Gateway extends SG_Controller {
 
 		// Inicia a veriavel
 		$reported = false;
-			
-		// Verifica se tem usuario logado
-		if( $user = auth() ) {
-
-			// Verifica se está denunciado
-			$reported = ( $gateway->reported( $user ) ) ? true : false ;
-		}
 
 		// Percorre todos os itens
 		$toReturn = [];
@@ -194,9 +187,10 @@ class Gateway extends SG_Controller {
 		loggedOnly();
 
 		// Busca as subscriptions
+		$this->db->select( 'gateway.*' );
 		$subs = $this->Gateway->where( " category_id = $category_id ")
 							  ->subscribed( auth() )
-							   ->find();
+							  ->find();
 		$subs = $subs ? $subs : [];
 
 		// Formata os dados
@@ -209,9 +203,10 @@ class Gateway extends SG_Controller {
 
 			// Formata os dados
 			$response[] = [
-				'id'    => $sub->id,
-				'name'  => $sub->name,
-				'midia' => $path
+				'id'       => $sub->id,
+				'category' => $sub->category_id,
+				'name'     => $sub->name,
+				'midia'    => $path
 			];
 		}
 		

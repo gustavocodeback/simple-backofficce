@@ -60,6 +60,11 @@ class Personal_category extends SG_Controller {
 		} else return reject( validation_errors() );
 	}
 
+	/**
+	 * Lista as categorias pessoais
+	 *
+	 * @return void
+	 */
 	public function list() {
 		loggedOnly();
 
@@ -72,9 +77,12 @@ class Personal_category extends SG_Controller {
 		foreach( $categories as $category ) {
 			$response[] = [
 				'id' => $category->id,
-				'name' => $caregory->name
+				'name' => $category->name
 			];
 		}
+
+		// Volta as categorias encontrada
+		resolve( $response );
 	}
 }
 

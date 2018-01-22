@@ -18,11 +18,12 @@ class Customer_gateway_model extends Customer_gateway_finder {
      * @var array
      */
     public $fields = array (
-        'customer_id' => 'customer_id',
-        'gateway_id'  => 'gateway_id',
-        'status'      => 'status',
-        'created_at'  => 'created_at',
-        'updated_at'  => 'updated_at',
+        'customer_id'           => 'customer_id',
+        'gateway_id'            => 'gateway_id',
+        'personal_category_id'  => 'personal_category_id',
+        'status'                => 'status',
+        'created_at'            => 'created_at',
+        'updated_at'            => 'updated_at',
     );
 
     /**

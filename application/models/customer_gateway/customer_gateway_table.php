@@ -27,6 +27,12 @@ $config['schema'] = array (
     'constraint' => 11,
     'null' => false,
   ),
+  'personal_category_id' => 
+  array (
+    'type'       => 'int',
+    'constraint' => 11,
+    'null'       => null,
+  ),
   'status' => 
   array (
     'type' => 'char',
