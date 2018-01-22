@@ -83,6 +83,12 @@ $config['schema'] = array (
     'constraint' => 1,
     'null' => true,
   ),
+  'midia_id' => 
+  array (
+    'type' => 'int',
+    'constraint' => 11,
+    'null' => true,
+  ),
 );
 
 /* end of file */

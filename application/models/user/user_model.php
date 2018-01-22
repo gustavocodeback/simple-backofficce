@@ -30,6 +30,7 @@ class User_model extends User_finder {
         'login_attempts' => 'login_attempts',
         'attempt_interval' => 'attempt_interval',
         'last_attempt' => 'last_attempt',
+        'midia_id' => 'midia_id'
     );
 
     /**

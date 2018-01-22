@@ -311,6 +311,121 @@ class Auth extends SG_Controller {
 		// renderiza a view
 		return reject( 'Erro ao carregar o endpoint' );
 	}
+
+	/**
+	 * __saveUserImage
+	 * 
+	 * Salva a imagem do usuario
+	 *
+	 * @return void
+	 */
+	private function __saveUserImage( $base64 ) {
+		
+		// Busca a extensao e os dados da imagem
+		list( $ext, $data ) = explode( ';', $base64 );
+		list( , $ext )      = explode( '/', $ext );
+		list( , $data ) = explode( ',', $data );
+
+		// Seta as propriedades restantes
+		$data      = base64_decode($data);
+		$hash      = getToken();
+		$filename  = $hash.'.'.$ext;
+		$inputName = 'user_image';
+		$size      = file_put_contents( 'public/uploads/'.$filename, $data );
+		if( !$size ) return false;
+		
+		// Carrega a model e cria uma nova instancia
+		$this->load->model( 'midia' );
+		$midia = $this->Midia->new();
+
+		// Seta as propriedades
+		$midia->name  = $inputName;
+		$midia->hash  = $hash;
+		$midia->type  = 'image';
+		$midia->ext   = $ext;
+		$midia->size  = $size;
+
+		// Salva a imagem no banco
+		if( $midia->save() ) {
+			return $midia->id;
+		} else return false;
+	}
+
+	/**
+	 * update_profile
+	 * 
+	 * Atualiza os dados do usuario
+	 *
+	 * @return void
+	 */
+	public function update_profile() {
+		loggedOnly();
+
+		// Busca o usuario
+		$user = auth();
+
+		// Pega o email
+		$email = $this->input->post( 'email' ) ? 
+				 $this->input->post( 'email' ) :
+				 $user->email;
+
+		// Verifica se o email foi alterado
+		if( $email !== $user->email ) {
+
+			// Verifica se o email é unico
+			if( $this->User->email( $email ) ) {
+				return reject( 'E-mail ja cadastrado no sistema' );
+			}
+			
+			// Seta o email
+			$user->email = $email;
+		}
+
+		// Verifica se a senha foi alterada
+		if( $password = $this->input->post( 'password' ) ) {
+			$user->setPassword( $password );
+		}
+
+		// seta o nome
+		$user->name = $this->input->post( 'name' ) ? 
+					  $this->input->post( 'name' ) : 
+					  $user->name;
+
+		// Verifica se a foto foi alterada
+		if( $base64 = $this->input->post( 'image' ) ) {
+
+			// Guarda a imagem
+			if( $midia_id = $this->__saveUserImage( $base64 ) ) {
+				$user->midia_id = $midia_id;
+			} else return reject( 'Erro ao salvar a imagem do usuário' );
+		}
+
+		// salvar a alteração
+		if( $user->save() ) {
+			return resolve( $user->authData() );
+		} else return reject( 'Erro ao realizar a ação' );
+	}
+
+	/**
+	 * get_user_image
+	 * 
+	 * Pega a imagem do usuario
+	 *
+	 * @return void
+	 */
+	public function get_user_image() {
+		loggedOnly();
+
+		// Pega o usuario logado
+		$user = auth();
+
+		// Busca a imagem
+		if( $user->midia_id ) {
+			if( $image = $user->belongsTo( 'midia' ) ) {
+				return resolve( $image->path() );
+			} return reject( 'Imagem não encontrada' );
+		} return reject( 'Usuario não possui imagem' );
+	}
 }
 
 // End of file
