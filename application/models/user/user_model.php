@@ -161,10 +161,16 @@ class User_model extends User_finder {
      * @return void
      */
     public function authData() {
+        $this->load->model( 'midia' );
+        $midia = $this->belongsTo( 'midia' );
+        $path  = $midia ? $midia->path() : base_url( 'public/images/empty.jpg' );
+        
+        // Volta os dados de autenticacao
         return [
             'id'         => $this->id,
             'name'       => $this->name,
             'email'      => $this->email,
+            'image'      => $path,
             'token_api'  => $this->token_api,
             'logged_at'  => $this->logged_at,
         ];

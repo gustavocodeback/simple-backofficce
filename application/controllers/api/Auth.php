@@ -423,8 +423,8 @@ class Auth extends SG_Controller {
 		if( $user->midia_id ) {
 			if( $image = $user->belongsTo( 'midia' ) ) {
 				return resolve( $image->path() );
-			} return reject( 'Imagem não encontrada' );
-		} return reject( 'Usuario não possui imagem' );
+			} return resolve( base_url( 'public/images/empty.jpg' ) );
+		} return resolve( base_url( 'public/images/empty.jpg' ) );
 	}
 }
 
