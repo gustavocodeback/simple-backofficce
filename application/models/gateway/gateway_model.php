@@ -81,7 +81,7 @@ class Gateway_model extends Gateway_finder {
      * 
      * @return void
      */
-     public function follow( $customer ) {
+     public function follow( $customer, $personalCategoryId = false ) {
       
       // Carrega a model de relacao
       $this->load->model( 'customer_gateway' );
@@ -105,7 +105,8 @@ class Gateway_model extends Gateway_finder {
       $seg->fill([
         'customer_id' => $customer->id,
         'gateway_id'  => $this->id,
-        'status'      => 'F'
+        'status'      => 'F',
+        'personal_category_id' => ( $personalCategoryId ) ? $personalCategoryId : ''
       ]);
       return $seg->save();
     }

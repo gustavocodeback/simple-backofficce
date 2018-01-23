@@ -54,6 +54,7 @@ class Personal_category_model extends Personal_category_finder {
      */
     public function parse() {
         return [
+            'id'         => $this->id,
             'name'       => $this->name,
             'user_id'    => $this->user_id,
             'created_at' => $this->created_at,

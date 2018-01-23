@@ -115,14 +115,14 @@ class Gateway extends SG_Controller {
 	 * Salva o follow
 	 *
 	 */
-	public function follow( $gateway_id ) {
+	public function follow( $gateway_id, $personalCategoryId = false ) {
 		loggedOnly();
 		
 		// Carrega a model
 		if ( $gateway = $this->Gateway->findById( $gateway_id ) ) {
 
 			// Seta o follow
-			if ( $gateway->follow( auth() ) ) {
+			if ( $gateway->follow( auth(), $personalCategoryId ) ) {
 				return resolve( 'Ação realizada com sucesso' );
 			} else return reject( 'Não foi possivel realizar essa ação' );
 		} else return reject( 'O Gateway informado não existe' );
