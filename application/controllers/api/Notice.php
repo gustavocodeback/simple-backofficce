@@ -212,6 +212,41 @@ class Notice extends SG_Controller {
 		return resolve( $notices );
 		} else return reject( false );
 	}
+
+	/**
+	 * Pega uma noticia pelo ID
+	 *
+	 * @param [type] $notice_id
+	 * @return void
+	 */
+	public function get( $notice_id ) {
+		$notice = $this->Notice->findById( $notice_id );
+		if ( !$notice ) reject( 'Nenhuma notícia encontrada' );
+
+		// Verifica se existe um texto
+		$text_parts = [];
+		if ( $notice->text ) {
+			$text_parts = preg_split( '/\n|\r\n?/', $notice->text );
+			$text_parts = array_filter( $text_parts, function( $item ) {
+				return ( strlen( $item ) > 0 ) ? true : false;	
+			});
+			$text_parts = array_values( $text_parts );
+		}
+
+		// Formata o JSON
+		$data = [
+			'id'          => $notice->id,
+			'title'       => $notice->title,
+			'link'        => $notice->notice_link,
+			'description' => $notice->description,
+			'text_parts'  => $text_parts,
+			'cover' 	  => $notice->image_link,
+			'published'   => toHumanReadable( $notice->date )
+		];
+
+		// Envia os dados
+		resolve( $data );
+	}
 }
 
 // End of file

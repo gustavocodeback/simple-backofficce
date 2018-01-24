@@ -213,6 +213,58 @@ class Gateway extends SG_Controller {
 		// Volta os dados encontrados
 		return resolve( $response );
 	}
+
+	/**
+	 * Pega as inscriçoes ordenadas pela categoria
+	 *
+	 * @return void
+	 */
+	public function get_ordered_subscriptions() {
+		loggedOnly();
+		$this->load->model( 'category' );
+
+		// Busca as subscriptions
+		$this->db->select( 'gateway.*' );
+		$subs = $this->Gateway->subscribed( auth() )
+							  ->find();
+		$subs = $subs ? $subs : [];
+
+		// Agrupa por categoria
+		$orderedByCategories = [];
+		foreach( $subs  as $sub ) {
+
+			// Veririca se já existe a categoria no array
+			if ( !isset( $orderedByCategories[$sub->category_id] ) ) {
+				$orderedByCategories[$sub->category_id] = [];
+			}
+
+			// Adiciona o veiculo
+			$orderedByCategories[$sub->category_id][] = $sub;
+		}
+
+		// Busca os dados da categoria
+		$response = [];
+		foreach( $orderedByCategories as $cat_id => $gateways ) {
+			
+			// Busca as imagens do veiculo
+			$gateways = array_map( function( $value ) {
+				$midia = $value->belongsTo( 'midia' );
+				$value->midia = $midia ? $midia->path() : base_url( 'public/images/empty.jpg' );
+				return $value;
+			}, $gateways );
+			
+			// Obtem os dados e formata a saida
+			$cat = $this->Category->findById( $cat_id );
+			$response[] = [
+				'id' => $cat_id,
+				'name' => $cat->name,
+				'gateways' => $gateways
+			];
+		}
+
+		// Volta o resultado
+		resolve( $response );
+  	}
 }
 
 // End of file

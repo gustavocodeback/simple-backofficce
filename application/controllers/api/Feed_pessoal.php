@@ -75,17 +75,16 @@ class Feed_pessoal extends SG_Controller {
      * @return void
      */
     public function get_user_follows() {
-        //loggedOnly();
+        loggedOnly();
 
         // Busca os follows
-        $follows = $this->Customer_gateway->where( "customer_id = 5" )->find();
+        $follows = $this->Customer_gateway->where( "customer_id = ".auth()->id )->find();
         if( !$follows ) return reject( [] );
         
-
         // Inicializa as variaveis
+        $gateways           = [];
+        $feedPessoal        = [];
         $categoriasPessoais = [];
-        $gateways = [];
-        $feedPessoal = [];
 
         // Percorre os follows
         foreach( $follows as $follow ) {
@@ -128,7 +127,8 @@ class Feed_pessoal extends SG_Controller {
         }
 
         // Retorno
-        return ( $feedPessoal ) ? resolve( $feedPessoal ) : 
-                                  reject( $feedPessoal );
+        return ( $feedPessoal ) ? resolve( $feedPessoal ) : reject( $feedPessoal );
     }
 }
+
+// End of file

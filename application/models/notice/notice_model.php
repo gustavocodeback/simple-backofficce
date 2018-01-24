@@ -21,6 +21,7 @@ class Notice_model extends Notice_finder {
       'gateway_id' => 'gateway_id',
       'title' => 'title',
       'notice_link' => 'notice_link',
+      'text' => 'text',
       'image_link' => 'image_link',
       'description' => 'description',
       'date' => 'date',

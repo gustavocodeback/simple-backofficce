@@ -45,6 +45,11 @@ $config['schema'] = array (
     'constraint' => 255,
     'null' => true,
   ),
+  'text' => 
+  array (
+    'type' => 'text',
+    'null' => true,
+  ),
   'date' => 
   array (
     'type' => 'datetime',
