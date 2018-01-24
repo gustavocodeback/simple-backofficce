@@ -18,7 +18,8 @@ class Region_model extends Region_finder {
      * @var array
      */
     public $fields = array (
-        'name' => 'name',
+        'name'       => 'name',
+        'sigla'      => 'sigla',
         'created_at' => 'created_at',
         'updated_at' => 'updated_at',
     );
@@ -31,9 +32,10 @@ class Region_model extends Region_finder {
      * @var array
      */
     public $visibles = array (
-        0 => 'ID',
-        1 => 'Nome',
-        2 => 'Ações',
+        'ID',
+        'Nome',
+        'Sigla',
+        'Ações'
     );
 
     /**
@@ -92,11 +94,15 @@ class Region_model extends Region_finder {
                 'db' => 'name',
                 'dt' => 1,
             ),
+            array (
+                'db' => 'sigla',
+                'dt' => 2,
+            ),
         );
         $columns[] = 
         [   
             'db' => 'id',
-            'dt' => 2,  
+            'dt' => 3,  
             'formatter' => function( $d, $row ) {
 
                 // Formata a data
@@ -124,13 +130,18 @@ class Region_model extends Region_finder {
         $data = [
             'url'    => $url,
             'fields' => array (
-            'name' => 
-                array (
+                'name' => array (
                     'label' => 'Nome',
                     'name' => 'name',
                     'type' => 'text',
                     'rules' => 'trim|required|max_length[60]',
                 ),
+                'sigla' =>  array (
+                    'label' => 'Sigla',
+                    'name' => 'sigla',
+                    'type' => 'text',
+                    'rules' => 'trim|required|max_length[4]',
+                )
             )
         ];
         return $data[$key];

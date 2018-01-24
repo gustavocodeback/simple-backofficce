@@ -21,6 +21,12 @@ $config['schema'] = array (
     'constraint' => 60,
     'null' => false,
   ),
+  'sigla' => 
+  array (
+    'type' => 'varchar',
+    'constraint' => 4,
+    'null' => false,
+  ),
   'created_at' => 
   array (
     'type' => 'datetime',

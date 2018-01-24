@@ -50,7 +50,7 @@ class Category extends SG_Controller {
 			$formatted[] = [
 				'id'    => $item->id,
 				'name'  => $item->name,
-				'midia' => $midia->path()
+				'midia' => $midia ? $midia->path() : base_url( 'public/images/empty.jpg' )
 			];
 		}
 
