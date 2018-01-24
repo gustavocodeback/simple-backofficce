@@ -18,6 +18,7 @@ class Feed_pessoal extends SG_Controller {
 
     /**
      * Busca o veiculo de noticias
+     * 
      */
     private function __gatewayData( $gateway_id, $personal_category = false ) {
 
@@ -45,6 +46,7 @@ class Feed_pessoal extends SG_Controller {
 
     /**
      * Busca o nome das categorias
+     * 
      */
     private function __getCategoriesName( $dados, $categoriaPessoal = false ) {
 
@@ -67,7 +69,11 @@ class Feed_pessoal extends SG_Controller {
         return $new_arr;
     }
     
-    // Buscar os follows do usuario logado
+    /**
+     * Busca o feed pessoal do usuário
+     *
+     * @return void
+     */
     public function get_user_follows() {
         //loggedOnly();
 
