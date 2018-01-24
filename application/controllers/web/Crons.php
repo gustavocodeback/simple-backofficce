@@ -40,15 +40,19 @@ class Crons extends SG_Controller {
 			// Verifica se já esta cadastrado
 			if ( $byLink ) continue;
 
+			// Obtem o texto da noticia
+			$extractionResult = WebArticleExtractor\Extract::extractFromURL( $item['link'] );
+
 			// Preenche o fill
 			$notice->fill([
-				'gateway_id'  => $row->id,
-				'title'       => $item['title'] ? $item['title'] : null,
-				'notice_link' => $item['link'] ? $item['link'] : null,
-				'image_link'  => $item['cover'] ? $item['cover'] : null,
+				'gateway_id'     => $row->id,
+				'title'          => $item['title'] ? $item['title'] : null,
+				'notice_link'    => $item['link'] ? $item['link'] : null,
+				'image_link'     => $item['cover'] ? $item['cover'] : null,
 				'default_notice' => $row->default_gateway,
-				'description'  => $item['description'] ? $item['description'] : null,
-				'date' => isset( $item['pubDate'] ) ? date( 'Y-m-d H:i:s', strtotime( $item['pubDate'] ) ) : now(),
+				'text'           => $extractionResult->text,
+				'description'    => $item['description'] ? $item['description'] : null,
+				'date'           => isset( $item['pubDate'] ) ? date( 'Y-m-d H:i:s', strtotime( $item['pubDate'] ) ) : now(),
 			]);
 			$notice->save();
 		}

@@ -23,7 +23,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
+<<<<<<< HEAD
 $config['base_url'] = 'http://localhost:9999/';
+=======
+$config['base_url'] = 'http://192.168.15.7/SimpleNews/simplenews-backend/';
+>>>>>>> 948d7403538d000ee906bd5c5656ef1c8e8563a2
 
 /*
 |--------------------------------------------------------------------------

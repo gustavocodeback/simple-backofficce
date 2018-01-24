@@ -18,6 +18,7 @@ class Feed_pessoal extends SG_Controller {
 
     /**
      * Busca o veiculo de noticias
+     * 
      */
     private function __gatewayData( $gateway_id, $personal_category = false ) {
 
@@ -45,6 +46,7 @@ class Feed_pessoal extends SG_Controller {
 
     /**
      * Busca o nome das categorias
+     * 
      */
     private function __getCategoriesName( $dados, $categoriaPessoal = false ) {
 
@@ -67,19 +69,22 @@ class Feed_pessoal extends SG_Controller {
         return $new_arr;
     }
     
-    // Buscar os follows do usuario logado
+    /**
+     * Busca o feed pessoal do usuário
+     *
+     * @return void
+     */
     public function get_user_follows() {
-        //loggedOnly();
+        loggedOnly();
 
         // Busca os follows
-        $follows = $this->Customer_gateway->where( "customer_id = 5" )->find();
+        $follows = $this->Customer_gateway->where( "customer_id = ".auth()->id )->find();
         if( !$follows ) return reject( [] );
         
-
         // Inicializa as variaveis
+        $gateways           = [];
+        $feedPessoal        = [];
         $categoriasPessoais = [];
-        $gateways = [];
-        $feedPessoal = [];
 
         // Percorre os follows
         foreach( $follows as $follow ) {
@@ -122,7 +127,8 @@ class Feed_pessoal extends SG_Controller {
         }
 
         // Retorno
-        return ( $feedPessoal ) ? resolve( $feedPessoal ) : 
-                                  reject( $feedPessoal );
+        return ( $feedPessoal ) ? resolve( $feedPessoal ) : reject( $feedPessoal );
     }
 }
+
+// End of file
