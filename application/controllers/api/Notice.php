@@ -233,15 +233,24 @@ class Notice extends SG_Controller {
 			$text_parts = array_values( $text_parts );
 		}
 
+		// Verifica se a noticia foi salva para ler dps
+		$saveForLater = $reported = false;
+		if( auth() ){
+			$saveForLater = $notice->status( auth() );
+			$reported     = ( $notice->reported( auth() ) ) ? true : false ;
+		}
+
 		// Formata o JSON
 		$data = [
-			'id'          => $notice->id,
-			'title'       => $notice->title,
-			'link'        => $notice->notice_link,
-			'description' => $notice->description,
-			'text_parts'  => $text_parts,
-			'cover' 	  => $notice->image_link,
-			'published'   => toHumanReadable( $notice->date )
+			'id'             => $notice->id,
+			'title'          => $notice->title,
+			'link'           => $notice->notice_link,
+			'description'    => $notice->description,
+			'text_parts'     => $text_parts,
+			'cover' 	     => $notice->image_link,
+			'published'      => toHumanReadable( $notice->date ),
+			'save_for_later' => ($saveForLater) ? 'T' : 'F',
+			'reported'       => $reported
 		];
 
 		// Envia os dados
