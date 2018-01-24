@@ -11,6 +11,7 @@ class Midia extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->protectIt( admin() );
 		setTitle( 'Midias' );
 
 		// Carrega a library

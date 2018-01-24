@@ -11,6 +11,7 @@ class Import extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->protectIt( admin() );
 
 		// Seta o contexto
 		context( strtolower( 'Import' ) );

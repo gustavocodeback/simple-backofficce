@@ -25,6 +25,7 @@ class Group extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->protectIt( admin() );
 
 		// Verifica se o usuário é um admin
 		if ( !admin() ) return close_page( 'home' );

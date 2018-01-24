@@ -16,6 +16,7 @@ class  Edit_mode extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->protectIt( admin() );
 
 		// Verifica se é um administrador
 		if ( !admin() ) close_page( 'home' );		

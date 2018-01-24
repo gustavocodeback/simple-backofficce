@@ -32,6 +32,7 @@ class Gateway extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->protectIt( admin() );
 		sidebar( 'Veículos de notícias' );
 
 		// carrega a model

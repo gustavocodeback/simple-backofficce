@@ -62,7 +62,7 @@ class SG_Controller extends CI_Controller {
 
                 // Seta o erro
                 flash( 'swaErrorBody', 'Você não tem permissão para esta ação!' );
-                close_page( 'home' );
+                close_page( 'auth' );
 
             } else return true;
         }
