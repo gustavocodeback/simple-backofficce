@@ -79,7 +79,7 @@ class Feed_pessoal extends SG_Controller {
 
         // Busca os follows
         $follows = $this->Customer_gateway->where( "customer_id = 5" )->find();
-        if( !$follows ) return reject( 'O usuário não está seguindo nenhum veículo de notícia' );
+        if( !$follows ) return reject( [] );
         
 
         // Inicializa as variaveis
@@ -129,6 +129,6 @@ class Feed_pessoal extends SG_Controller {
 
         // Retorno
         return ( $feedPessoal ) ? resolve( $feedPessoal ) : 
-                                  reject( 'Erro ao buscar os veiculos' );
+                                  reject( $feedPessoal );
     }
 }
