@@ -228,8 +228,11 @@ class Notice extends SG_Controller {
 		if ( $notice->text ) {
 			$text_parts = preg_split( '/\n|\r\n?/', $notice->text );
 			$text_parts = array_filter( $text_parts, function( $item ) {
-				return ( strlen( $item ) > 0 ) ? true : false;	
+				return ( strlen( trim( $item ) ) > 0 ) ? true : false;	
 			});
+			$text_parts = array_map( function( $value ) {
+				return trim( $value );
+			}, $text_parts );
 			$text_parts = array_values( $text_parts );
 		}
 

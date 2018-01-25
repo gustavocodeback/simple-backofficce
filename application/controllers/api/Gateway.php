@@ -42,14 +42,15 @@ class Gateway extends SG_Controller {
 
 			// formata os dados
 			$gateway_data = [
-				'id'        => $gateway->id,
-				'name'      => $gateway->name,
-				'url'       => $gateway->url,
-				'image'     => $image->path(),
-				'category'  => $category->name,
-				'status'    => $gateway->status( auth() ),
-				'reported'  => $reported,
-				'crated_at' => $gateway->created_at
+				'id'        	=> $gateway->id,
+				'name'      	=> $gateway->name,
+				'url'       	=> $gateway->url,
+				'image'     	=> $image->path(),
+				'category'  	=> $category->name,
+				'status'        => $gateway->status( auth() ),
+				'subscriptions' => $gateway->subscriptions(),
+				'reported'      => $reported,
+				'crated_at'     => $gateway->created_at
 			];
 
 			return resolve( $gateway_data );
@@ -95,14 +96,15 @@ class Gateway extends SG_Controller {
 
 			// formata os dados
 			$toReturn[] = [
-				'id'        => $gateway->id,
-				'name'      => $gateway->name,
-				'url'       => $gateway->url,
-				'image'     => $image->path(),
-				'category'  => $category->name,
-				'status'    => $gateway->status( auth() ),
-				'reported'  => $reported,
-				'crated_at' => $gateway->created_at
+				'id'        	=> $gateway->id,
+				'name'      	=> $gateway->name,
+				'url'       	=> $gateway->url,
+				'image'     	=> $image->path(),
+				'category'  	=> $category->name,
+				'status'  	  	=> $gateway->status( auth() ),
+				'subscriptions' => $gateway->subscriptions(),
+				'reported'  	=> $reported,
+				'crated_at' 	=> $gateway->created_at
 			];
 		}
 		$pages->data = $toReturn;
