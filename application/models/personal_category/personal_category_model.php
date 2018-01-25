@@ -48,6 +48,19 @@ class Personal_category_model extends Personal_category_finder {
         parent::__construct();
     }
 
+    /**
+     * Reseta os campos da categoria pessoal nos follows
+     *
+     */
+    public function update() {
+
+        // Seta os capos
+        $data = [ 'personal_category_id' => 0 ];
+        
+        // Faz o update
+        return $this->db->update('customer_gateway', $data, "personal_category_id = ".$this->id);
+    }
+
     /** 
      * Volta os metodos
      * 

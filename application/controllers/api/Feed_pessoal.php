@@ -61,8 +61,14 @@ class Feed_pessoal extends SG_Controller {
             }
 
             // Reorganiza o array
-            $new_arr[] = [ 'categoria' => $categoria->name, 
-                           'gateways' => $dado   ];
+            $new_arr[] = [ 
+                'categoria' => [ 
+                    'id'   => $categoria->id,
+                    'name' => $categoria->name,
+                    'personal_category' => 
+                        ( $categoria->entity == 'Personal_category_model' ) ? true : false
+                ], 
+                'gateways' => $dado ];
         }
 
         // Retorno
