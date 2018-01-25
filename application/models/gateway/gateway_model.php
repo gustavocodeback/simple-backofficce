@@ -218,6 +218,23 @@ class Gateway_model extends Gateway_finder {
     }
 
     /**
+     * Pega o numero de inscritos
+     *
+     * @return void
+     */
+    public function subscriptions() {
+
+      // Monta a query
+      $q = $this->db->query( " SELECT COUNT(*) as total FROM customer_gateway
+                               WHERE gateway_id = ".$this->id );
+      
+      // Verifica se existem resultados
+      if ( $q->num_rows() > 0 ) {
+        return $q->result()[0]->total;
+      } else return 0;
+    }
+
+    /**
      * Link de adicionar
      *
      * @return void
