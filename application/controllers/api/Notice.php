@@ -118,13 +118,14 @@ class Notice extends SG_Controller {
 	 */
 	public function get_saved_notices( $page = 1 ) {
 		loggedOnly();
-
+		
 		// Carrega a model
 		$this->load->model( 'customer_notice' );
 
 		// Busca as relações
 		$savedNotices = $this->Customer_notice->getSavedNotices( auth(), $page );
-
+		if( !$savedNotices ) return reject( [] );
+		
 		// Inicia o array de noticias
 		$notices = [];
 
@@ -145,7 +146,7 @@ class Notice extends SG_Controller {
 			return resolve( $savedNotices );
 
 		// Quando nao tem noticia
-		} else return reject( false );
+		} else return reject( [] );
 	}
 
 	/**
