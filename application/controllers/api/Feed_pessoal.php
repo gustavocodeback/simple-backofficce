@@ -26,16 +26,22 @@ class Feed_pessoal extends SG_Controller {
         $gateway = $this->Gateway->findById( $gateway_id );
         if( !$gateway ) return;
 
+        $midia = $gateway->belongsTo( 'midia' );
+        $midia = ( $midia ) ? $midia->path() : base_url( 'public/images/empty.jpg' );
+        
+
         // Prepara os dados
         if( $personal_category ) {
             $dataGateway = [
-                'id'   => $gateway_id,
-                'name' => $gateway->name
+                'id'    => $gateway_id,
+                'name'  => $gateway->name,
+                'image' => $midia
             ];
         } else {
             $dataGateway = [
                 'id'          => $gateway_id,
                 'name'        => $gateway->name,
+                'image'       => $midia,
                 'category_id' => $gateway->category_id
             ];
         }
@@ -111,8 +117,9 @@ class Feed_pessoal extends SG_Controller {
                 if( !$gateway ) break;
 
                 // Organiza o array
-                $gateways[$gateway['category_id']][] = [ 'id' => $gateway['id'],
-                                                         'name' => $gateway['name'] ];
+                $gateways[$gateway['category_id']][] = [ 'id'    => $gateway['id'],
+                                                         'name'  => $gateway['name'],
+                                                         'image' => $gateway['image']];
             }
         }
 
