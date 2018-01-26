@@ -38,7 +38,7 @@
                 <div class="device">
                   <div class="screen">
                     <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
-                    <img src="{{ base_url( 'public/images/demo-screen-1.jpg' ) }}" class="img-fluid" alt="">
+                    <img src="{{ base_url( 'public/images/login.png' ) }}" class="img-fluid" alt="">
                   </div>
                   <div class="button">
                     <!-- You can hook the "home button" to some JavaScript events or just remove it -->
@@ -80,7 +80,7 @@
                 <div class="device">
                   <div class="screen">
                     <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
-                    <img src="{{ base_url( 'public/images/demo-screen-1.jpg' ) }}" class="img-fluid">
+                    <img src="{{ base_url( 'public/images/veiculo-page.png' ) }}" class="img-fluid">
                   </div>
                   <div class="button">
                     <!-- You can hook the "home button" to some JavaScript events or just remove it -->
