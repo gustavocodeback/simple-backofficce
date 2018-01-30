@@ -58,6 +58,55 @@ class Gateway extends SG_Controller {
 	}
 
 	/**
+	 * Pesquisa os veiculos pelo nome
+	 *
+	 */
+	public function search_all( $query, $page = 1 ) {
+	
+		// Pega a query para pesquisa
+		$query = $query ? $query : '';
+	
+		// Otem as paginas
+		$gateways = $this->Gateway->where( " name LIKE '%$query%' " )->paginate( $page, 20 );
+		
+		// Inicia a variavel
+		$reported = false;
+
+		// Percorre todos os gateways
+		$return = [];
+		foreach( $gateways->data as $gateway ) {
+
+			// Verifica se tem usuario logado
+			if( $user = auth() ) {
+
+				// Verifica se esta denunciado
+				$reported = ( $gateway->reported( $user ) ) ? true : false;
+			}
+
+			// Busca a imagem
+			$image = $gateway->belongsTo( 'midia' );
+			$category = $gateway->belongsTo( 'category' );
+
+			// Formata os dados
+			$return[] = [
+				'id'        	=> $gateway->id,
+				'name'      	=> $gateway->name,
+				'url'       	=> $gateway->url,
+				'image'     	=> $image->path(),
+				'category'  	=> $category->name,
+				'status'  	  	=> $gateway->status( auth() ),
+				'subscriptions' => $gateway->subscriptions(),
+				'reported'  	=> $reported,
+				'crated_at' 	=> $gateway->created_at
+			];
+		}
+		$gateways->data = $return;
+
+		// Envia os dados
+		return resolve( $gateways );
+	}
+
+	/**
 	 * Busca os gateways pelo ID da categoria
 	 *
 	 * @param [type] $category_id
