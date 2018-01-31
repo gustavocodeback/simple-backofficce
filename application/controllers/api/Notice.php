@@ -75,16 +75,25 @@ class Notice extends SG_Controller {
 		$categories = $this->input->post( 'categories_ids' );
 
 		// Faz a busca das noticias
-		$notices = $this->Notice->select( 'n.*' )
-								->lastPublished();
-		
+		$notices = $this->Notice->select( 'n.*' )->lastPublished();
+
+		// Verifica se foi informado um feed pessoal
+		if ( ( $feed_id = get_header( 'App-Feed-Id' ) ) && $user ) {
+
+			// Verifica o tipo e faz a busca
+			if ( strpos( $feed_id, 'p-' ) !== false ) {
+				$notices->findPersonalFeed( str_replace( 'p-', '', $feed_id ), $user );				
+			} else {
+				$notices->subscribed( $user )->removePersonal();
+			}
+
+		// Quando nao for feed pessoal
+		} elseif( $user ) $notices = $notices->subscribed( $user );
+
 		// Verifica se existem categorias de busca
 		if ( is_array( $categories ) && count( $categories ) > 0 ) {
 			$notices = $notices->inCategories( $categories );
 		}
-
-		// Verifica se existe um usuário
-		if ( $user ) $notices = $notices->subscribed( $user );
 
 		// Busca as noticias
 		$notices = $notices->paginate( $page, 10, 'notice n' );

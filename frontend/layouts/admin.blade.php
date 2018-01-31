@@ -28,10 +28,10 @@
     <div class="container">
         @include( 'components.header.header' )
         <div class="row">
-            <div class="col-md-9 p-1">
+            <div class="col-sm-9 p-1">
                 @yield( 'content' )
             </div>
-            <div class="col-md-3 p-1">
+            <div class="col-sm-3 p-1">
                 @include( 'components.sidebar.sidebar' )  
             </div>
         </div>

@@ -32,11 +32,11 @@ class Report_gateway_model extends Report_gateway_finder {
      * @var array
      */
     public $visibles = array (
-  0 => 'ID',
-  1 => 'customer_id',
-  2 => 'gateway_id',
-  3 => 'Ações',
-);
+        0 => 'ID',
+        1 => 'Usuário',
+        2 => 'Veículo',
+        3 => 'Ações',
+    );
 
     /**
      * __construct
@@ -84,21 +84,45 @@ class Report_gateway_model extends Report_gateway_finder {
 
         // Columns
         $columns = array (
-  0 => 
-  array (
-    'db' => 'id',
-    'dt' => 0,
-  ),
-  1 => 
-  array (
-    'db' => 'customer_id',
-    'dt' => 1,
-  ),
-  2 => 
-  array (
-    'db' => 'gateway_id',
-    'dt' => 2,
-  ),
+            0 => 
+                array (
+                    'db' => 'id',
+                    'dt' => 0,
+                ),
+            1 => 
+                array (
+                    'db' => 'customer_id',
+                    'dt' => 1,
+                    'formatter' => function( $d, $row ) {
+                        
+                        // Carrega o model de usuario
+                        $this->load->model('user');
+
+                        // Busca o usuario
+                        $user = $this->User->findById( $d );
+
+                        // Volta o resultado
+                        return ( $user ) ? $user->name : 'User não encontrado';
+                    }
+                ),
+            2 => 
+                array (
+                    'db' => 'gateway_id',
+                    'dt' => 2,
+                    'formatter' => function( $d, $row ) {
+                        
+                        // Carrega o model de usuario
+                        $this->load->model('gateway');
+
+                        // Busca o usuario
+                        $gateway = $this->Gateway->findById( $d );
+
+                        // Volta o resultado
+                        return ( $gateway ) ? 
+                            '<a href="'.$gateway->url.'" target="_blank">'.$gateway->name.'</a>'  
+                            : 'Veículo não encontrado';
+                    }
+                ),
 );
         $columns[] = 
         [   
@@ -108,46 +132,14 @@ class Report_gateway_model extends Report_gateway_finder {
 
                 // Formata a data
                 $del  = rmButton( 'report_gateway/delete/'.$d );
-                $edit = editButton( 'report_gateway/list?addModal=true&id='.$d );
 
                 // Volta os botões
-                return $del.'&nbsp'.$edit;
+                return $del;
             }
         ];
 
         // Volta o resultado
         return $this->datatables->send( $this->table(), $columns );
-    }
-    
-    /**
-     * form
-     * 
-     * Form de inserção
-     *
-     * @return void
-     */
-    public function form( $key ) {
-        $url = $this->id ? 'report_gateway/save/'.$this->id : 'report_gateway/save';
-        $data = [
-            'url'    => $url,
-            'fields' => array (
-  'customer_id' => 
-  array (
-    'label' => 'customer_id',
-    'name' => 'customer_id',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  'gateway_id' => 
-  array (
-    'label' => 'gateway_id',
-    'name' => 'gateway_id',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-)
-        ];
-        return $data[$key];
     }
 
     /**

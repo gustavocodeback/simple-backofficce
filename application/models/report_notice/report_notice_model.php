@@ -18,11 +18,11 @@ class Report_notice_model extends Report_notice_finder {
      * @var array
      */
     public $fields = array (
-  'customer_id' => 'customer_id',
-  'notice_id' => 'notice_id',
-  'created_at' => 'created_at',
-  'updated_at' => 'updated_at',
-);
+        'customer_id' => 'customer_id',
+        'notice_id' => 'notice_id',
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at',
+    );
 
     /**
      * visibles
@@ -32,11 +32,11 @@ class Report_notice_model extends Report_notice_finder {
      * @var array
      */
     public $visibles = array (
-  0 => 'ID',
-  1 => 'customer_id',
-  2 => 'notice_id',
-  3 => 'Ações',
-);
+        0 => 'ID',
+        1 => 'Usuário',
+        2 => 'Notícia',
+        3 => 'Ações',
+    );
 
     /**
      * __construct
@@ -84,22 +84,46 @@ class Report_notice_model extends Report_notice_finder {
 
         // Columns
         $columns = array (
-  0 => 
-  array (
-    'db' => 'id',
-    'dt' => 0,
-  ),
-  1 => 
-  array (
-    'db' => 'customer_id',
-    'dt' => 1,
-  ),
-  2 => 
-  array (
-    'db' => 'notice_id',
-    'dt' => 2,
-  ),
-);
+            0 => 
+                array (
+                    'db' => 'id',
+                    'dt' => 0,
+                ),
+            1 => 
+                array (
+                    'db' => 'customer_id',
+                    'dt' => 1,
+                    'formatter' => function( $d, $row ) {
+                        
+                        // Carrega o model de usuario
+                        $this->load->model('user');
+
+                        // Busca o usuario
+                        $user = $this->User->findById( $d );
+
+                        // Volta o resultado
+                        return ( $user ) ? $user->name : 'User não encontrado';
+                    }
+                ),
+            2 => 
+                array (
+                    'db' => 'notice_id',
+                    'dt' => 2,
+                    'formatter' => function( $d, $row ) {
+                        
+                        // Carrega o model de usuario
+                        $this->load->model('notice');
+
+                        // Busca o usuario
+                        $notice = $this->Notice->findById( $d );
+
+                        // Volta o resultado
+                        return ( $notice ) ? 
+                            '<a href="'.$notice->notice_link.'" target="_blank">'.$notice->title.'</a>'  
+                            : 'Notícia não encontrada';
+                    }
+                ),
+        );
         $columns[] = 
         [   
             'db' => 'id',
@@ -108,46 +132,14 @@ class Report_notice_model extends Report_notice_finder {
 
                 // Formata a data
                 $del  = rmButton( 'report_notice/delete/'.$d );
-                $edit = editButton( 'report_notice/list?addModal=true&id='.$d );
 
                 // Volta os botões
-                return $del.'&nbsp'.$edit;
+                return $del;
             }
         ];
 
         // Volta o resultado
         return $this->datatables->send( $this->table(), $columns );
-    }
-    
-    /**
-     * form
-     * 
-     * Form de inserção
-     *
-     * @return void
-     */
-    public function form( $key ) {
-        $url = $this->id ? 'report_notice/save/'.$this->id : 'report_notice/save';
-        $data = [
-            'url'    => $url,
-            'fields' => array (
-  'customer_id' => 
-  array (
-    'label' => 'customer_id',
-    'name' => 'customer_id',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  'notice_id' => 
-  array (
-    'label' => 'notice_id',
-    'name' => 'notice_id',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-)
-        ];
-        return $data[$key];
     }
 
     /**

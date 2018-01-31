@@ -31,12 +31,12 @@ class Suport_model extends Suport_finder {
      * @var array
      */
     public $visibles = array (
-  0 => 'ID',
-  1 => 'customer_id',
-  2 => 'subject',
-  3 => 'message',
-  4 => 'Ações',
-);
+        0 => 'ID',
+        1 => 'Usuário',
+        2 => 'Assunto',
+        3 => 'Mensagem',
+        4 => 'Ações',
+    );
 
     /**
      * __construct
@@ -84,27 +84,38 @@ class Suport_model extends Suport_finder {
 
         // Columns
         $columns = array (
-  0 => 
-  array (
-    'db' => 'id',
-    'dt' => 0,
-  ),
-  1 => 
-  array (
-    'db' => 'customer_id',
-    'dt' => 1,
-  ),
-  2 => 
-  array (
-    'db' => 'subject',
-    'dt' => 2,
-  ),
-  3 => 
-  array (
-    'db' => 'message',
-    'dt' => 3,
-  ),
-);
+            0 => 
+            array (
+                'db' => 'id',
+                'dt' => 0,
+            ),
+            1 => 
+            array (
+                'db' => 'customer_id',
+                'dt' => 1,
+                'formatter' => function( $d, $row ) {
+                    
+                    // Carrega o model de usuario
+                    $this->load->model('user');
+
+                    // Busca o usuario
+                    $user = $this->User->findById( $d );
+
+                    // Volta o resultado
+                    return ( $user ) ? $user->name : 'User não encontrado';
+                }
+            ),
+            2 => 
+            array (
+                'db' => 'subject',
+                'dt' => 2,
+            ),
+            3 => 
+            array (
+                'db' => 'message',
+                'dt' => 3,
+            ),
+        );
         $columns[] = 
         [   
             'db' => 'id',
@@ -113,53 +124,14 @@ class Suport_model extends Suport_finder {
 
                 // Formata a data
                 $del  = rmButton( 'suport/delete/'.$d );
-                $edit = editButton( 'suport/list?addModal=true&id='.$d );
 
                 // Volta os botões
-                return $del.'&nbsp'.$edit;
+                return $del;
             }
         ];
 
         // Volta o resultado
         return $this->datatables->send( $this->table(), $columns );
-    }
-    
-    /**
-     * form
-     * 
-     * Form de inserção
-     *
-     * @return void
-     */
-    public function form( $key ) {
-        $url = $this->id ? 'suport/save/'.$this->id : 'suport/save';
-        $data = [
-            'url'    => $url,
-            'fields' => array (
-  'customer_id' => 
-  array (
-    'label' => 'customer_id',
-    'name' => 'customer_id',
-    'type' => 'number',
-    'rules' => 'trim|required|max_length[11]|integer',
-  ),
-  'subject' => 
-  array (
-    'label' => 'subject',
-    'name' => 'subject',
-    'type' => 'text',
-    'rules' => 'trim|required|max_length[255]',
-  ),
-  'message' => 
-  array (
-    'label' => 'message',
-    'name' => 'message',
-    'type' => 'text',
-    'rules' => 'trim|required',
-  ),
-)
-        ];
-        return $data[$key];
     }
 
     /**

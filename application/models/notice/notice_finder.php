@@ -83,6 +83,36 @@ class Notice_finder extends SG_Model {
     }
 
     /**
+     * Busca as noticias com categoria pessoal
+     *
+     * @param [type] $user
+     * @return void
+     */
+    public function findPersonalFeed( $feedPessoalId, $user ) {
+
+        // Faz o join
+        $this->db->join( 'customer_gateway cg', "cg.gateway_id = n.gateway_id" );
+        $this->db->where( " cg.personal_category_id = $feedPessoalId 
+                            AND customer_id = $user->id" );
+
+        // Retorna os follows
+        return $this;
+    }
+
+    /**
+     * remove as noticias que possuem categoria pessoal
+     *
+     * @param [type] $user
+     * @return void
+     */
+     public function removePersonal() {        
+        $this->db->where( "( cg.personal_category_id IS NULL OR cg.personal_category_id = 0 ) " );
+
+        // Retorna os follows
+        return $this;
+    }
+
+    /**
      * Pega a assinatura dos itens
      *
      * @param [type] $user
