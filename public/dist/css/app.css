@@ -13860,7 +13860,7 @@ select[multiple].input-sm {
 #helpbar {
   width: 100%;
   height: 25px;
-  background: #49B792;
+  background: #993895;
   border-bottom: 1px solid #e6e6e6;
 }
 
@@ -13880,7 +13880,7 @@ select[multiple].input-sm {
 
 #helpbar .nav-content .nav-link.active {
   background: #fff;
-  color: #49B792;
+  color: #993895;
   border-radius: 5px 5px 0px 0px;
 }
 
@@ -13898,7 +13898,7 @@ select[multiple].input-sm {
 
 #header .header-link:hover {
   cursor: pointer;
-  color: #49B792;
+  color: #993895;
   -webkit-transform: scale(1.01);
   transform: scale(1.01);
 }
@@ -13920,13 +13920,13 @@ select[multiple].input-sm {
 
 #navbar .access-content .access-link:hover {
   cursor: pointer;
-  color: #49B792;
+  color: #993895;
   font-weight: bold;
 }
 
 #navbar .access-content .access-link.active {
-  border-bottom: 3px solid #49B792;
-  color: #49B792;
+  border-bottom: 3px solid #993895;
+  color: #993895;
   font-weight: bold;
 }
 
@@ -13969,7 +13969,7 @@ select[multiple].input-sm {
 
 #footer .footer-item .footer-item-link:hover {
   cursor: pointer;
-  color: #49B792;
+  color: #993895;
   -webkit-transform: scale(1.01);
   transform: scale(1.01);
 }
@@ -14020,13 +14020,13 @@ select[multiple].input-sm {
 
 #sidebar .sidebar-item:hover {
   cursor: pointer;
-  color: #49B792;
+  color: #993895;
   -webkit-transform: scale(1.01);
   transform: scale(1.01);
 }
 
 #sidebar .sidebar-item.active {
-  color: #49B792;
+  color: #993895;
   -webkit-transform: scale(1.01);
   transform: scale(1.01);
 }
