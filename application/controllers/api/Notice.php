@@ -77,24 +77,40 @@ class Notice extends SG_Controller {
 		// Faz a busca das noticias
 		$notices = $this->Notice->select( 'n.*' )->lastPublished();
 
-		// Verifica se foi informado um feed pessoal
-		if ( ( $feed_id = get_header( 'App-Feed-Id' ) ) && $user ) {
+		// Verifica se o usuário está logado
+		if ( $user ) {
 
-			// Verifica o tipo e faz a busca
-			if ( strpos( $feed_id, 'p-' ) !== false ) {
-				$notices->findPersonalFeed( str_replace( 'p-', '', $feed_id ), $user );				
+			// Verifica se existe um id de feed pessoal
+			if ( $feed_id = get_header( 'App-Feed-Id' ) ) {
+
+				// Exibe o feed pessoal
+				if ( strpos( $feed_id, 'p-' ) !== false ) {
+					$notices->findPersonalFeed( str_replace( 'p-', '', $feed_id ), $user );				
+				} else {
+					$notices->subscribed( $user )->removePersonal();
+				}
 			} else {
-				$notices->subscribed( $user )->removePersonal();
+
+				// Filtra por categoria
+				$notices = $notices->inCategories( $categories );
+
+				// Pega as não silenciadas
+				$notices = $notices->notSilenced( $user );
 			}
 
-		// Quando nao for feed pessoal
-		} elseif( $user ) $notices = $notices->subscribed( $user );
+		} else {
 
-		// Verifica se existem categorias de busca
-		if ( is_array( $categories ) && count( $categories ) > 0 ) {
+			// Filtra por categoria
 			$notices = $notices->inCategories( $categories );
-		}
 
+			// Verifica se deve fazer o join
+			if ( !is_array( $categories ) || count( $categories ) == 0 )
+				$notices = $notices->joinGateway( 'g' );
+			
+			// Pega somente as de veiculos padrão
+			$notices->default( 'g' );
+		}
+		
 		// Busca as noticias
 		$notices = $notices->paginate( $page, 10, 'notice n' );
 		
