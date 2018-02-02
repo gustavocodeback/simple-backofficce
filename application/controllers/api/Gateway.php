@@ -15,7 +15,36 @@ class Gateway extends SG_Controller {
 		// carrega a model de veiculos de noticias
 		$this->load->model( [ 'gateway', 'customer_gateway' ] );
 	}
-	
+
+	/**
+	 * Deixa a resposta do gateway de forma padrão
+	 *
+	 * @param [type] $gateway
+	 * @return void
+	 */
+	private function __formatGetwayJson( $gateway ) {
+		// Pega o usuário logado, se existir
+		$user = auth();
+
+		// Busca a imagem e acategoria
+		$image    = $gateway->belongsTo( 'midia' );
+		$category = $gateway->belongsTo( 'category' );
+		
+		// formata os dados
+		return [
+			'id'        	=> $gateway->id,
+			'name'      	=> $gateway->name,
+			'url'       	=> $gateway->url,
+			'image'     	=> $image ? $image->path() : base_url( 'public/images/empty.jpg' ),
+			'category'  	=> $category->name,
+			'status'        => $gateway->status( $user ),
+			'muted'         => $gateway->muted( $user ),
+			'subscriptions' => $gateway->subscriptions(),
+			'reported'      => $gateway->reported( $user ),
+			'crated_at'     => $gateway->created_at
+		];
+	}
+
 	/**
 	 * get
 	 *
@@ -26,32 +55,8 @@ class Gateway extends SG_Controller {
 		// verifica se veio veiculo
 		if( $gateway = $this->Gateway->findById( $id ) ) {
 
-			// busca a imagem e acategoria
-			$image    = $gateway->belongsTo( 'midia' );
-			$category = $gateway->belongsTo( 'category' );
-
-			// Inicia a veriavel
-			$reported = false;
-			
-			// Verifica se tem usuario logado
-			if( $user = auth() ) {
-
-				// Verifica se está denunciado
-				$reported = ( $gateway->reported( $user ) ) ? true : false ;
-			}
-
 			// formata os dados
-			$gateway_data = [
-				'id'        	=> $gateway->id,
-				'name'      	=> $gateway->name,
-				'url'       	=> $gateway->url,
-				'image'     	=> $image->path(),
-				'category'  	=> $category->name,
-				'status'        => $gateway->status( auth() ),
-				'subscriptions' => $gateway->subscriptions(),
-				'reported'      => $reported,
-				'crated_at'     => $gateway->created_at
-			];
+			$gateway_data = $this->__formatGetwayJson( $gateway );
 
 			return resolve( $gateway_data );
 		} else return reject( 'O veículo desejado não existe.' );
@@ -76,29 +81,8 @@ class Gateway extends SG_Controller {
 		$return = [];
 		foreach( $gateways->data as $gateway ) {
 
-			// Verifica se tem usuario logado
-			if( $user = auth() ) {
-
-				// Verifica se esta denunciado
-				$reported = ( $gateway->reported( $user ) ) ? true : false;
-			}
-
-			// Busca a imagem
-			$image = $gateway->belongsTo( 'midia' );
-			$category = $gateway->belongsTo( 'category' );
-
 			// Formata os dados
-			$return[] = [
-				'id'        	=> $gateway->id,
-				'name'      	=> $gateway->name,
-				'url'       	=> $gateway->url,
-				'image'     	=> $image->path(),
-				'category'  	=> $category->name,
-				'status'  	  	=> $gateway->status( auth() ),
-				'subscriptions' => $gateway->subscriptions(),
-				'reported'  	=> $reported,
-				'crated_at' 	=> $gateway->created_at
-			];
+			$return[] = $this->__formatGetwayJson( $gateway );
 		}
 		$gateways->data = $return;
 
@@ -133,28 +117,9 @@ class Gateway extends SG_Controller {
 		$toReturn = [];
 		foreach( $pages->data as $gateway ) {
 
-			// Verifica se tem usuario logado
-			if( $user = auth() ) {
-
-				// Verifica se está denunciado
-				$reported = ( $gateway->reported( $user ) ) ? true : false ;
-			}
-
-			// Pega a imagem do gateway
-			$image = $gateway->belongsTo( 'midia' );
 
 			// formata os dados
-			$toReturn[] = [
-				'id'        	=> $gateway->id,
-				'name'      	=> $gateway->name,
-				'url'       	=> $gateway->url,
-				'image'     	=> $image->path(),
-				'category'  	=> $category->name,
-				'status'  	  	=> $gateway->status( auth() ),
-				'subscriptions' => $gateway->subscriptions(),
-				'reported'  	=> $reported,
-				'crated_at' 	=> $gateway->created_at
-			];
+			$toReturn[] = $this->__formatGetwayJson( $gateway );
 		}
 		$pages->data = $toReturn;
 
@@ -235,6 +200,7 @@ class Gateway extends SG_Controller {
 
 	/**
 	 * Denuncia o veiculo
+	 *
 	 */
 	public function report( $gateway_id ) {
 		loggedOnly();
@@ -255,14 +221,52 @@ class Gateway extends SG_Controller {
 	public function mute( $gateway_id ) {
 		loggedOnly();
 		
-		// Carrega a model
-		if ( $gateway = $this->Gateway->findById( $gateway_id ) ) {
+		// Verifica se o gateway existe
+		if ( !$this->Gateway->findById( $gateway_id ) ) return reject( 'Nenhum gateway encontrado' );
 
-			// Seta o unfollow
-			if ( $gateway->mute( auth() ) ) {
+		// Carrega a model
+		$this->load->model( [ 'customer_muted' ] );
+
+		// Pega a referencia
+		$muted = $this->Customer_muted->byGateway( $gateway_id )->byCustomer( auth()->id )->findOne();
+		if ( $muted ) {
+
+			// Tenta salvar no banco
+			if ( $muted->delete() ) {
 				return resolve( 'Ação realizada com sucesso' );
-			} else return reject( 'Não foi possivel realizar essa ação' );
-		} else return reject( 'O Gateway informado não existe' );
+			} else reject( 'Erro ao realizar essa ação' );
+		} else resolve( 'Ação realizada com sucesso' );
+	}
+	
+	/**
+	 * Retira o silenciamento do muted
+	 * 
+	 */
+	public function unmute( $gateway_id ) {
+		loggedOnly();
+		
+		// Verifica se o gateway existe
+		if ( !$this->Gateway->findById( $gateway_id ) ) return reject( 'Nenhum gateway encontrado' );
+
+		// Carrega a model
+		$this->load->model( [ 'customer_muted' ] );
+
+		// Pega a referencia
+		$muted = $this->Customer_muted->byGateway( $gateway_id )->byCustomer( auth()->id )->findOne();
+		if ( !$muted ) {
+
+			// Cria o muted
+			$nMuted = $this->Customer_muted->new();
+			$nMuted->fill([
+				'customer_id' => auth()->id,
+				'gateway_id' => $gateway_id
+			]);
+
+			// Tenta salvar no banco
+			if ( $nMuted->save() ) {
+				return resolve( 'Ação realizada com sucesso' );
+			} else reject( 'Erro ao realizar essa ação' );
+		} else resolve( 'Ação realizada com sucesso' );
 	}
 
 	/**

@@ -112,28 +112,6 @@ class Gateway_model extends Gateway_finder {
     }
 
     /**
-     * Deixa de seguir um gateway
-     * 
-     * @return void
-     */
-    public function mute( $customer ) {
-      
-      // Carrega a model de relacao
-      $this->load->model( 'customer_gateway' );
-
-      // monta a query
-      $where = 'customer_id = '.$customer->id. ' AND gateway_id = '.$this->id;    
-
-      // busca o status da relação id id
-      $ret = $this->Customer_gateway->where( $where )->findOne();
-      if( !$ret ) return false;
-
-      // Salva o novo status
-      $ret->status = 'S';
-      return $ret->save();
-    }
-
-    /**
      * Pega o status em relacao a um usuario
      * 
      * @return void
@@ -175,6 +153,7 @@ class Gateway_model extends Gateway_finder {
      * um usuario especifico
      */
     public function reported( $customer ) {
+      if ( !$customer ) return false;
 
       // Carrega a model de denuncias
       $this->load->model( 'report_gateway' );
@@ -234,6 +213,28 @@ class Gateway_model extends Gateway_finder {
       } else return 0;
     }
 
+    /**
+     * Verifica se o veiculo esta mutado ou não
+     *
+     * @return boolean
+     */
+    public function muted( $user ) {
+
+      // Verifica o login
+      if ( !$user ) return $this->default_gateway == 'S' ? false : true;
+
+      // Carrega a model
+      $this->load->model( 'customer_muted' );
+
+      // Pega a referencia
+      $muted = $this->Customer_muted->byGateway( $this->id )
+                                    ->byCustomer( auth()->id )
+                                    ->findOne();
+      
+      // Verifica se existe o registro
+      return !$muted;
+    }
+    
     /**
      * Link de adicionar
      *

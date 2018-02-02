@@ -76,6 +76,11 @@ class Notice_finder extends SG_Model {
      * @return void
      */
     public function inCategories( $categories ) {
+        
+        // Verifica se deve adicionar o filtro
+        if ( !is_array( $categories ) || count( $categories ) == 0 ) return $this;
+
+        // Adiciona o filtro
         $this->db->join( 'gateway g', 'g.id = n.gateway_id ', 'inner')
                  ->join( 'category c', 'c.id = g.category_id ', 'inner' )
                  ->where_in( 'c.id', $categories );
@@ -121,6 +126,28 @@ class Notice_finder extends SG_Model {
     public function subscribed( $user ) {
         $this->db->join( 'customer_gateway cg', 'cg.gateway_id = n.gateway_id AND customer_id = '.$user->id );
         $this->db->where( 'cg.status = "F" ');
+        return $this;
+    }
+
+    /**
+     * Pega as noticias dos veiculos não silenciados
+     *
+     * @param [type] $user
+     * @return void
+     */
+    public function notSilenced( $user ) {
+        $this->db->join( 'customer_muted mt', 'mt.gateway_id = n.gateway_id AND mt.customer_id = '.$user->id, 'inner' );
+        return $this;
+    }
+
+    /**
+     * Faz o join com a tabela de gateways
+     *
+     * @param [type] $alias
+     * @return void
+     */
+    public function joinGateway( $alias ) {
+        $this->db->join( " gateway $alias", " n.gateway_id = $alias.id ", "inner" );
         return $this;
     }
 }
