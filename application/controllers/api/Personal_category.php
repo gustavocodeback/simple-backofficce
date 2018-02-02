@@ -29,7 +29,7 @@ class Personal_category extends SG_Controller {
 			[
 				'field' => 'name',
 				'label' => 'Nome',
-				'rules' => 'min_length[3]|max_length[40]|required'
+				'rules' => 'min_length[1]|max_length[40]|required'
 			]
 		];
 
@@ -83,56 +83,6 @@ class Personal_category extends SG_Controller {
 
 		// Volta as categorias encontrada
 		resolve( $response );
-	}
-
-	/**
-	 * delete
-	 * 
-	 * Deleta uma categoria pessoa
-	 */
-	public function delete( $personal_category_id ) {
-		loggedOnly();
-
-		// Busca a categoria pessoal
-		$personalCategory = $this->Personal_category->findById( $personal_category_id );
-
-		// Verifica se a categoria existe
-		if( !$personalCategory ) return reject( 'Categoria não existe' );
-
-		// Reseta os campos na tabela de follows
-		if( $personalCategory->update() ) {
-			
-			// Deleta a categoria
-			if( $personalCategory->delete() ) {
-				return resolve( 'Ação realizada com sucesso' );
-			} return reject( 'Erro ao deletar a categoria pessoal' );
-		} return reject( 'Erro ao atualizar a tabela de follows' );
-	}
-
-	/**
-	 * edit
-	 * 
-	 * Edita uma categoria pessoal
-	 */
-	public function edit() {
-		loggedOnly();
-
-		// Pega os dados
-		$dados = $this->input->post();
-
-		// Busca a categoria pessoal
-		$personalCategory = $this->Personal_category->findById( $dados['id'] );
-		
-		// Verifica se existe
-		if( !$personalCategory ) return reject( 'Categoria não existe' );
-
-		// Seta o nome
-		$personalCategory->name = $dados['name'];
-
-		// Tenta salvar
-		if( $personalCategory->save() ) {
-			return resolve( 'Ação realizada com sucesso' );
-		} return resolve( 'Erro ao salvar a categoria pessoal' );
 	}
 }
 

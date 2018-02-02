@@ -197,6 +197,43 @@ class Gateway extends SG_Controller {
 	}
 
 	/**
+	 * Deixa de seguir varios veiculos
+	 *
+	 */
+	public function unfollow_many() {
+		loggedOnly();
+		$user = auth();
+
+		// Pega os ids 
+		$gateways_id = $this->input->post( 'gateways_id' );
+		$this->load->model( 'personal_category' );
+
+		// Percorre os ids
+		foreach( $gateways_id as $id ) {
+
+			// Busca os veiculos
+			if( $gateway = $this->Gateway->findById( $id ) ) {
+
+				// Seta o unfollow
+				if( !$gateway->unfollow( $user ) ) {
+					return reject( 'Não foi possivel deixar de seguir '.$gateway->name );
+				}
+			} else return reject( 'O '.$gateway->name.' não existe' );
+		}
+
+		// Carrega os feeds pessoais
+		$personals = $this->Personal_category->byUser( $user );
+		$personals = $personals ? $personals : [];
+
+		// Pecorre as categorias pessoais
+		foreach(  $personals as $personal ) {
+			if ( !$personal->hasSubscriptions() ) $personal->delete();
+		}
+
+		return resolve( 'Ação realizada com sucesso' );
+	}
+
+	/**
 	 * Denuncia o veiculo
 	 */
 	public function report( $gateway_id ) {

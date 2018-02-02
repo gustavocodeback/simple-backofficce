@@ -48,19 +48,6 @@ class Personal_category_model extends Personal_category_finder {
         parent::__construct();
     }
 
-    /**
-     * Reseta os campos da categoria pessoal nos follows
-     *
-     */
-    public function update() {
-
-        // Seta os capos
-        $data = [ 'personal_category_id' => 0 ];
-        
-        // Faz o update
-        return $this->db->update('customer_gateway', $data, "personal_category_id = ".$this->id);
-    }
-
     /** 
      * Volta os metodos
      * 
@@ -98,86 +85,6 @@ class Personal_category_model extends Personal_category_finder {
     }
 
     /**
-     * columns
-     * 
-     * Colunas para o DataTables
-     *
-     * @return void
-     */
-    public function DataTables() {
-        
-        // Carrega a library
-        $this->load->library( 'DataTables' );
-
-        // Columns
-        $columns = array (
-            0 => 
-            array (
-                'db' => 'id',
-                'dt' => 0,
-            ),
-            1 =>
-            array (
-                'db' => 'name',
-                'dt' => 1
-            ),
-            2 =>
-            array (
-                'db' => 'user_id',
-                'dt' => 2
-            )
-        );
-        $columns[] = 
-        [   
-            'db' => 'id',
-            'dt' => 2,  
-            'formatter' => function( $d, $row ) {
-
-                // Formata a data
-                $del  = rmButton( 'personal_category/delete/'.$d );
-                $edit = editButton( 'personal_category/list?addModal=true&id='.$d );
-
-                // Volta os botões
-                return $del.'&nbsp'.$edit;
-            }
-        ];
-
-        // Volta o resultado
-        return $this->datatables->send( $this->table(), $columns );
-    }
-    
-    /**
-     * form
-     * 
-     * Form de inserção
-     *
-     * @return void
-     */
-    public function form( $key ) {
-        $url = $this->id ? 'personal_category/save/'.$this->id : 'personal_category/save';
-        $data = [
-            'url'    => $url,
-            'fields' => array (
-                'name' => 
-                    array (
-                        'label' => 'Nome',
-                        'name' => 'name',
-                        'type' => 'text',
-                        'rules' => 'trim|required|max_length[60]',
-                    ),
-                'user_id' => 
-                    array (
-                        'label' => 'Usuario',
-                        'name'  => 'user_id',
-                        'type'  => 'int',
-                        'size'  => '11'
-                    ),
-            )
-        ];
-        return $data[$key];
-    }
-
-    /**
      * permissions
      * 
      * Volta o array de permissões
@@ -192,6 +99,25 @@ class Personal_category_model extends Personal_category_finder {
             'read'   => [ 'any' ]
         ];
     }
+
+    /**
+     * Verifica se a categoria pessoal tem inscricoes
+     *
+     * @return Array
+     */
+    public function hasSubscriptions() {
+        
+        // Prepara a busca
+        $this->db->from( 'customer_gateway' )
+        ->select( 'id' )
+        ->where( " personal_category_id = $this->id " );
+
+        // Faz a busca
+        $d = $this->db->get();
+
+        // Verifica se existem inscricoes
+        return $d->num_rows() > 0 ? true : false;
+    }  
 }
 
 // End of file
