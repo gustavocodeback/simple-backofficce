@@ -105,7 +105,7 @@ if ( ! function_exists( 'reject' ) ) {
  * 
  */
 if ( ! function_exists( 'denied' ) ) {
-    function denied( $message ) {
+    function denied() {
         return send( 403, [ 'message' => 'Access denied' ] );
     }
 }
@@ -289,7 +289,7 @@ if ( ! function_exists( 'loggedOnly' ) ) {
         // Verifica se o usuário está logado
         if ( !auth() ) {
             if ( valid_api_request() ) {
-                reject( 'Usuário não autorizado' );
+                denied();
                 exit();
             } else {
                 close_page( 'auth' );
