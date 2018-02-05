@@ -49,6 +49,7 @@ class Crons extends SG_Controller {
 				'gateway_id'     => $row->id,
 				'title'          => $item->getTitle(),
 				'notice_link'    => $item->getUrl(),
+				'description'    => $item->resume,
 				'image_link'     => $item->cover ? $item->cover : null,
 				'default_notice' => $row->default_gateway,
 				'text'           => $extractionResult->text,

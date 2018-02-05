@@ -318,6 +318,25 @@ class Rss {
     }
 
     /**
+     * Obtem o resumo
+     *
+     * @param [type] $item
+     * @return void
+     */
+    private function __getDescription( $item ) {
+        $html = $item->getContent();
+        if ( !$html ) return null;
+
+        // Obtem o primeiro paragrafo
+        $start     = strpos( $html, '<p>' );
+        $end       = strpos( $html, '</p>', $start );
+        $paragraph = substr( $html, $start, $end-$start+4 );
+        
+        // Volta somente o texto
+        return html_entity_decode(strip_tags($paragraph));
+    }
+
+    /**
      * Faz o parse de uma url RSS
      *
      * @param [type] $url
@@ -338,6 +357,7 @@ class Rss {
             if ( $feed = $parser->execute() ) {
                 foreach( $feed->items as $key => $item ) {
                     $feed->items[$key]->cover = $this->__getCover( $item );
+                    $feed->items[$key]->resume = $this->__getDescription( $item );
                 }
                 return $feed;
 

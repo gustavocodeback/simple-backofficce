@@ -2,7 +2,7 @@
     <div class="row">
 
         <?php $__currentLoopData = $rss->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $new): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <div class="col-sm-4 p-2">
+        <div class="col-sm-6 p-2">
             <div class="card z-depth-1">
                 
                 <?php if( $new->cover ): ?>
@@ -11,7 +11,10 @@
 
                 <div class="card-body">
                     <h5 class="card-title"><?php echo e($new->getTitle()); ?></h5>
+                    <p>
+                        <?php echo $new->resume; ?>
 
+                    </p>
                     <a href="<?php echo e($new->getUrl()); ?>" target="blank" class="btn btn-primary">Visualizar noticia</a>
                 </div>
             </div>

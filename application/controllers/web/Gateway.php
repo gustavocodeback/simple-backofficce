@@ -230,7 +230,7 @@ class Gateway extends SG_Controller {
 
 		// Verifica o status	
 		if ( !$feed ) {
-			flash( 'swaErrorBody', $rss->error );
+			flash( 'swaErrorBody', $feed->error );
 			redirect( site_url( 'gateway/list/'.$item->category_id ) );
 			return;
 		}
