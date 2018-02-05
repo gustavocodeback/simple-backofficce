@@ -52,7 +52,9 @@
               </button><!-- botao de adicionar foto -->
 
           </div><!-- input de midia -->
+
           @endif
+          
           @if( $item['type'] == 'text' )
           {!! inputText( $item['label'],  $item['name'], [ 'attr' => [ 'value' => $modelGrid->{$item['name']} ] ] ) !!}
           @endif

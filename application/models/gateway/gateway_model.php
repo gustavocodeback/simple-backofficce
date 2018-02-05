@@ -276,7 +276,11 @@ class Gateway_model extends Gateway_finder {
                   // Carrega a model
                   $this->load->model( 'midia' );
                   $midia = $this->Midia->findById( $d );
-                  return "<img src='".$midia->path()."' width='50px'>";
+                  if ( $midia ) {
+                    return "<img src='".$midia->path()."' width='50px'>";
+                  } else {
+                    return "<img src='".base_url( 'public/images/empty.jpg' )."' width='50px'>";
+                  }
                 }
 
                 // Volta o resultado

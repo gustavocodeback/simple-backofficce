@@ -1,5 +1,11 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
+use PicoFeed\Reader\Reader;
+use PicoFeed\Scraper\Scraper;
+use PicoFeed\Config\Config;
+use PicoFeed\Reader\Favicon;
+
+
 /**
  * RSS
  * 
@@ -61,39 +67,43 @@ class Rss {
         $str = stripslashes( $str );
         $str = str_replace( '"', " ", $str );
 
-        // Explode os links
-        $parts = explode( 'http', $str );
-
         // Pega os provaveis pontos de link
         preg_match_all( '/.(?:JPG|PNG|GIF|jpg|png|gif)/', $str, $exts, PREG_OFFSET_CAPTURE );
         preg_match_all( '/(?:http|HTTP|https|HTTPS):\/\//', $str, $https, PREG_OFFSET_CAPTURE );
 
-        // Seta o offset
-        $uOffset = false;
-        $pOffset = false;
-        $img = false;
+        // Verifica se é possivel ter uma imagem
+        if ( count( $https ) == 0 || count( $exts ) == 0 ) return false;
 
-        // Percorre as extensoes
-        foreach( $exts[0] as $ext ) {
-            $uOffset = $ext[1];
-            $lr = 0;
+        // Links de imagens possiveis
+        $possibleLinks = [];
+       
+        // Offsets dos https
+        $httpsOffsets = array_map( function( $value ){
+            return $value[1];
+        }, $https[0] );
 
-            // Percorre os http
-            foreach( $https[0] as $http ) {
-                $res = $uOffset - $http[1];
+        // Offsets das extensões
+        $extensionsOffsets = array_map( function( $value ){
+            return $value[1];
+        }, $exts[0] );
 
-                // Seta o offset inicial
-                $pOffset = ( $pOffset === false || $res < $lr ) ? $http[1] : $pOffset;
-                $lr = $res;
-            }
+        // Percorre os offsets das extensoes
+        foreach( $extensionsOffsets as $extOffset ) {
+            $intervals = array_map( function( $httpsOffset ) use ( $extOffset ) {
+                return $extOffset - $httpsOffset;
+            }, $httpsOffsets );
+            $intervals = array_filter( $intervals, function( $value ) {
+                return ( $value > 0 );
+            });
             
-            // Verifica se existe uma imagem
-            if ( !in_array( FALSE, [ $pOffset, $uOffset ] ) )
-                $img = substr( $str, $pOffset, ( $uOffset - $pOffset + 4 ) );
+            // Salva o link possivel
+            $length = min( $intervals );
+            $start  = $extOffset - $length;
+            $possibleLinks[]  = substr( $str, $start, $length+4 );
         }
 
-        // Volta a imagem encontrada
-        return $img;
+        // Verifica se existem links possiveis
+        return ( count( $possibleLinks ) > 0 ) ? $possibleLinks[0] : false;
     }
 
     /**
@@ -226,6 +236,116 @@ class Rss {
      */
     public function forEachRow( $callback ) {
         foreach( $this->news as $new ) $callback( $new );
+    }
+
+    /**
+     * Encontra os links RSS de uma página
+     *
+     * @param [type] $url
+     * @return void
+     */
+    public function findLinks( $location ) {
+        if ( $html = @DOMDocument::loadHTML( file_get_contents( $location ) ) ) {
+
+            // Carrega o DOM
+            $xpath = new DOMXPath($html);
+            $feeds = $xpath->query("//head/link[@href][@type='application/rss+xml']/@href");
+            
+            // Encontra os resultados
+            $results = [];
+            foreach( $feeds as $feed ) {
+                $results[] = $feed->nodeValue;
+            }
+            
+            // Volta os links encontrados
+            return $results;
+        }
+        return false;
+    }
+
+    /**
+     * Obtem o favicon da página
+     *
+     * @param [type] $url
+     * @return void
+     */
+    public function get_favicon( $url ) {
+        $favicon = new Favicon;
+        $icon_link = $favicon->find( $url );
+        return $icon_link;
+    }
+
+    /**
+     * Pega o cover de uma imagem
+     *
+     * @param [type] $item
+     * @return void
+     */
+    private function __getCover( $item ) {
+
+        // Possiveis lugares para achar a imagem
+        $possibleTags  = [ 'media', 'media:enclosure', 'media:content' ];
+        $possibleLinks = [];
+
+        // Verifica se existe a tag media
+        if( $item->hasNamespace('media') ) {
+            foreach( $possibleTags as $tag ) {
+                $values = $item->getTag( $tag, 'url' );
+                if ( count( $values ) > 0 ) {
+                    foreach( $values as $key => $value ) {
+                        $headers = get_headers( $value, 1 );
+                        if ( strpos($headers['Content-Type'], 'image/') === false ) {
+                            unset( $values[$key] );
+                        }
+                    }
+                    $possibleLinks = array_merge( $possibleLinks, $values );
+                }
+            }
+        }
+
+        // Verifica o enclose
+        if ( !empty( $item->getEnclosureUrl() ) && strpos( $item->getEnclosureType(), 'image' ) !== false ) {
+            $possibleLinks[] = $item->getEnclosureUrl();
+        } 
+
+        // Verifica se já encontrou uma imagem
+        if ( count( $possibleLinks ) == 0 ) {
+            if ( $img = $this->__getImageUrl( $item->getContent() ) )
+                $possibleLinks[] = $img;
+        }
+
+        return isset( $possibleLinks[0] ) ? $possibleLinks[0] : null;
+    }
+
+    /**
+     * Faz o parse de uma url RSS
+     *
+     * @param [type] $url
+     * @return void
+     */
+    public function parse( $url ) {
+        try {
+
+            $reader = new Reader;
+            $resource = $reader->discover( $url );
+
+            $parser = $reader->getParser(
+                $resource->getUrl(),
+                $resource->getContent(),
+                $resource->getEncoding()
+            );
+
+            if ( $feed = $parser->execute() ) {
+                foreach( $feed->items as $key => $item ) {
+                    $feed->items[$key]->cover = $this->__getCover( $item );
+                }
+                return $feed;
+
+            } else return null;
+        }
+        catch (Exception $e) {
+            // Do something...
+        }
     }
 };
 

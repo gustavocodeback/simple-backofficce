@@ -14,7 +14,8 @@
 		"php": ">=5.3.7",
 		"philo/laravel-blade": "^3.1",
 		"phpmailer/phpmailer": "^6.0",
-		"zackslash/php-web-article-extractor": "*"
+		"zackslash/php-web-article-extractor": "*",
+		"miniflux/picofeed": "@stable"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

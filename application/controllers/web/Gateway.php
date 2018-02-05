@@ -226,16 +226,17 @@ class Gateway extends SG_Controller {
 
 		// Carrega a library de rss
 		$this->load->library( 'rss' );
-		$rss = $this->rss->load( $item->rss );
+		$feed = $this->rss->parse( $item->rss );
 
 		// Verifica o status	
-		if ( !$rss->status ) {
+		if ( !$feed ) {
 			flash( 'swaErrorBody', $rss->error );
+			redirect( site_url( 'gateway/list/'.$item->category_id ) );
 			return;
 		}
 
 		// Seta na view
-		setItem( 'rss', $rss );
+		setItem( 'rss', $feed );
 
 		// Carrega a view
 		view( 'gateway/gateway' );
