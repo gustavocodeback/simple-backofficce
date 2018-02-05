@@ -22,6 +22,9 @@ class SG_Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
         cors();
+
+        // Seta o time zone
+        date_default_timezone_set('America/Sao_Paulo');
         
         // Seta os grupos
         $this->setGroups();

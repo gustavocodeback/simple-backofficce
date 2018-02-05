@@ -87,7 +87,7 @@ class Notice extends SG_Controller {
 				if ( strpos( $feed_id, 'p-' ) !== false ) {
 					$notices->findPersonalFeed( str_replace( 'p-', '', $feed_id ), $user );				
 				} else {
-					$notices->subscribed( $user )->removePersonal()->belongsToCategory( $feed_id );
+					$notices->subscribed( $user )->removePersonal()->inCategories( [ $feed_id ] );
 				}
 			} else {
 

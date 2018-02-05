@@ -118,22 +118,6 @@ class Notice_finder extends SG_Model {
     }
 
     /**
-     * Busca as noticias de uma categoria especifica
-     *
-     * @param [type] $category_id
-     * @return void
-     */
-    public function belongsToCategory( $category_id ) {
-        // Faz o join
-        // Adiciona o filtro
-        $this->db->join( 'gateway g', 'g.id = n.gateway_id ', 'inner')
-                 ->join( 'category c', 'c.id = g.category_id ', 'inner' )
-                 ->where_in( 'c.id', $category_id );
-
-        return $this;
-    }
-
-    /**
      * Pega a assinatura dos itens
      *
      * @param [type] $user
