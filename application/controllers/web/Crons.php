@@ -1,5 +1,4 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Crons extends SG_Controller {
 
@@ -11,6 +10,7 @@ class Crons extends SG_Controller {
 	 */
 	public function __construct() {
 		parent::__construct();
+		ini_set('max_execution_time', 30000 );
 
 		// Seta o contexto
 		context( strtolower( 'Crons' ) );
@@ -24,35 +24,37 @@ class Crons extends SG_Controller {
 	 */
 	private function __fetchRss( $row ) {
 		$this->load->library( 'rss' );
-		$rss = $this->rss->load( $row->rss );
-
-		// Verifica se carregou o status
-		if ( !$rss->status ) return;
+		$rss = $this->rss->parse( $row->rss );
+		if ( !$rss ) return;
 
 		// Carrega a lista
 		$this->load->model( 'notice' );
+		$total = count( $rss->items );
+		$splice = ( $total > 5 ) ? 5 : $total;
+		$items = array_splice( $rss->items, 0, $total );
 
 		// Percorre as noticias
-		foreach( $rss->news as $item ) {
+		foreach( $items as $item ) {
 			$notice = $this->Notice->new();
-			$byLink = $this->Notice->getByLink( $item['link'] );
+			$byLink = $this->Notice->getByLink( $item->getUrl() );
 
 			// Verifica se já esta cadastrado
 			if ( $byLink ) continue;
 
 			// Obtem o texto da noticia
-			$extractionResult = WebArticleExtractor\Extract::extractFromURL( $item['link'] );
+			$extractionResult = WebArticleExtractor\Extract::extractFromURL( $item->getUrl() );
 
 			// Preenche o fill
 			$notice->fill([
 				'gateway_id'     => $row->id,
-				'title'          => $item['title'] ? $item['title'] : null,
-				'notice_link'    => $item['link'] ? $item['link'] : null,
-				'image_link'     => $item['cover'] ? $item['cover'] : null,
+				'title'          => $item->getTitle(),
+				'notice_link'    => $item->getUrl(),
+				'description'    => $item->resume,
+				'image_link'     => $item->cover ? $item->cover : null,
 				'default_notice' => $row->default_gateway,
 				'text'           => $extractionResult->text,
-				'description'    => $item['description'] ? $item['description'] : null,
-				'date'           => isset( $item['pubDate'] ) ? date( 'Y-m-d H:i:s', strtotime( $item['pubDate'] ) ) : now(),
+				'description'    => null,
+				'date'           => $item->getPublishedDate()->format( 'Y-m-d H:i:s' ),
 			]);
 			$notice->save();
 		}

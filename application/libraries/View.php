@@ -53,7 +53,7 @@ class View {
         $this->titlePrefix = sitename().' - ';
 
         // inicializa a instancia do blade 
-        $this->blade = new Blade( FCPATH.DIRECTORY_SEPARATOR.'frontend', APPPATH.'/cache/' );
+        $this->blade = new Blade( FCPATH.DIRECTORY_SEPARATOR.'frontend', APPPATH.'cache' );
     }
 
     /**
