@@ -107,8 +107,24 @@ class Gateway extends SG_Controller {
 		$query = $this->input->get( 'query' );
 		$query = $query ? $query : '';
 
+		// Seta o where
+		$where = " category_id = $category_id AND name LIKE '%$query%' ";
+
+		// Verifica se é para filtrar pela regiao
+		if( $region = get_header( 'App-Region' ) ) {
+			
+			// Carrega a model de regioes
+			$this->load->model( 'region' );
+
+			// Busca a regiao
+			$region = $this->Region->where( "sigla = '$region'" )->findOne();
+
+			// Seta o where com a regiao
+			$where .= " AND region_id = $region->id ";
+		}
+
 		// Obtem as páginas
-		$pages = $this->Gateway->where( " category_id = $category_id AND name LIKE '%$query%' " )->paginate( $page, 20 );
+		$pages = $this->Gateway->where( $where )->paginate( $page, 20 );
 
 		// Inicia a veriavel
 		$reported = false;
