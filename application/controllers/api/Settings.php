@@ -24,6 +24,34 @@ class Settings extends SG_Controller {
 		$settings = $settings ? $settings : '';
 		return resolve( $settings );
 	}
+
+	/*
+	 * Busca a tradução
+	 *
+	 */
+	public function get_category() {
+
+		// Pega as regioe
+		$regions = $this->input->post( 'regions' );
+
+		// Busca a tradução
+		$translate = [];
+		foreach( $regions as $region ) {
+			$settings = $this->settings->getBySlug( $region['sigla'] );
+			$translate[$region['sigla']] = $settings ? $settings : [];
+		}
+		return resolve( $translate );
+	}
+
+	/*
+	 * Busca um item pelo slug
+	 *
+	 */
+	public function get_by_slug( $slug ) {
+		$settings = $this->settings->getBySlug( $slug );
+		$settings = $settings ? $settings : [];
+		return resolve( $settings );
+	}
 }
 
 // End of file
