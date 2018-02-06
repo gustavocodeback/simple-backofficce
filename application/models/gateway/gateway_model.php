@@ -424,6 +424,17 @@ class Gateway_model extends Gateway_finder {
               'type'   => 'select',
               'rules'  => 'trim|required|max_length[1]',
             ),
+            'visible' => 
+            array (
+              'label'  => 'Visível',
+              'name'   => 'visible',
+              'opcoes' => [ 
+                  [ 'label' => 'Sim', 'value' => 'S' ],
+                  [ 'label' => 'Não', 'value' => 'N' ]
+                ],
+              'type'   => 'select',
+              'rules'  => 'trim|required|max_length[1]',
+            ),
           )
         ];
         return $data[$key];

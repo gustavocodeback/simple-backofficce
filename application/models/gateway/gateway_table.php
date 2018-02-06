@@ -57,6 +57,12 @@ $config['schema'] = array (
     'constraint' => 1,
     'null' => false,
   ),
+  'visible' => 
+  array (
+    'type' => 'char',
+    'constraint' => 1,
+    'null' => false,
+  ),
   'created_at' => 
   array (
     'type' => 'datetime',
