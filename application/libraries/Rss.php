@@ -95,7 +95,8 @@ class Rss {
             $intervals = array_filter( $intervals, function( $value ) {
                 return ( $value > 0 );
             });
-            
+            if ( !is_array( $intervals ) ) continue;
+
             // Salva o link possivel
             $length = min( $intervals );
             $start  = $extOffset - $length;
@@ -294,8 +295,10 @@ class Rss {
                 if ( count( $values ) > 0 ) {
                     foreach( $values as $key => $value ) {
                         $headers = get_headers( $value, 1 );
-                        if ( strpos($headers['Content-Type'], 'image/') === false ) {
-                            unset( $values[$key] );
+                        if( is_string( $headers['Content-Type'] ) ) {
+                            if ( strpos($headers['Content-Type'], 'image/') === false ) {
+                                unset( $values[$key] );
+                            }
                         }
                     }
                     $possibleLinks = array_merge( $possibleLinks, $values );
