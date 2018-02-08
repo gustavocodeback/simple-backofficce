@@ -55,7 +55,7 @@ class Notice extends SG_Controller {
 				'description'    => $notice->description,
 				'created'        => toHumanReadable($notice->date ),
 				'gateway_name'   => $veiculo->name,
-				'gateway_image'  => $image->path(),
+				'gateway_image'  => $image ? $image->path() : base_url( 'public/images/empty.jpg' ),
 				'gateway_id'     => $notice->gateway_id,
 				'gateway_url'    => $url,
 				'save_for_later' => ($saveForLater) ? 'T' : 'F',
