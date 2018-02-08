@@ -11,6 +11,7 @@ class Crons extends SG_Controller {
 	public function __construct() {
 		parent::__construct();
 		ini_set('max_execution_time', 30000 );
+		date_default_timezone_set('America/Sao_Paulo');		
 
 		// Seta o contexto
 		context( strtolower( 'Crons' ) );
@@ -43,7 +44,13 @@ class Crons extends SG_Controller {
 
 			// Obtem o texto da noticia
 			$extractionResult = WebArticleExtractor\Extract::extractFromURL( $item->getUrl() );
-
+			
+			// Converte a data
+			$datetime = $item->getPublishedDate();
+			$tz = $datetime->getTimezone();
+			$dateTime = new DateTime ($datetime->format( 'Y-m-d H:i:s' ), new DateTimeZone($tz->getName()));
+			$dateTime->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+			
 			// Preenche o fill
 			$notice->fill([
 				'gateway_id'     => $row->id,
@@ -54,7 +61,7 @@ class Crons extends SG_Controller {
 				'default_notice' => $row->default_gateway,
 				'text'           => $extractionResult->text,
 				'description'    => null,
-				'date'           => $item->getPublishedDate()->format( 'Y-m-d H:i:s' ),
+				'date'           => $dateTime->format('Y-m-d H:i:s'),
 			]);
 			$notice->save();
 		}
