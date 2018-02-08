@@ -294,7 +294,7 @@ class Rss {
                 $values = $item->getTag( $tag, 'url' );
                 if ( count( $values ) > 0 ) {
                     foreach( $values as $key => $value ) {
-                        $headers = get_headers( $value, 1 );
+                        $headers = get_headers_from_url( $value );
                         if( is_string( $headers['Content-Type'] ) ) {
                             if ( strpos($headers['Content-Type'], 'image/') === false ) {
                                 unset( $values[$key] );

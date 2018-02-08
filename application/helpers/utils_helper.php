@@ -480,4 +480,55 @@ if ( ! function_exists( 'toHumanReadable' ) ) {
     }
 }
 
+/**
+ * get_headers_from_url
+ * 
+ * Retorna os headers a partir de uma url
+ * 
+ */
+if ( ! function_exists( 'get_headers_from_url' ) ) {
+    function get_headers_from_url( $url ) {
+        
+        // create curl resource
+        $ch = curl_init();
+
+        // set url
+        curl_setopt( $ch, CURLOPT_URL, $url );
+
+        //return the transfer as a string
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+
+        //enable headers
+        curl_setopt( $ch, CURLOPT_HEADER, 1 );
+
+        //get only headers
+        curl_setopt( $ch, CURLOPT_NOBODY, 1 );
+
+        // $output contains the output string
+        $output = curl_exec( $ch );
+
+        // close curl resource to free up system resources
+        curl_close( $ch );
+
+        $headers = array();
+
+        $data = explode( "\n",$output );
+        if( count( $data ) == 0 ) return [];
+
+        $headers['status'] = $data[0];
+
+        array_shift( $data );
+
+        foreach( $data as $part ) {
+            if( strpos( $part, ':' ) !== false ) {
+                $middle=explode(":",$part);
+                $headers[trim( $middle[0] )] = trim( $middle[1] );
+            }
+        }
+
+        //return all headers
+        return $headers;
+    }
+}
+
 // End of file
