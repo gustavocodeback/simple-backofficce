@@ -79,7 +79,8 @@ class User_model extends User_finder {
      */
     public function hooks() {
         return [
-            'beforeInsert' => 'hashPassword'
+            'beforeInsert' => 'hashPassword',
+            'afterInsert' => 'followDefault'
         ];
     }
 
@@ -92,6 +93,36 @@ class User_model extends User_finder {
      */
     public function table() {
         return 'user';
+    }
+
+    /**
+     * followDefault
+     *
+     * Visualiza todos os gateways padrões
+     * 
+     * @return void
+     */
+    public function followDefault() {
+        
+        // Carrega a model de relacao
+        $this->load->model( 'customer_muted' ); 
+        $this->load->model( 'gateway' );
+
+        // Busca os gateways padroes
+        $gateways = $this->Gateway->where( " default_gateway = 'S' " )->find();
+    
+        // Segue todos os gateways padrao
+        if( $gateways ) {
+            foreach( $gateways as $gateway ) {
+                // Cria o muted
+                $nMuted = $this->Customer_muted->new();
+                $nMuted->fill([
+                    'customer_id' => $this->id,
+                    'gateway_id' => $gateway->id
+                ]);
+                $nMuted->save();
+            }
+        }
     }
 
     /**
