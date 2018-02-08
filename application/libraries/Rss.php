@@ -295,6 +295,7 @@ class Rss {
                 if ( count( $values ) > 0 ) {
                     foreach( $values as $key => $value ) {
                         $headers = get_headers_from_url( $value );
+                        if( !isset( $headers['Content-Type'] ) ) return null;
                         if( is_string( $headers['Content-Type'] ) ) {
                             if ( strpos($headers['Content-Type'], 'image/') === false ) {
                                 unset( $values[$key] );
