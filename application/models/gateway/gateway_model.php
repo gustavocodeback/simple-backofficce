@@ -24,6 +24,7 @@ class Gateway_model extends Gateway_finder {
       'name' => 'name',
       'url' => 'url',
       'rss' => 'rss',
+      'visible' => 'visible',
       'default_gateway' => 'default_gateway',
       'created_at' => 'created_at',
       'updated_at' => 'updated_at',
