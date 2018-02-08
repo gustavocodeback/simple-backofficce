@@ -80,6 +80,7 @@
                             <div class="col-8">
                                 <div class="row">
                                     <div class="col p-2">
+                                        <label for="font-name">Nome</label>
                                         <input  type="text"  
                                                 class="form-control"
                                                 name="font-name"
@@ -90,6 +91,7 @@
                                 
                                 <div class="row">
                                     <div class="col p-2">
+                                        <label for="region_id">Região</label>
                                         <select id='category_id' 
                                                 class='selectpicker dropup form-control'
                                                 name='region_id'
@@ -99,10 +101,11 @@
                                                 @endforeach
                                         </select>
                                     </div>
-                                </div><!-- select de categories -->
+                                </div><!-- select de regiao -->
 
                                 <div class="row">
                                     <div class="col p-2">
+                                        <label for="category_id">Categoria</label>
                                         <select id='category_id' 
                                                 class='selectpicker dropup form-control'
                                                 name='category_id'
@@ -116,16 +119,18 @@
                                 
                                 <div class="row">
                                     <div class="col p-2">
+                                    <label for="site-url">Site</label>
                                     <input  type="text"  
                                             class="form-control"
                                             name="site-url"
                                             value="{{ $feed->getSiteUrl() }}"
                                             placeholder="URL do veículo">
                                     </div>
-                                </div><!-- nome do gateway -->
+                                </div><!-- url do gateway -->
                                 
                                 <div class="row">
                                     <div class="col p-2">
+                                        <label for="rss-link">Link rss</label>
                                         <input type="text" readonly name="rss-link" class="form-control" value="{{ $feed->getFeedUrl() }}">
                                     </div>
                                 </div><!-- link rss -->
@@ -138,6 +143,15 @@
                                         </label>
                                     </div>
                                 </div><!-- checkbox padrao -->
+
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="visible-gateway">
+                                            <input type="checkbox" id="visible-gateway" name="visible-gateway">
+                                            Marcar como visível
+                                        </label>
+                                    </div>
+                                </div><!-- checkbox visivel -->
 
                            </div><!-- text -->
                         </div>

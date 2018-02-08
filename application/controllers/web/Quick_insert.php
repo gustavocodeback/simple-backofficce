@@ -95,8 +95,9 @@ class Quick_insert extends SG_Controller {
 	public function save_gateway() {
 		$this->load->model( [ 'gateway' ] );
 
-		// Seta a opção padrão
+		// Seta a opção padrão e visivel
 		$defaultFlag = $this->input->post( 'default-gateway' ) ? 'S' : 'N';
+		$visibleFlag = $this->input->post( 'visible-gateway' ) ? 'S' : 'N';
 
 		// Verifica se deve usar a imagem padrão
 		$midia = null;
@@ -115,7 +116,8 @@ class Quick_insert extends SG_Controller {
 			'name'            => $this->input->post( 'font-name' ),
 			'url'             => $this->input->post( 'site-url' ),
 			'rss'             => $this->input->post( 'rss-link' ),
-			'default_gateway' => $defaultFlag
+			'default_gateway' => $defaultFlag,
+			'visible'         => $visibleFlag
 		]);
 
 		// Salva o gateway
