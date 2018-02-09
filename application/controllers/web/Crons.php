@@ -42,8 +42,13 @@ class Crons extends SG_Controller {
 			// Verifica se já esta cadastrado
 			if ( $byLink ) continue;
 
-			// Obtem o texto da noticia
-			$extractionResult = WebArticleExtractor\Extract::extractFromURL( $item->getUrl() );
+			try {
+				// Obtem o texto da noticia
+				$extractionResult = WebArticleExtractor\Extract::extractFromURL( $item->getUrl() );
+			} catch( Exception $e ) {
+				return ;
+			}
+			
 			
 			// Converte a data
 			$datetime = $item->getPublishedDate();

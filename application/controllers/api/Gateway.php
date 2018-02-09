@@ -66,28 +66,31 @@ class Gateway extends SG_Controller {
 	 * Pesquisa os veiculos pelo nome
 	 *
 	 */
-	public function search_all( $query, $page = 1 ) {
+	public function search_all( $page = 1 ) {
 	
-		// Pega a query para pesquisa
+		$query = $this->input->get( 'query' );
 		$query = $query ? $query : '';
-	
-		// Otem as paginas
-		$gateways = $this->Gateway->where( " name LIKE '%$query%' " )->paginate( $page, 20 );
-		
-		// Inicia a variavel
+
+		// Seta o where
+		$where = " name LIKE '%$query%' OR url LIKE '%$query%' OR rss LIKE '%$query%' ";
+
+		// Obtem as páginas
+		$pages = $this->Gateway->where( $where )->paginate( $page, 20 );
+
+		// Inicia a veriavel
 		$reported = false;
+		
+		// Percorre todos os itens
+		$toReturn = [];
+		foreach( $pages->data as $gateway ) {
 
-		// Percorre todos os gateways
-		$return = [];
-		foreach( $gateways->data as $gateway ) {
-
-			// Formata os dados
-			$return[] = $this->__formatGetwayJson( $gateway );
+			// formata os dados
+			$toReturn[] = $this->__formatGetwayJson( $gateway );
 		}
-		$gateways->data = $return;
+		$pages->data = $toReturn;
 
 		// Envia os dados
-		return resolve( $gateways );
+		return resolve( $pages );
 	}
 
 	/**
