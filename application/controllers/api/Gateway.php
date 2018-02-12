@@ -25,18 +25,18 @@ class Gateway extends SG_Controller {
 	private function __formatGetwayJson( $gateway ) {
 		// Pega o usuário logado, se existir
 		$user = auth();
-
+	
 		// Busca a imagem e acategoria
-		$image    = $gateway->belongsTo( 'midia' );
+		$image = $gateway->belongsTo( 'midia' );
 		$category = $gateway->belongsTo( 'category' );
-		
+	
 		// formata os dados
 		return [
 			'id'        	=> $gateway->id,
 			'name'      	=> $gateway->name,
 			'url'       	=> $gateway->url,
 			'image'     	=> $image ? $image->path() : base_url( 'public/images/empty.jpg' ),
-			'category'  	=> $category->name,
+			'category'  	=> $category ? $category->name : '' ,
 			'status'        => $gateway->status( $user ),
 			'muted'         => $gateway->muted( $user ),
 			'subscriptions' => $gateway->subscriptions(),
@@ -63,6 +63,144 @@ class Gateway extends SG_Controller {
 	}
 
 	/**
+	 * Salva uma imagem para o local informado
+	 *
+	 * @param [type] $url
+	 * @param [type] $saveto
+	 * @return void
+	 */
+	private function __grabImage( $url, $saveto ){
+		$ch = curl_init ($url);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
+		$raw=curl_exec( $ch );
+		curl_close ( $ch );
+		if( file_exists( $saveto ) ){
+			unlink( $saveto );
+		}
+		$fp = fopen( $saveto, 'x' );
+		fwrite( $fp, $raw );
+		fclose( $fp );
+	}
+
+	/**
+	 * Salva uma imagem de um link para a tabela de midia
+	 *
+	 * @param [type] $image_link
+	 * @return void
+	 */
+	 private function __saveDefaultMidia( $image_link ) {
+		$this->load->model( 'midia' );
+
+		// Gera a hash da midia
+		$hash = getToken();
+		$this->__grabImage( $image_link, 'public/uploads/'.$hash.'.jpg' );
+
+		// Cria a nova midia
+		$midia = $this->Midia->new();
+		$midia->fill([
+			'name' => $image_link,
+			'hash' => $hash,
+			'type' => 'image',
+			'ext'  => 'jpg'
+		]);
+
+		// Salva a midia
+		if ( $midia->save() ) {
+			return $midia;
+		} else return null;
+	}
+
+	/**
+	 * Salva um veiculo no banco de dados
+	 *
+	 * @param [type] $feed
+	 * @return object | boolean
+	 */
+	private function __saveGateway( $feed ) {
+		
+		// Carrega as dependencias
+		$this->load->model( 'region' );
+		$this->load->library( 'sg_settings' );
+		
+		// Verifica se deve usar a imagem padrão
+		$midia = null;
+		$image_link = $feed->image;
+		if ( $image_link && strlen( $image_link ) > 0 ) {
+			$midia = $this->__saveDefaultMidia( $image_link );
+		}
+		$midia = $midia ? $midia->id : $midia;
+		
+		// Busca a regiao
+		$region = get_header( 'App-Region' ) ? get_header( 'App-Region' ) : 'BRL';
+		$region = $this->Region->where( "sigla = '$region'" )->findOne();
+
+		// Busca a categoria
+		$categoria = $this->settings->getBySlug( 'categoria_geral' );
+
+		// Cria um novo gateway
+		$gateway = $this->Gateway->new();
+		$gateway->fill([
+			'region_id'       => $region->id,
+			'category_id'     => $categoria[0]['val'],
+			'midia_id'        => $midia,
+			'name'            => $feed->title,
+			'url'             => $feed->siteUrl,
+			'rss'             => $feed->feedUrl,
+			'default_gateway' => 'N',
+			'visible'         => 'N'
+		]);
+
+		// Salva o gateway
+		if ( $gateway->save() ) {
+			return $gateway;
+		} else return false;
+	}
+
+	/**
+	 * Busca um veiculo pelo seu rss
+	 *
+	 * @param [type] $link
+	 * @return object | boolean
+	 */
+	private function __parse( $link ) {
+		
+		// Carrega a library
+		$this->load->library( 'rss' );
+
+		// Verifica se é uma URL Feedly
+		if ( strpos( $link, 'feedly' ) !== false ) {
+			$parts = explode( 'http', $link );
+			$link = 'http'.urldecode( end( $parts ) );
+		}
+
+		// Obtem os links RSS da página
+		$feed = $this->rss->parse( $link );
+		if ( !$feed ) {
+			return;
+		}
+
+		// Verifica se esse feed ja existe
+		$jaExiste = $this->Gateway->exists( $feed );
+		if( $jaExiste ) return $jaExiste;
+
+		// Seta a url da imagem
+		$image_link = null;
+		if ( $feed )
+			$feed->image = $feed->getLogo() ? 
+						   $feed->getLogo() : 
+						   $this->rss->get_favicon( $feed->getSiteUrl() );
+		
+		// Salva o gateway passado
+		if( $gateway = $this->__saveGateway( $feed ) ) {
+			// Seta variavel de categoria geral
+			$gateway->categoria_geral = true;
+			return $gateway;
+		} else return false;
+	}
+
+	/**
 	 * Pesquisa os veiculos pelo nome
 	 *
 	 */
@@ -77,13 +215,24 @@ class Gateway extends SG_Controller {
 		// Obtem as páginas
 		$pages = $this->Gateway->where( $where )->paginate( $page, 20 );
 
+		// Tenta adicionar o link rss
+		if( auth() && !$pages->data && ( strpos( $query, '.com' ) !== false ) ) {
+			$retorno = $this->__parse( $query );
+			if( !$retorno ) return reject( [] );
+
+			// Seta os dados
+			$pages->data[] = $retorno;
+			$pages->total_pages = 1;
+			$pages->total_itens = 1;
+		}
+
 		// Inicia a veriavel
 		$reported = false;
 		
 		// Percorre todos os itens
 		$toReturn = [];
 		foreach( $pages->data as $gateway ) {
-
+			
 			// formata os dados
 			$toReturn[] = $this->__formatGetwayJson( $gateway );
 		}

@@ -38,6 +38,38 @@ class Gateway_finder extends SG_Model {
         $this->db->where( 'customer_gateway.status = "F" ');
         return $this;
     }
+
+    /**
+     * Verifica se um gateway ja existe
+     *
+     * @param [type] $feed
+     * @return void
+     */
+    public function exists( $feed ) {
+        
+        // Seta o where
+        $where = [
+            'name' => $feed->title,
+            'url'  => $feed->siteUrl
+        ];
+        
+        // Busca o gateway
+        $query = $this->db->get_where('gateway', $where);
+        
+        // Seta o resultado
+        $result = null;
+        foreach ($query->result() as $row) {
+                $result = $row;
+        }
+
+        if( !$result ) return false;
+
+        // Busca no banco com os dados necessarios
+        $gateway = $this->Gateway->findById( $result->id );
+
+        // Retorna o gateway
+        return $gateway;
+    }
 }
 
 /* end of file */

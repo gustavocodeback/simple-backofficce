@@ -36,7 +36,7 @@ $config['schema'] = array (
   'name' => 
   array (
     'type' => 'varchar',
-    'constraint' => 60,
+    'constraint' => 255,
     'null' => false,
   ),
   'url' => 
