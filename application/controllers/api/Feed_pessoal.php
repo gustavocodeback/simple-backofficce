@@ -21,7 +21,7 @@ class Feed_pessoal extends SG_Controller {
      * 
      */
     private function __gatewayData( $gateway_id, $personal_category = false ) {
-
+       
         // Busca o gateway
         $gateway = $this->Gateway->findById( $gateway_id );
         if( !$gateway ) return;
@@ -88,7 +88,7 @@ class Feed_pessoal extends SG_Controller {
      */
     public function get_user_follows() {
         loggedOnly();
-
+        
         // Busca os follows
         $follows = $this->Customer_gateway->where( "customer_id = ".auth()->id )->find();
         if( !$follows ) return reject( [] );
@@ -106,20 +106,19 @@ class Feed_pessoal extends SG_Controller {
 
                 // Busca os dados do gateway
                 $gateway = $this->__gatewayData( $follow->gateway_id, true );
-                if( !$gateway ) break;
-                 
-                // Relaciona os gateways a sua respectiva gategoria pessoal
-                $categoriasPessoais[$follow->personal_category_id][] = $gateway;
+                if( $gateway ) {
+                    $categoriasPessoais[$follow->personal_category_id][] = $gateway;
+                }
             } else {
-
+               
                 // Recebe o gateway
                 $gateway = $this->__gatewayData( $follow->gateway_id, false );
-                if( !$gateway ) break;
-
-                // Organiza o array
-                $gateways[$gateway['category_id']][] = [ 'id'    => $gateway['id'],
-                                                         'name'  => $gateway['name'],
-                                                         'image' => $gateway['image']];
+                if( $gateway ) {
+                    // Organiza o array
+                    $gateways[$gateway['category_id']][] = [ 'id'    => $gateway['id'],
+                                                             'name'  => $gateway['name'],
+                                                             'image' => $gateway['image']];
+                }
             }
         }
 
@@ -138,9 +137,9 @@ class Feed_pessoal extends SG_Controller {
         } else {
             $feedPessoal = ( $categoriasPessoais ) ? $categoriasPessoais : $gateways;
         }
-
+        
         // Retorno
-        return ( $feedPessoal ) ? resolve( $feedPessoal ) : reject( $feedPessoal );
+        return resolve( $feedPessoal );
     }
 }
 
