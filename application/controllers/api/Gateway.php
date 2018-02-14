@@ -216,10 +216,11 @@ class Gateway extends SG_Controller {
 		$pages = $this->Gateway->where( $where )->paginate( $page, 20 );
 
 		// Tenta adicionar o link rss
-		if( auth() && !$pages->data && ( strpos( $query, '.com' ) !== false ) ) {
+		if( !$pages->data && ( strpos( $query, '.com' ) !== false ) ) {
 			$retorno = $this->__parse( $query );
-			if( !$retorno ) return reject( [] );
-
+			if( !$retorno ) {
+				return reject( [] );
+			} 
 			// Seta os dados
 			$pages->data[] = $retorno;
 			$pages->total_pages = 1;
