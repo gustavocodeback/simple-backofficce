@@ -99,10 +99,11 @@ class Suport_model extends Suport_finder {
                     $this->load->model('user');
 
                     // Busca o usuario
-                    $user = $this->User->findById( $d );
+                    $user = null;
+                    if( $d ) $user = $this->User->findById( $d );
 
                     // Volta o resultado
-                    return ( $user ) ? $user->name : 'User não encontrado';
+                    return ( $user ) ? $user->name : 'Anônimo';
                 }
             ),
             2 => 

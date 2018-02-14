@@ -21,14 +21,13 @@ class Suport extends SG_Controller {
 	 * Salva a mensagem de suporte
 	 */
 	public function save() {
-		loggedOnly();
 
 		// Cria uma nova mensagem
 		$suport = $this->Suport->new();
 		$suport->fill( $this->input->post() );
 
 		// Seta o usuario logado
-		$suport->customer_id = auth()->id;
+		$suport->customer_id = ( $user = auth() ) ? $user->id : '';
 		
 		// Tenta salvar
 		if( $suport->save() ) {

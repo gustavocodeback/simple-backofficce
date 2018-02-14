@@ -19,7 +19,7 @@ $config['schema'] = array (
   array (
     'type' => 'int',
     'constraint' => 11,
-    'null' => false,
+    'null' => true,
   ),
   'subject' => 
   array (
