@@ -95,8 +95,8 @@ class Rss {
             $intervals = array_filter( $intervals, function( $value ) {
                 return ( $value > 0 );
             });
-            if ( !is_array( $intervals ) ) continue;
-
+            if ( !is_array( $intervals ) || count( $intervals ) <= 0 ) continue;
+            
             // Salva o link possivel
             $length = min( $intervals );
             $start  = $extOffset - $length;
