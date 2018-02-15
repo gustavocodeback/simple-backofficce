@@ -113,6 +113,61 @@ class Gateway extends SG_Controller {
 	}
 
 	/**
+	 * Salva as noticias do veiculo
+	 *
+	 * @param [type] $feed
+	 * @param [type] $gatewayId
+	 * @return void
+	 */
+	private function __saveNotices( $feed, $gatewayId ) {
+
+		// Verifica se tem noticias
+		if( !$feed ) return;
+
+		// Carrega a lista
+		$this->load->model( 'notice' );
+		$total = count( $feed->items );
+		$splice = ( $total > 5 ) ? 5 : $total;
+		$items = array_splice( $feed->items, 0, $total );
+
+		// percorre as noticias
+		foreach( $items as $item ) {
+			$notice = $this->Notice->new();
+			$byLink = $this->Notice->getByLink( $item->getUrl() );
+
+			// Verifica se já esta cadastrado
+			if ( $byLink ) continue;
+
+			try {
+				// Obtem o texto da noticia
+				$extractionResult = WebArticleExtractor\Extract::extractFromURL( $item->getUrl() );
+			} catch( Exception $e ) {
+				return ;
+			}
+			
+			// Converte a data
+			$datetime = $item->getPublishedDate();
+			$tz = $datetime->getTimezone();
+			$dateTime = new DateTime ($datetime->format( 'Y-m-d H:i:s' ), new DateTimeZone($tz->getName()));
+			$dateTime->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+			
+			// Preenche o fill
+			$notice->fill([
+				'gateway_id'     => $gatewayId,
+				'title'          => $item->getTitle(),
+				'notice_link'    => $item->getUrl(),
+				'description'    => $item->resume,
+				'image_link'     => $item->cover ? $item->cover : null,
+				'default_notice' => 'N',
+				'text'           => $extractionResult->text,
+				'description'    => null,
+				'date'           => $dateTime->format('Y-m-d H:i:s'),
+			]);
+			$notice->save();
+		}
+	}
+
+	/**
 	 * Salva um veiculo no banco de dados
 	 *
 	 * @param [type] $feed
@@ -125,11 +180,11 @@ class Gateway extends SG_Controller {
 		$this->load->library( 'sg_settings' );
 		
 		// Verifica se deve usar a imagem padrão
-		$midia = null;
+		$midia = null; 
 		$image_link = $feed->image;
 		if ( $image_link && strlen( $image_link ) > 0 ) {
 			$midia = $this->__saveDefaultMidia( $image_link );
-		}
+		} 
 		$midia = $midia ? $midia->id : $midia;
 		
 		// Busca a regiao
@@ -154,6 +209,7 @@ class Gateway extends SG_Controller {
 
 		// Salva o gateway
 		if ( $gateway->save() ) {
+			$this->__saveNotices( $feed, $gateway->id );
 			return $gateway;
 		} else return false;
 	}
