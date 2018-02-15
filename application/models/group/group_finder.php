@@ -15,7 +15,7 @@ class Group_finder extends SG_Model {
      * 
      * @var string
      */
-    public $default = 'admin';
+    public $default = 'cliente';
     
     /**
      * entity
