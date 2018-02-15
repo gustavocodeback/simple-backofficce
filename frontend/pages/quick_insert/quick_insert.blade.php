@@ -138,7 +138,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <label for="default-gateway">
-                                            <input type="checkbox" id="default-gateway" name="default-gateway">
+                                            <input type="checkbox" checked="true" id="default-gateway" name="default-gateway">
                                             Marcar como padrão
                                         </label>
                                     </div>
@@ -147,7 +147,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <label for="visible-gateway">
-                                            <input type="checkbox" id="visible-gateway" name="visible-gateway">
+                                            <input type="checkbox" checked="true" id="visible-gateway" name="visible-gateway">
                                             Marcar como visível
                                         </label>
                                     </div>
