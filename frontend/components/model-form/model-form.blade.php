@@ -28,7 +28,7 @@
           @endsection
 
           <div  class="midiaInput"         
-                {!! isset( $item['size'] ) ? 'data-size="'.$item['size'].'"' : 'data-size="1"' !!}
+                {!! isset( $item['size'] ) ? 'data-size="'.$item['size'].'"' : 'data-size=""' !!}
                 {!! isset( $item['ratio'] ) ? 'data-ratio="'.$item['ratio'].'"' : '' !!}>
 
               <label class="d-block pt-2">{{ $item['label'] }}</label>

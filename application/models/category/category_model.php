@@ -162,7 +162,7 @@ class Category_model extends Category_finder {
                     'label' => 'Foto',
                     'name'  => 'midia_id',
                     'type'  => 'midia',
-                    'size'  => '1'
+                    'size'  => '1',
                 ),
             )
         ];

@@ -103,7 +103,7 @@ class Suport_model extends Suport_finder {
                     if( $d ) $user = $this->User->findById( $d );
 
                     // Volta o resultado
-                    return ( $user ) ? $user->name : 'Anônimo';
+                    return ( $user ) ? $user->name : 'Anonimo';
                 }
             ),
             2 => 
