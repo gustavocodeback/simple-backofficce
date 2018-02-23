@@ -45,6 +45,12 @@ $config['schema'] = array (
     'constraint' => 255,
     'null' => true,
   ),
+  'parsed' => 
+  array (
+    'type' => 'char',
+    'constraint' => 1,
+    'null' => false,
+  ),
   'text' => 
   array (
     'type' => 'text',

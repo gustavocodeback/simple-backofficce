@@ -240,6 +240,30 @@ class Notice extends SG_Controller {
 	}
 
 	/**
+	 * Obtem o texto da noticia
+	 *
+	 * @param [type] $link
+	 * @return void
+	 */
+	private function __getText( $link ) {
+		
+		// Obtem a página
+		$content = get_web_page( $link );
+		debug( $content );
+
+		// Verifica se existe algum erro
+		if ( $content['errno'] || $content['http_code'] < 200 || $content['http_code'] > 200 ) {
+			return 'Clique em "Ver original" para ver está notícia';
+		}
+
+		// Extract article directly from a URL
+		$extractionResult = WebArticleExtractor\Extract::extractFromURL( $link );
+	
+		// Volta o texto
+		return $extractionResult->text;
+	}
+
+	/**
 	 * Pega uma noticia pelo ID
 	 *
 	 * @param [type] $notice_id
@@ -248,6 +272,14 @@ class Notice extends SG_Controller {
 	public function get( $notice_id ) {
 		$notice = $this->Notice->findById( $notice_id );
 		if ( !$notice ) reject( 'Nenhuma notícia encontrada' );
+
+		// Obtem o texto da noticia
+		if ( !$notice->parsed || $notice->parsed == 'N' ) {
+			$text = $this->__getText( $notice->notice_link );
+			$notice->text = $text;
+			$notice->parsed = 'S';
+			$notice->save();
+		}
 
 		// Verifica se existe um texto
 		$text_parts = [];

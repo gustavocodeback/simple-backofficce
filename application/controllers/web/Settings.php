@@ -118,6 +118,20 @@ class Settings extends SG_Controller {
 		flash( 'swaSuccessBody', 'As configurações foram alteradas com sucesso.' );
 		close_page( "settings/index/$slug" );
 	}
+
+	/**
+	 * Exibe os dados de sincronização
+	 *
+	 * @return void
+	 */
+	public function sync() {
+		sidebar( 'Sincronização' );
+		setItem( 'title', 'Sincronização' );
+		setItem( 'lastId',  $this->settings->get( 'last_inserted_id' ) );
+		setItem( 'period',  $this->settings->get( 'executions_in_period' ) );
+		setItem( 'started',  $this->settings->get( 'last_cron_time' ) );
+		view( 'sync/sync' );
+	}
 }
 
 // End of file

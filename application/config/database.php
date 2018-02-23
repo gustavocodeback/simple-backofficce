@@ -70,7 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-$active_group = 'default';
+$active_group = 'umbler';
 $query_builder = TRUE;
 
 $db['default'] = array(
@@ -95,12 +95,13 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 
-$db['locaweb'] = array(
+$db['umbler'] = array(
 	'dsn'	=> '',
-	'hostname' => 'dev_simplenews.mysql.dbaas.com.br',
-	'username' => 'dev_simplenews',
+	'hostname' => 'mysql427.umbler.com',
+	'username' => 'prod_simple',
 	'password' => 'Hj855tkC6CxIkL',
-	'database' => 'dev_simplenews',
+	'database' => 'prod_simple',
+	'port'     => '41890',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

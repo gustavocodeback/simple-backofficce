@@ -31,7 +31,7 @@ class Crons extends SG_Controller {
 		// Carrega a lista
 		$this->load->model( 'notice' );
 		$total = count( $rss->items );
-		$splice = ( $total > 5 ) ? 5 : $total;
+		$total = ( $total > 5 ) ? 5 : $total;
 		$items = array_splice( $rss->items, 0, $total );
 
 		// Percorre as noticias
@@ -41,12 +41,13 @@ class Crons extends SG_Controller {
 
 			// Verifica se já esta cadastrado
 			if ( $byLink ) continue;
-			try {
+			
+			/* try {
 				// Obtem o texto da noticia
 				$extractionResult = WebArticleExtractor\Extract::extractFromURL( $item->getUrl() );
 			} catch( Exception $e ) {
 				return ;
-			}
+			} */
 			
 			// Converte a data
 			$datetime = $item->getPublishedDate();

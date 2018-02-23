@@ -25,7 +25,7 @@ class SG_Controller extends CI_Controller {
 
         // Seta o time zone
         date_default_timezone_set('America/Sao_Paulo');
-        
+
         // Seta os grupos
         $this->setGroups();
     }
