@@ -30,7 +30,7 @@
           <?php $__env->stopSection(); ?>
 
           <div  class="midiaInput"         
-                <?php echo isset( $item['size'] ) ? 'data-size="'.$item['size'].'"' : 'data-size="1"'; ?>
+                <?php echo isset( $item['size'] ) ? 'data-size="'.$item['size'].'"' : 'data-size=""'; ?>
 
                 <?php echo isset( $item['ratio'] ) ? 'data-ratio="'.$item['ratio'].'"' : ''; ?>>
 

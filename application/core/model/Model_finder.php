@@ -232,6 +232,9 @@ class Model_finder extends Model_alter
         // monta o where
         if (!empty( $this->whereClause )) $this->db->where( $this->whereClause );
         
+        // Verifica se deve buscar somente um
+        if ( $only ) $this->db->limit( 1 );
+        
         // faz a busca
         $busca = $this->db->get();
         
@@ -310,9 +313,7 @@ class Model_finder extends Model_alter
     }
 
     /**
-     * paginate
-     *
-     * pagina os resultados
+     * Faz a paginacao dos resultados
      *
      */
     public function paginate( $page = 0, $qtde = 20, $from = true ) {
@@ -389,6 +390,12 @@ class Model_finder extends Model_alter
         ];
     }
 
+    /**
+     * Para roda query complexas
+     *
+     * @param [type] $callback
+     * @return void
+     */
     public function complexQuery( $callback ) {
         $callback( $this );
         return $this;
