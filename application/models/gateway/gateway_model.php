@@ -282,10 +282,9 @@ class Gateway_model extends Gateway_finder {
                   } else {
                     return "<img src='".base_url( 'public/images/empty.jpg' )."' width='50px'>";
                   }
+                } else {
+                  return "<p>Sem imagem</p>";
                 }
-
-                // Volta o resultado
-                return '';
             }
           ),
           2 => 
