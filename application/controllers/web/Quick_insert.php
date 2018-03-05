@@ -101,11 +101,18 @@ class Quick_insert extends SG_Controller {
 
 		// Verifica se deve usar a imagem padrão
 		$midia = null;
-		$image_link = $this->input->post( 'default-logo' );
-		if ( $image_link && strlen( $image_link ) > 0 ) {
+
+		// Verifica se é a midia padrao
+		if( $this->input->post( 'default-midia' ) ) {
+			$image_link = $this->input->post( 'default-logo' );
 			$midia = $this->__saveDefaultMidia( $image_link );
+		}else {
+			$midiaId = $this->input->post( 'midia' ) ?
+					  $this->input->post( 'midia' ) :
+					  null; 
 		}
-		$midia = $midia ? $midia->id : $this->input->post( 'midia' );
+		
+		$midia = $midia ? $midia->id : $midiaId;
 
 		// Cria um novo gateway
 		$gateway = $this->Gateway->new();

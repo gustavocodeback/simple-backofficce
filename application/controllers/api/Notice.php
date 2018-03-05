@@ -253,7 +253,6 @@ class Notice extends SG_Controller {
 		
 		// Obtem a página
 		$content = get_web_page( $link );
-		debug( $content );
 
 		// Verifica se existe algum erro
 		if ( $content['errno'] || $content['http_code'] < 200 || $content['http_code'] > 200 ) {
