@@ -184,7 +184,7 @@ class SG_Email extends PHPMailer {
         }
 
         // Seta o corpo
-        $this->Body = $body;
+        $this->Body = html_entity_decode( $body );
 
         // Volta a instancia
         return $this;
