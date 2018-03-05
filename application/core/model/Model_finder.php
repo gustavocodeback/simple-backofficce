@@ -219,6 +219,26 @@ class Model_finder extends Model_alter
     }
 
     /**
+     * Ordena de forma ascendente
+     *
+     * @return void
+     */
+    public function asc() {
+        $this->db->order_by( 'id', 'ASC' );
+        return $this;
+    }
+
+    /**
+     * Ordena de forma descendente
+     *
+     * @return void
+     */
+    public function desc() {
+        $this->db->order_by( 'id', 'DESC' );
+        return $this;
+    }
+
+    /**
      * get
      *
      * faz a busca

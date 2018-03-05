@@ -59,7 +59,8 @@ class Notice extends SG_Controller {
 				'gateway_id'     => $notice->gateway_id,
 				'gateway_url'    => $url,
 				'save_for_later' => ($saveForLater) ? 'T' : 'F',
-				'reported'       => $reported
+				'reported'       => $reported,
+				'date'           => $notice->date 
 			];
 		}
 		return $notices_formated;
