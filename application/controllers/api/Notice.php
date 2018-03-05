@@ -69,6 +69,7 @@ class Notice extends SG_Controller {
 	 * Pega todas as noticias
 	 */
 	public function get_notices( $page = 1 ) {
+		$this->db->query( 'SET SQL_BIG_SELECTS=1' );
 		$user = auth();
 
 		// Pega as categorias enviadas
@@ -110,9 +111,11 @@ class Notice extends SG_Controller {
 			// Pega somente as de veiculos padrão
 			$notices->default( 'g' );
 		}
+		// debug( $this->db->get_compiled_select() );
 		
 		// Busca as noticias
 		$notices = $notices->paginate( $page, 10, 'notice n' );
+		// debug( $notices );
 		
 		// verifica se tem noticias
 		if( $notices ) {
