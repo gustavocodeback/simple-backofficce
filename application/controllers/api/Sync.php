@@ -66,7 +66,7 @@ class Sync extends SG_Controller {
 
 		// Pega os dados
 		$regions    = $this->Region->find();
-		$categories = $this->Category->find();
+		$categories = $this->Category->asc()->find();
 
 		// Seta as regioes formatada
 		$formattedRegions = [];

@@ -103,10 +103,7 @@ class SG_Settings {
         // prepara a busca
         $this->ci->db->from( 'sg_settings' )
                  ->select( '*' )
-                 ->where( " key = '$key' " );
-        
-        // Verifica se existe um slug
-        if ( $slug ) $this->ci->db->where( " slug = '$slug' " );
+                 ->where( [ 'key' => $key, 'slug' => $slug ] );
 
         // faz a busca
         $busca = $this->ci->db->get();
@@ -128,7 +125,7 @@ class SG_Settings {
         // prepara a busca
         $this->ci->db->from( 'sg_settings' )
         ->select( '*' )
-        ->where( " slug = '$slug' " );
+        ->where( [ 'slug' => $slug ] );
 
         // faz a busca
         $busca = $this->ci->db->get();

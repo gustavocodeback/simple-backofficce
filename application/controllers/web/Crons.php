@@ -3,18 +3,54 @@
 class Crons extends SG_Controller {
 
 	/**
-	 * __construct
+	 * Hora que iniciou
 	 * 
-	 * método construtor
+	 */
+	public $starded;
+
+	/**
+	 * Quando o loop atual começou
+	 *
+	 * @var [type]
+	 */
+	public $init;
+
+	/**
+	 * Execusoes realizadas
+	 *
+	 * @var array
+	 */
+	public $executions = [];
+
+	/**
+	 * Método construtor
 	 * 
 	 */
 	public function __construct() {
 		parent::__construct();
-		ini_set('max_execution_time', 30000 );
-		date_default_timezone_set('America/Sao_Paulo');		
+		$this->started = time();
+		$this->load->model( ['gateway', 'notice' ] );
+		$this->load->library( 'rss' );
+		ini_set( 'max_execution_time', 300 );
+		date_default_timezone_set('America/Sao_Paulo');
+	}
 
-		// Seta o contexto
-		context( strtolower( 'Crons' ) );
+	/**
+	 * Volta o tempo que o script está executando
+	 *
+	 * @return void
+	 */
+	private function running() {
+		return time() - $this->started;
+	}
+
+	/**
+	 * Volta o tempo que ainda sobra para o script executar
+	 *
+	 * @return void
+	 */
+	private function left() {
+		return ini_get( 'max_execution_time' ) - 10 - $this->running();
 	}
 
 	/**
@@ -24,18 +60,11 @@ class Crons extends SG_Controller {
 	 * @return void
 	 */
 	private function __fetchRss( $row ) {
-		$this->load->library( 'rss' );
 		$rss = $this->rss->parse( $row->rss );
 		if ( !$rss ) return;
 
-		// Carrega a lista
-		$this->load->model( 'notice' );
-		$total = count( $rss->items );
-		$total = ( $total > 5 ) ? 5 : $total;
-		$items = array_splice( $rss->items, 0, $total );
-
 		// Percorre as noticias
-		foreach( $items as $item ) {
+		foreach( $rss->items as $item ) {
 			$notice = $this->Notice->new();
 			$byLink = $this->Notice->getByLink( $item->getUrl() );
 
@@ -63,29 +92,95 @@ class Crons extends SG_Controller {
 				'description'    => $item->resume,
 				'image_link'     => $item->cover ? $item->cover : null,
 				'default_notice' => $row->default_gateway,
-				'text'           => $extractionResult->text,
+				'text'           => null,
 				'description'    => null,
 				'date'           => $dateTime->format('Y-m-d H:i:s'),
 			]);
 			$notice->save();
 		}
-
-		// Salva a data da atualização
-		$this->settings->set( 'news_last_update', time() );
 	}
 	
+	/**
+	 * Insere o next
+	 *
+	 * @return void
+	 */
+	private function getNext() {
+
+		// Obtem o ultimo ID processado
+		$last_id = $this->settings->get( 'last_inserted_id', '0' );
+		$last_id = empty( $last_id ) ? '0' : $last_id;
+
+		// Obtem o gateway
+		$gateway = $this->Gateway->next( $last_id );
+		if ( !$gateway ) {
+			$gateway = $this->Gateway->next( '0' );
+		};
+		$this->settings->set( 'last_inserted_id', $gateway->id );
+
+		// Volta o gateway
+		return $gateway;
+	}
+
+	/**
+	 * Indica que o loop iniciou
+	 *
+	 * @return void
+	 */
+	function start() {
+		$this->init = time();
+	}
+
+	/**
+	 * Indica que o loop acabou
+	 *
+	 * @return void
+	 */
+	function end(){
+		$end = time() - $this->init;
+		$this->executions[] = $end;
+	}
+
+	/**
+	 * Pega a media de execução
+	 *
+	 * @return void
+	 */
+	function media() {
+		return array_sum( $this->executions ) / count( $this->executions );
+	}
+
 	/**
 	 * Cron JOBS para o gateway
 	 *
 	 * @return void
 	 */
 	public function fetch_rss_updates() {
-		$this->load->model( [ 'gateway'] );
+		$media = 0;
+		$execucoes = 0;
+		while( $this->left() > ( 2 * $media ) ) {
+			$gateway = $this->getNext();
+			$this->start();
+			$this->__fetchRss( $gateway );
+			$this->end();
+			$media = $this->media();
+			$execucoes++;
+		}
+		$this->settings->set( 'execution_time_per_time', $media );
+		$this->settings->set( 'executions_in_period', $execucoes );
+		$this->settings->set( 'execution_time_duration', $this->running() );
+		$this->settings->set( 'last_cron_time', date( 'Y-m-d H:i:s', time() ) );
+	}
 
-		// Carrega os gateways
-		$this->Gateway->chunckRows( function( $row ) {
-			$this->__fetchRss( $row ); 
-		});
+	/** 
+	 * Faz a sincronização forçada de um gateway
+	 * 
+	 */
+	public function force_sync( $id ) {
+		if ( $gateway = $this->Gateway->findById( $id ) ) {
+			$this->__fetchRss( $gateway );
+			echo 'Sincronização feita com sucesso';
+		} else echo 'Nenhum gateway encontrado';
 	}
 }
 

@@ -43,23 +43,23 @@ class SG_Email extends PHPMailer {
         $this->ci =& get_instance();
 
         // parametriza o phpmailer
-        $this->From     = settings( 'SMTP_FROM' );
-        $this->Sender   = settings( 'SMTP_FROM' );
-        $this->FromName = settings( 'SMTP_FROM_NAME' );
-        $this->Port     = settings( 'SMTP_PORT' );
+        $this->From     = settings( 'SMTP_FROM', null, 'smtp' );
+        $this->Sender   = settings( 'SMTP_FROM', null, 'smtp'  );
+        $this->FromName = settings( 'SMTP_FROM_NAME', null, 'smtp'  );
+        $this->Port     = settings( 'SMTP_PORT', null, 'smtp'  );
         parent::SetLanguage("br");
         $this->CharSet = 'UTF-8';
         
         // verifica se deve adicionar o replyTo
-        $this->AddReplyTo( settings( 'SMTP_FROM' ), settings( 'SMTP_FROM_NAME' ) );
+        $this->AddReplyTo( settings( 'SMTP_FROM', null, 'smtp'  ), settings( 'SMTP_FROM_NAME', null, 'smtp'  ) );
 
         // seta as opções de SMTP
         parent::IsSMTP( true );
         parent::IsHTML( true );
         $this->SMTPAuth = true;
-        $this->Host     = settings( 'SMTP_HOST' );
-        $this->Username = settings( 'SMTP_USER' );
-        $this->Password = settings( 'SMTP_PASSWORD' );
+        $this->Host     = settings( 'SMTP_HOST', null, 'smtp'  );
+        $this->Username = settings( 'SMTP_USER', null, 'smtp'  );
+        $this->Password = settings( 'SMTP_PASSWORD', null, 'smtp' );
     }
 
    /**
@@ -176,7 +176,7 @@ class SG_Email extends PHPMailer {
     public function parse( string $template, array $data = [] ) {
 
         // Carraga o corpo
-        $body = $this->ci->settings->get( $template );
+        $body = $this->ci->settings->get( $template, null, 'emails' );
 
         // Percorre os dados
         foreach( $data as $key => $item ) {

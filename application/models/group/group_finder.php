@@ -34,9 +34,6 @@ class Group_finder extends SG_Model {
      */
     public function __construct() {
         parent::__construct();
-
-        // verifica se existe um grupo padrão
-        $this->default = $this->settings->get( 'default-auth-group', 'admin' );
     }
 
     /**
@@ -71,7 +68,7 @@ class Group_finder extends SG_Model {
      * @return void
      */
     public function defaultGroup() {
-        return $this->where( " slug = '$this->default' " )->findOne();
+        return $this->where( " slug LIKE '$this->default' " )->findOne();
     }
 }
 

@@ -319,13 +319,13 @@ if ( ! function_exists( 'folderSize' ) ) {
  * 
  */
 if ( ! function_exists( 'settings' ) ) {
-    function settings( $key ) {
+    function settings( string $key, $default = null, $slug = 'system' ) {
 
         // Pega a instancia do ci
         $ci =& get_instance();
 
         // Volta o item
-        return $ci->settings->get( $key );
+        return $ci->settings->get( $key, $default, $slug );
     }
 }
 
