@@ -176,7 +176,7 @@ class SG_Email extends PHPMailer {
     public function parse( string $template, array $data = [] ) {
 
         // Carraga o corpo
-        $body = $this->ci->settings->get( $template );
+        $body = $this->ci->settings->get( $template, null, 'emails' );
 
         // Percorre os dados
         foreach( $data as $key => $item ) {

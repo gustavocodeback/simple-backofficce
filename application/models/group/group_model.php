@@ -77,7 +77,7 @@ class Group_model extends Group_finder {
 
         // seta os dados
         $assoc->user_id  = $user->id;
-        $assoc->group_id = 7;
+        $assoc->group_id = $this->id;
 
         // salva o grupo
         return $assoc->save();
