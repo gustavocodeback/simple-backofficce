@@ -23,8 +23,6 @@ class Gateway extends SG_Controller {
 	 * @return void
 	 */
 	private function __formatGetwayJson( $gateway ) {
-		return [];
-		
 		// Pega o usuário logado, se existir
 		$user = auth();
 	

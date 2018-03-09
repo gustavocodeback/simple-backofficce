@@ -62,11 +62,11 @@ $route['default_controller'] = 'welcome';
 $route['(.*)'] = function( $param ) {
 
     // os prefixos
-    $prefix = [ 'web', 'api', 'cmd' ];
+    $prefix = [ 'web', 'api', 'cmd', 'android' ];
 
     // faz o explode
     $parts = explode( '/', $param );
-    
+
     // seta o inicio da url
     $url = 'web';
 

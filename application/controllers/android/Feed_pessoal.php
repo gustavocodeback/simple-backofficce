@@ -1,0 +1,146 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Feed_pessoal extends SG_Controller {
+
+    /**
+	 * __construct
+	 * 
+	 * método construtor
+	 * 
+	 */
+	public function __construct() {
+		parent::__construct();
+		valid_api_request();
+
+		// carrega a model de veiculos de noticias
+		$this->load->model( [ 'customer_gateway', 'personal_category', 'gateway', 'category' ] );
+    }
+
+    /**
+     * Busca o veiculo de noticias
+     * 
+     */
+    private function __gatewayData( $gateway_id, $personal_category = false ) {
+       
+        // Busca o gateway
+        $gateway = $this->Gateway->findById( $gateway_id );
+        if( !$gateway ) return;
+
+        $midia = $gateway->belongsTo( 'midia' );
+        $midia = ( $midia ) ? $midia->path() : base_url( 'public/images/empty.jpg' );
+        
+
+        // Prepara os dados
+        if( $personal_category ) {
+            $dataGateway = [
+                'id'    => $gateway_id,
+                'name'  => $gateway->name,
+                'image' => $midia
+            ];
+        } else {
+            $dataGateway = [
+                'id'          => $gateway_id,
+                'name'        => $gateway->name,
+                'image'       => $midia,
+                'category_id' => $gateway->category_id
+            ];
+        }
+
+        // Retorna o veiculo 
+        return $dataGateway;
+    }
+
+    /**
+     * Busca o nome das categorias
+     * 
+     */
+    private function __getCategoriesName( $dados, $categoriaPessoal = false ) {
+
+        // Percorre o array
+        foreach( $dados as $key => $dado ) {
+
+            // Busca a categoria
+            if( $categoriaPessoal ) {
+                $categoria = $this->Personal_category->findById( $key );                
+            } else {
+                $categoria = $this->Category->findById( $key );
+            }
+
+            // Reorganiza o array
+            $new_arr[] = [ 
+                'categoria' => [ 
+                    'id'   => $categoria->id,
+                    'name' => $categoria->name,
+                    'personal_category' => 
+                        ( $categoria->entity == 'Personal_category_model' ) ? true : false
+                ], 
+                'gateways' => $dado ];
+        }
+
+        // Retorno
+        return $new_arr;
+    }
+    
+    /**
+     * Busca o feed pessoal do usuário
+     *
+     * @return void
+     */
+    public function get_user_follows() {
+        loggedOnly();
+        
+        // Busca os follows
+        $follows = $this->Customer_gateway->where( "customer_id = ".auth()->id )->find();
+        if( !$follows ) return reject( [] );
+        
+        // Inicializa as variaveis
+        $gateways           = [];
+        $feedPessoal        = [];
+        $categoriasPessoais = [];
+
+        // Percorre os follows
+        foreach( $follows as $follow ) {
+            
+            // Verifica se tem categoria pessoal
+            if( $follow->personal_category_id ) {
+
+                // Busca os dados do gateway
+                $gateway = $this->__gatewayData( $follow->gateway_id, true );
+                if( $gateway ) {
+                    $categoriasPessoais[$follow->personal_category_id][] = $gateway;
+                }
+            } else {
+               
+                // Recebe o gateway
+                $gateway = $this->__gatewayData( $follow->gateway_id, false );
+                if( $gateway ) {
+                    // Organiza o array
+                    $gateways[$gateway['category_id']][] = [ 'id'    => $gateway['id'],
+                                                             'name'  => $gateway['name'],
+                                                             'image' => $gateway['image']];
+                }
+            }
+        }
+
+        // Busca o nome das categorias
+        if( $categoriasPessoais ) { 
+            $categoriasPessoais = $this->__getCategoriesName( $categoriasPessoais, true );
+        }
+        if( $gateways ) {
+            $gateways = $this->__getCategoriesName( $gateways );
+        }
+
+        // Faz merge se necessario e define o feed pessoal
+        if( $categoriasPessoais && $gateways ) {    
+            $feedPessoal = array_merge( $categoriasPessoais, $gateways );
+            
+        } else {
+            $feedPessoal = ( $categoriasPessoais ) ? $categoriasPessoais : $gateways;
+        }
+        
+        // Retorno
+        return resolve( $feedPessoal );
+    }
+}
+
+// End of file
