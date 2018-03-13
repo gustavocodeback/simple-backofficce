@@ -50,7 +50,7 @@ class Notice extends SG_Controller {
 			$notices_formated[] = [
 				'id'             => $notice->id,
 				'title'          => $notice->title,
-				'notice_link'    => $notice->notice_link,
+				'notice_link'    => urldecode( $notice->notice_link ),
 				'image_link'     => $notice->image_link,
 				'description'    => $notice->description,
 				'created'        => toHumanReadable($notice->date ),
@@ -308,7 +308,7 @@ class Notice extends SG_Controller {
 		$data = [
 			'id'             => $notice->id,
 			'title'          => $notice->title,
-			'link'           => $notice->notice_link,
+			'link'           => urldecode( $notice->notice_link ),
 			'description'    => $notice->description,
 			'text_parts'     => $text_parts,
 			'cover' 	     => $notice->image_link,
