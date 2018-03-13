@@ -37,7 +37,7 @@ class Home extends SG_Controller {
 		$this->load->model( ['gateway', 'notice' ] );
 
 		// Carrega as noticias mais novas
-		$notices  = $this->Notice->newer()->paginate( 1, 15 );
+		$notices  = $this->Notice->desc()->paginate( 1, 15 );
 		$gateways = $this->Gateway->paginate( 1, 1 );
 		setItem( 'numOfNotices', $notices->total_itens );
 		setItem( 'numOfGateways', $gateways->total_itens );
