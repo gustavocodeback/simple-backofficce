@@ -278,7 +278,7 @@ class Notice extends SG_Controller {
 
 		// Obtem o texto da noticia
 		if ( !$notice->parsed || $notice->parsed == 'N' ) {
-			$text = $this->__getText( $notice->notice_link );
+			$text = $this->__getText( urldecode( $notice->notice_link ) );
 			$notice->text = $text;
 			$notice->parsed = 'S';
 			$notice->save();
