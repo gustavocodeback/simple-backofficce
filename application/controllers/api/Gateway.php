@@ -293,7 +293,7 @@ class Gateway extends SG_Controller {
 		foreach( $pages->data as $gateway ) {
 			
 			// formata os dados
-			$toReturn[] = $this->__formatGetwayJson( $gateway );
+			// $toReturn[] = $this->__formatGetwayJson( $gateway );
 		}
 		$pages->data = $toReturn;
 
@@ -346,7 +346,7 @@ class Gateway extends SG_Controller {
 
 
 			// formata os dados
-			$toReturn[] = $this->__formatGetwayJson( $gateway );
+			// $toReturn[] = $this->__formatGetwayJson( $gateway );
 		}
 		$pages->data = $toReturn;
 
