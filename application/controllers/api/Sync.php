@@ -95,15 +95,10 @@ class Sync extends SG_Controller {
 		}
 
 		// Volta os dados para atualizar
-		// $data = [
-		// 	'timestamp'  => time(),
-		//	'regions'    => $formattedRegions,
-		//	'categories' => $formattedCategories
-		//];
 		$data = [
 			'timestamp'  => time(),
 			'regions'    => $formattedRegions,
-			'categories' => []
+			'categories' => $formattedCategories
 		];
 		resolve( $data );
 	}
