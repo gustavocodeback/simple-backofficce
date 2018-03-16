@@ -25,6 +25,7 @@ class Notice extends SG_Controller {
 		
 		// inicializa o array
 		$notices_formated = [];
+		return [];
 		
 		// percorre as noticias
 		foreach( $notices as $notice ) {
