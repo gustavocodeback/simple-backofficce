@@ -75,9 +75,13 @@ class Notice extends SG_Controller {
 
 		// Pega as categorias enviadas
 		$categories = $this->input->post( 'categories_ids' );
+		$firstId    = $this->input->post( 'first_id' );
 
 		// Faz a busca das noticias
 		$notices = $this->Notice->select( 'n.*' )->lastPublished();
+
+		// Verifica se possui primeiro id
+		if( $firstId ) $notices = $notices->where( 'n.id < '.$firstId );
 
 		// Verifica se o usuário está logado
 		if ( $user ) {
