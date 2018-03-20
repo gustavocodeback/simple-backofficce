@@ -37,6 +37,13 @@
     <!-- Custom styles for this template -->
     <link href="{{ base_url( 'public/dist/css/new-age.min.css' ) }}" rel="stylesheet">
 
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-4478623331059529",
+        enable_page_level_ads: true
+    });
+    </script>
     @yield( 'styles' )
 </head>
 <body id="page-top">
