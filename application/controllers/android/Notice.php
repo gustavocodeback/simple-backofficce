@@ -83,6 +83,9 @@ class Notice extends SG_Controller {
 		// Verifica se possui primeiro id
 		if( $firstId ) $notices = $notices->where( 'n.id < '.$firstId );
 
+		// Evita as noticias futuras
+		$notices = $notices->where( 'n.date < now()' );
+
 		// Verifica se o usuário está logado
 		if ( $user ) {
 
