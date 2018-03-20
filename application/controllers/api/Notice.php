@@ -52,7 +52,7 @@ class Notice extends SG_Controller {
 				'id'             => $notice->id,
 				'title'          => $notice->title,
 				'notice_link'    => $notice->notice_link,
-				'image_link'     => $notice->image_link,
+				'image_link'     => $notice->image_link ? null : null,
 				'description'    => $notice->description,
 				'created'        => toHumanReadable($notice->date ),
 				'gateway_name'   => $veiculo->name,
@@ -121,7 +121,6 @@ class Notice extends SG_Controller {
 		
 		// Busca as noticias
 		$notices = $notices->paginate( $page, 10, 'notice n' );
-		// debug( $notices );
 		
 		// verifica se tem noticias
 		if( $notices ) {
