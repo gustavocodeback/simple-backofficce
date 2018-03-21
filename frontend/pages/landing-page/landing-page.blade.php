@@ -157,7 +157,7 @@
         <h2>Acompanhe-nos nas redes sociais</h2>
         <ul class="list-inline list-social">
           <li class="list-inline-item social-twitter">
-            <a href="https://twitter.com/getsimple">
+            <a href="https://twitter.com/getsimpleapp">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
