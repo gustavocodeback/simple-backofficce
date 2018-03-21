@@ -83,6 +83,34 @@ class Category extends SG_Controller {
 			return resolve( $tsLastUpdated );
 		}
 	}
+
+	/**
+	 * Busca o nome da categoria pessoal ou normal
+	 *
+	 * @param [type] $id
+	 * @return void
+	 */
+	public function ger_one( $id ) {
+		loggedOnly();
+
+		// Verifica se veio id
+		if( !$id ) return reject( '' );
+
+		// Verifica se é pessoal
+		if ( strpos( $id, 'p-' ) !== false ) {
+			$this->load->model( 'personal_category' );
+			$categoria = $this->Personal_category->findById( str_replace( 'p-', '', $id ) );			
+		} else {
+			$categoria = $this->Category->findById( $id );
+		}
+
+		// Retorna o nome
+		if( $categoria ) {
+			return resolve( $categoria->name );
+		} else {
+			return reject( '' );
+		}		
+	}
 }
 
 // End of file
