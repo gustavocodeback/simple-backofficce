@@ -58,8 +58,8 @@
       <div class="container">
         <div class="row">
           <div class="col-md-8 mx-auto">
-            <h2 class="section-heading">Começe a usar o GetSimple agora mesmo!</h2>
-            <p>GetSimple está disponível nas principais plataformas, começe a utiliza-lo agora mesmo!</p>
+            <h2 class="section-heading">Comece a usar o GetSimple agora mesmo!</h2>
+            <p>GetSimple está disponível nas principais plataformas, comece a utilizá-lo agora mesmo!</p>
             <div class="badges">
               <a class="badge-link" href="#"><img src="{{ base_url( 'public/images/google-play-badge.svg' ) }}"></a>
               <a class="badge-link" href="#"><img src="{{ base_url( 'public/images/app-store-badge.svg' ) }}"></a>
