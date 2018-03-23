@@ -1,14 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/cordova-plugin-admobpro/www/AdMob.js",
-        "id": "cordova-plugin-admobpro.AdMob",
-        "pluginId": "cordova-plugin-admobpro",
-        "clobbers": [
-            "window.AdMob"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
         "id": "cordova-plugin-camera.Camera",
         "pluginId": "cordova-plugin-camera",
@@ -51,14 +43,6 @@ module.exports = [
         "id": "cordova-plugin-device.DeviceProxy",
         "pluginId": "cordova-plugin-device",
         "runs": true
-    },
-    {
-        "file": "plugins/cordova-plugin-facebookads/www/FacebookAds.js",
-        "id": "cordova-plugin-facebookads.FacebookAds",
-        "pluginId": "cordova-plugin-facebookads",
-        "clobbers": [
-            "window.FacebookAds"
-        ]
     },
     {
         "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
@@ -132,12 +116,8 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-facebook-audnet-sdk": "4.26.2",
-    "cordova-plugin-extension": "1.5.4",
-    "cordova-plugin-admobpro": "2.31.1",
     "cordova-plugin-camera": "4.0.1",
     "cordova-plugin-device": "1.1.7",
-    "cordova-plugin-facebookads": "4.23.2",
     "cordova-plugin-inappbrowser": "2.0.1",
     "cordova-plugin-ionic-webview": "1.1.16",
     "cordova-plugin-safariviewcontroller": "1.5.2",

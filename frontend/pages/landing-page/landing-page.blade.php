@@ -2,7 +2,7 @@
 @section('content')
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">Simple</a>
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">GetSimple</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fa fa-bars"></i>
@@ -31,7 +31,7 @@
         <div class="row h-100">
           <div class="col-lg-7 my-auto">
             <div class="header-content mx-auto">
-              <h1 class="mb-5">Simple é um aplicativo para procurar e organizar notícias do Brasil e do mundo no seu smartphone</h1>
+              <h1 class="mb-5">GetSimple é um aplicativo para procurar e organizar notícias do Brasil e do mundo no seu smartphone</h1>
               <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger">Fazer download de graça!</a>
             </div>
           </div>
@@ -41,7 +41,7 @@
                 <div class="device">
                   <div class="screen">
                     <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
-                    <img src="{{ base_url( 'public/images/login.png' ) }}" class="img-fluid" alt="">
+                    <img src="{{ base_url( 'public/images/login.jpg' ) }}" class="img-fluid" alt="">
                   </div>
                   <div class="button">
                     <!-- You can hook the "home button" to some JavaScript events or just remove it -->
@@ -58,8 +58,8 @@
       <div class="container">
         <div class="row">
           <div class="col-md-8 mx-auto">
-            <h2 class="section-heading">Começe a usar o Simple agora mesmo!</h2>
-            <p>Simple está disponível nas principais plataformas, começe a utiliza-lo agora mesmo!</p>
+            <h2 class="section-heading">Começe a usar o GetSimple agora mesmo!</h2>
+            <p>GetSimple está disponível nas principais plataformas, começe a utiliza-lo agora mesmo!</p>
             <div class="badges">
               <a class="badge-link" href="#"><img src="{{ base_url( 'public/images/google-play-badge.svg' ) }}"></a>
               <a class="badge-link" href="#"><img src="{{ base_url( 'public/images/app-store-badge.svg' ) }}"></a>
@@ -73,7 +73,7 @@
       <div class="container">
         <div class="section-heading text-center">
           <h2>Notícias do Brasil e do mundo, direto no seu bolso</h2>
-          <p class="text-muted">Veja o que pode ser feito com o Simple!</p>
+          <p class="text-muted">Veja o que pode ser feito com o GetSimple!</p>
           <hr>
         </div>
         <div class="row">
@@ -83,7 +83,7 @@
                 <div class="device">
                   <div class="screen">
                     <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
-                    <img src="{{ base_url( 'public/images/veiculo-page.png' ) }}" class="img-fluid">
+                    <img src="{{ base_url( 'public/images/feed.jpg' ) }}" class="img-fluid">
                   </div>
                   <div class="button">
                     <!-- You can hook the "home button" to some JavaScript events or just remove it -->
@@ -143,7 +143,7 @@
     <section class="cta">
       <div class="cta-content">
         <div class="container">
-          <h2>Seja Simple <br>agora.</h2>
+          <h2>Seja GetSimple <br>agora.</h2>
           <a href="#contact" class="btn btn-outline btn-xl js-scroll-trigger">
             Download gratuito!
           </a>
@@ -157,18 +157,18 @@
         <h2>Acompanhe-nos nas redes sociais</h2>
         <ul class="list-inline list-social">
           <li class="list-inline-item social-twitter">
-            <a href="#">
+            <a href="https://twitter.com/getsimpleapp">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li class="list-inline-item social-facebook">
-            <a href="#">
+            <a href="https://www.facebook.com/getsimpleapp">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li class="list-inline-item social-google-plus">
-            <a href="#">
-              <i class="fa fa-google-plus"></i>
+            <a href="https://www.instagram.com/getsimpleapp/">
+              <i class="fa fa-instagram"></i>
             </a>
           </li>
         </ul>
@@ -177,7 +177,7 @@
 
     <footer>
       <div class="container">
-        <p>&copy; {{ date( 'Y', time() ) }} Simple. Todos os direitos reservados.</p>
+        <p>&copy; {{ date( 'Y', time() ) }} GetSimple. Todos os direitos reservados.</p>
         <ul class="list-inline">
           <li class="list-inline-item">
             <a href="{{ site_url( 'auth' ) }}">Área administrativa</a>

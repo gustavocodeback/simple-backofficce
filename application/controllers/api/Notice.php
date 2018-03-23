@@ -25,7 +25,6 @@ class Notice extends SG_Controller {
 		
 		// inicializa o array
 		$notices_formated = [];
-		return [];
 		
 		// percorre as noticias
 		foreach( $notices as $notice ) {
@@ -51,8 +50,8 @@ class Notice extends SG_Controller {
 			$notices_formated[] = [
 				'id'             => $notice->id,
 				'title'          => $notice->title,
-				'notice_link'    => $notice->notice_link,
-				'image_link'     => $notice->image_link ? null : null,
+				'notice_link'    => urldecode( $notice->notice_link ),
+				'image_link'     => '',
 				'description'    => $notice->description,
 				'created'        => toHumanReadable($notice->date ),
 				'gateway_name'   => $veiculo->name,
@@ -83,6 +82,9 @@ class Notice extends SG_Controller {
 
 		// Verifica se possui primeiro id
 		if( $firstId ) $notices = $notices->where( 'n.id < '.$firstId );
+
+		// Evita as noticias futuras
+		$notices = $notices->where( 'n.date < now()' );
 
 		// Verifica se o usuário está logado
 		if ( $user ) {
@@ -121,6 +123,7 @@ class Notice extends SG_Controller {
 		
 		// Busca as noticias
 		$notices = $notices->paginate( $page, 10, 'notice n' );
+		// debug( $notices );
 		
 		// verifica se tem noticias
 		if( $notices ) {
@@ -243,6 +246,12 @@ class Notice extends SG_Controller {
 
 		// Obtem as páginas
 		$pages = $this->Notice->where( $where )->paginate( $page, 20 );
+
+		// Inicia a veriavel
+		$reported = false;
+		
+		// Percorre todos os itens
+		$toReturn = [];
 			
 		// formata os dados
 		$pages->data = $this->__formatNotices( $pages->data );
@@ -286,7 +295,7 @@ class Notice extends SG_Controller {
 
 		// Obtem o texto da noticia
 		if ( !$notice->parsed || $notice->parsed == 'N' ) {
-			$text = $this->__getText( $notice->notice_link );
+			$text = $this->__getText( urldecode( $notice->notice_link ) );
 			$notice->text = $text;
 			$notice->parsed = 'S';
 			$notice->save();
@@ -316,7 +325,7 @@ class Notice extends SG_Controller {
 		$data = [
 			'id'             => $notice->id,
 			'title'          => $notice->title,
-			'link'           => $notice->notice_link,
+			'link'           => urldecode( $notice->notice_link ),
 			'description'    => $notice->description,
 			'text_parts'     => $text_parts,
 			'cover' 	     => $notice->image_link,

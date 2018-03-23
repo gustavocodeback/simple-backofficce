@@ -83,6 +83,9 @@ class Notice extends SG_Controller {
 		// Verifica se possui primeiro id
 		if( $firstId ) $notices = $notices->where( 'n.id < '.$firstId );
 
+		// Evita as noticias futuras
+		$notices = $notices->where( 'n.date < now()' );
+
 		// Verifica se o usuário está logado
 		if ( $user ) {
 
@@ -235,16 +238,26 @@ class Notice extends SG_Controller {
 	 */
 	public function search_notice( $string, $page = 1 ) {
 		
-		// Busca os registros
-		$notices = $this->Notice->where( 'title LIKE "%'.$string.'%"' )
-								->order('date', 'DESC')
-								->paginate( $page, 10 );
+		$query = $this->input->get( 'query' );
+		$query = $query ? $query : '';
 
-		// verifica se tem noticias
-		if( $notices ) {
-		$notices->data = $this->__formatNotices( $notices->data );
-		return resolve( $notices );
-		} else return reject( false );
+		// Seta o where
+		$where = " title LIKE '%$query%' ";
+
+		// Obtem as páginas
+		$pages = $this->Notice->where( $where )->paginate( $page, 20 );
+
+		// Inicia a veriavel
+		$reported = false;
+		
+		// Percorre todos os itens
+		$toReturn = [];
+			
+		// formata os dados
+		$pages->data = $this->__formatNotices( $pages->data );
+
+		// Envia os dados
+		return resolve( $pages );
 	}
 
 	/**
