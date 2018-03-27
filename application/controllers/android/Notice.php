@@ -236,7 +236,7 @@ class Notice extends SG_Controller {
 	/**
 	 * Faz a busca das noticias pelo titulo
 	 */
-	public function search_notice( $string, $page = 1 ) {
+	public function search_notice( $page = 1 ) {
 		
 		$query = $this->input->get( 'query' );
 		$query = $query ? $query : '';
