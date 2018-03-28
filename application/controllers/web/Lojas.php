@@ -42,7 +42,10 @@ class Lojas extends SG_Controller {
         }else if($webOS){
             redirect( 'https://getsimple.com.br/' );
             exit();
-		}
+		}else {
+            redirect( 'https://getsimple.com.br/' );
+            exit();
+        }
     }
 }
 
