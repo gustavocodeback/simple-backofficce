@@ -61,8 +61,8 @@
             <h2 class="section-heading">Comece a usar o GetSimple agora mesmo!</h2>
             <p>GetSimple está disponível nas principais plataformas, comece a utilizá-lo agora mesmo!</p>
             <div class="badges">
-              <a class="badge-link" href="#"><img src="{{ base_url( 'public/images/google-play-badge.svg' ) }}"></a>
-              <a class="badge-link" href="#"><img src="{{ base_url( 'public/images/app-store-badge.svg' ) }}"></a>
+              <a class="badge-link" href="https://play.google.com/store/apps/details?id=br.com.codeback.simple"><img src="{{ base_url( 'public/images/google-play-badge.svg' ) }}"></a>
+              <a class="badge-link" href="http://getsimple.com.br/www/"><img src="{{ base_url( 'public/images/app-store-badge.svg' ) }}"></a>
             </div>
           </div>
         </div>
@@ -157,17 +157,17 @@
         <h2>Acompanhe-nos nas redes sociais</h2>
         <ul class="list-inline list-social">
           <li class="list-inline-item social-twitter">
-            <a href="https://twitter.com/getsimpleapp">
+            <a href="https://twitter.com/getsimpleapp" target="_blank">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li class="list-inline-item social-facebook">
-            <a href="https://www.facebook.com/getsimpleapp">
+            <a href="https://www.facebook.com/getsimpleapp" target="_blank">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li class="list-inline-item social-google-plus">
-            <a href="https://www.instagram.com/getsimpleapp/">
+            <a href="https://www.instagram.com/getsimpleapp/" target="_blank">
               <i class="fa fa-instagram"></i>
             </a>
           </li>
