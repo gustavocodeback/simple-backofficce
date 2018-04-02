@@ -63,6 +63,15 @@
             <div class="badges">
               <a class="badge-link" href="https://play.google.com/store/apps/details?id=br.com.codeback.simple"><img src="{{ base_url( 'public/images/google-play-badge.svg' ) }}"></a>
               <a class="badge-link" href="http://getsimple.com.br/www/"><img src="{{ base_url( 'public/images/app-store-badge.svg' ) }}"></a>
+              <a href="{{ site_url( 'www' ) }}" class="row button-link btn btn-dark">
+                <div>
+                  <i class="fa fa-globe"></i>
+                </div>
+                <div>
+                  <p>Baixar a versao</p>
+                  <h3>PWA</h3>
+                </div>
+              </a>
             </div>
           </div>
         </div>
@@ -144,7 +153,7 @@
       <div class="cta-content">
         <div class="container">
           <h2>Seja GetSimple <br>agora.</h2>
-          <a href="#contact" class="btn btn-outline btn-xl js-scroll-trigger">
+          <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger">
             Download gratuito!
           </a>
         </div>
