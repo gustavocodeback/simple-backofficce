@@ -333,6 +333,14 @@ class Notice extends SG_Controller {
 			'save_for_later' => ($saveForLater) ? 'T' : 'F',
 			'reported'       => $reported
 		];
+			
+		// Registra o log
+		$notice->registerLog([
+			'color'  => 'success',
+			'action' => 'VISUALIZOU uma noticia',
+			'text'   => 'A noticia '.$notice_id.' foi visualizada ',
+			'json'   => []
+		]);
 
 		// Envia os dados
 		resolve( $data );
