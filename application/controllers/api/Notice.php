@@ -51,7 +51,7 @@ class Notice extends SG_Controller {
 				'id'             => $notice->id,
 				'title'          => $notice->title,
 				'notice_link'    => urldecode( $notice->notice_link ),
-				'image_link'     => '',
+				'image_link'     => $notice->image_link,
 				'description'    => $notice->description,
 				'created'        => toHumanReadable($notice->date ),
 				'gateway_name'   => $veiculo->name,
