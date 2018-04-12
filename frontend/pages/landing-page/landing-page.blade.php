@@ -62,7 +62,7 @@
             <p>GetSimple está disponível nas principais plataformas, comece a utilizá-lo agora mesmo!</p>
             <div class="badges">
               <a class="badge-link" href="https://play.google.com/store/apps/details?id=br.com.codeback.simple"><img src="{{ base_url( 'public/images/google-play-badge.svg' ) }}"></a>
-              <a class="badge-link" href="http://getsimple.com.br/www/"><img src="{{ base_url( 'public/images/app-store-badge.svg' ) }}"></a>
+              <a class="badge-link" href="https://itunes.apple.com/br/app/apple-store/id1351364395"><img src="{{ base_url( 'public/images/app-store-badge.svg' ) }}"></a>
               <a href="{{ site_url( 'www' ) }}" class="row button-link btn btn-dark">
                 <div>
                   <i class="fa fa-globe"></i>

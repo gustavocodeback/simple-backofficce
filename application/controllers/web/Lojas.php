@@ -31,10 +31,10 @@ class Lojas extends SG_Controller {
 
         //do something with this information
         if( $iPod || $iPhone ){
-            redirect( 'http://getsimple.com.br/www/' );
+            redirect( 'https://itunes.apple.com/br/app/apple-store/id1351364395' );
             exit();
         }else if($iPad){
-            redirect( 'http://getsimple.com.br/www/' );
+            redirect( 'https://itunes.apple.com/br/app/apple-store/id1351364395' );
             exit();
         }else if($Android){
             redirect( 'https://play.google.com/store/apps/details?id=br.com.codeback.simple' );
