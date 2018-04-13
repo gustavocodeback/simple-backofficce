@@ -245,7 +245,7 @@ class Notice extends SG_Controller {
 		$where = " title LIKE '%$query%' ";
 
 		// Obtem as páginas
-		$pages = $this->Notice->where( $where )->paginate( $page, 20 );
+		$pages = $this->Notice->where( $where )->order( "date", "DESC" )->paginate( $page, 20 );
 
 		// Inicia a veriavel
 		$reported = false;
