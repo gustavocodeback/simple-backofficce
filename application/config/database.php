@@ -97,7 +97,7 @@ $db['default'] = array(
 
 $db['umbler'] = array(
 	'dsn'	=> '',
-	'hostname' => 'mysql427.umbler.com',
+	'hostname' => 'mysql472.umbler.com',
 	'username' => 'prod_simple_02',
 	'password' => 'Hj855tkC6CxIkL',
 	'database' => 'prod_simple_02',

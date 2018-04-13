@@ -58,11 +58,20 @@
       <div class="container">
         <div class="row">
           <div class="col-md-8 mx-auto">
-            <h2 class="section-heading">Começe a usar o GetSimple agora mesmo!</h2>
-            <p>GetSimple está disponível nas principais plataformas, começe a utiliza-lo agora mesmo!</p>
+            <h2 class="section-heading">Comece a usar o GetSimple agora mesmo!</h2>
+            <p>GetSimple está disponível nas principais plataformas, comece a utilizá-lo agora mesmo!</p>
             <div class="badges">
-              <a class="badge-link" href="#"><img src="{{ base_url( 'public/images/google-play-badge.svg' ) }}"></a>
-              <a class="badge-link" href="#"><img src="{{ base_url( 'public/images/app-store-badge.svg' ) }}"></a>
+              <a class="badge-link" href="https://play.google.com/store/apps/details?id=br.com.codeback.simple"><img src="{{ base_url( 'public/images/google-play-badge.svg' ) }}"></a>
+              <a class="badge-link" href="https://itunes.apple.com/br/app/apple-store/id1351364395"><img src="{{ base_url( 'public/images/app-store-badge.svg' ) }}"></a>
+              <a href="{{ site_url( 'www' ) }}" class="row button-link btn btn-dark">
+                <div>
+                  <i class="fa fa-globe"></i>
+                </div>
+                <div>
+                  <p>Baixar a versao</p>
+                  <h3>PWA</h3>
+                </div>
+              </a>
             </div>
           </div>
         </div>
@@ -144,7 +153,7 @@
       <div class="cta-content">
         <div class="container">
           <h2>Seja GetSimple <br>agora.</h2>
-          <a href="#contact" class="btn btn-outline btn-xl js-scroll-trigger">
+          <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger">
             Download gratuito!
           </a>
         </div>
@@ -157,17 +166,17 @@
         <h2>Acompanhe-nos nas redes sociais</h2>
         <ul class="list-inline list-social">
           <li class="list-inline-item social-twitter">
-            <a href="https://twitter.com/getsimpleapp">
+            <a href="https://twitter.com/getsimpleapp" target="_blank">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li class="list-inline-item social-facebook">
-            <a href="https://www.facebook.com/getsimpleapp">
+            <a href="https://www.facebook.com/getsimpleapp" target="_blank">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li class="list-inline-item social-google-plus">
-            <a href="https://www.instagram.com/getsimpleapp/">
+            <a href="https://www.instagram.com/getsimpleapp/" target="_blank">
               <i class="fa fa-instagram"></i>
             </a>
           </li>

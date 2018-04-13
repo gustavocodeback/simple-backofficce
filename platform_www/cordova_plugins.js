@@ -111,6 +111,14 @@ module.exports = [
             "cordova.plugins.Keyboard"
         ],
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-facebookads/www/FacebookAds.js",
+        "id": "cordova-plugin-facebookads.FacebookAds",
+        "pluginId": "cordova-plugin-facebookads",
+        "clobbers": [
+            "window.FacebookAds"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -126,7 +134,10 @@ module.exports.metadata =
     "es6-promise-plugin": "4.1.0",
     "cordova-plugin-x-socialsharing": "5.2.1",
     "cordova-sqlite-storage": "2.2.0",
-    "ionic-plugin-keyboard": "2.2.1"
+    "ionic-plugin-keyboard": "2.2.1",
+    "cordova-plugin-extension": "1.5.4",
+    "cordova-facebook-audnet-sdk": "4.26.2",
+    "cordova-plugin-facebookads": "4.23.2"
 }
 // BOTTOM OF METADATA
 });

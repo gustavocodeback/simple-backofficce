@@ -236,7 +236,7 @@ class Notice extends SG_Controller {
 	/**
 	 * Faz a busca das noticias pelo titulo
 	 */
-	public function search_notice( $string, $page = 1 ) {
+	public function search_notice( $page = 1 ) {
 		
 		$query = $this->input->get( 'query' );
 		$query = $query ? $query : '';
@@ -333,6 +333,14 @@ class Notice extends SG_Controller {
 			'save_for_later' => ($saveForLater) ? 'T' : 'F',
 			'reported'       => $reported
 		];
+			
+		// Registra o log
+		$notice->registerLog([
+			'color'  => 'success',
+			'action' => 'VISUALIZOU uma noticia',
+			'text'   => 'A noticia '.$notice_id.' foi visualizada ',
+			'json'   => []
+		]);
 
 		// Envia os dados
 		resolve( $data );

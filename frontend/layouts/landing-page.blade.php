@@ -36,6 +36,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{{ base_url( 'public/dist/css/new-age.min.css' ) }}" rel="stylesheet">
+    <link href="{{ base_url( 'public/dist/css/new-age-2.css' ) }}" rel="stylesheet">
 
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
