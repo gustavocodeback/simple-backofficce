@@ -246,12 +246,6 @@ class Notice extends SG_Controller {
 
 		// Obtem as páginas
 		$pages = $this->Notice->where( $where )->lastPublished()->paginate( $page, 20 );
-
-		// Inicia a veriavel
-		$reported = false;
-		
-		// Percorre todos os itens
-		$toReturn = [];
 			
 		// formata os dados
 		$pages->data = $this->__formatNotices( $pages->data );
