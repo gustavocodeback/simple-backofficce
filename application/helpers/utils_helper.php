@@ -469,7 +469,8 @@ if ( ! function_exists( 'toHumanReadable' ) ) {
         );
         foreach ($string as $k => &$v) {
             if ($diff->$k) {
-                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+                $plural = $k == 'm' ? 'es' : 's';
+                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? $plural : '');
             } else {
                 unset($string[$k]);
             }
