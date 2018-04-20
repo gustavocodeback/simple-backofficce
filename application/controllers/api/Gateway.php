@@ -79,9 +79,7 @@ class Gateway extends SG_Controller {
 		if( file_exists( $saveto ) ){
 			unlink( $saveto );
 		}
-		$fp = fopen( $saveto, 'x' );
-		fwrite( $fp, $raw );
-		fclose( $fp );
+		file_put_contents( $saveto, $raw );
 	}
 
 	/**
@@ -137,13 +135,6 @@ class Gateway extends SG_Controller {
 
 			// Verifica se já esta cadastrado
 			if ( $byLink ) continue;
-
-			try {
-				// Obtem o texto da noticia
-				$extractionResult = WebArticleExtractor\Extract::extractFromURL( $item->getUrl() );
-			} catch( Exception $e ) {
-				return ;
-			}
 			
 			// Converte a data
 			$datetime = $item->getPublishedDate();
@@ -159,7 +150,7 @@ class Gateway extends SG_Controller {
 				'description'    => $item->resume,
 				'image_link'     => $item->cover ? $item->cover : null,
 				'default_notice' => 'N',
-				'text'           => $extractionResult->text,
+				'text'           => null,
 				'description'    => null,
 				'date'           => $dateTime->format('Y-m-d H:i:s'),
 			]);
@@ -233,9 +224,7 @@ class Gateway extends SG_Controller {
 
 		// Obtem os links RSS da página
 		$feed = $this->rss->parse( $link );
-		if ( !$feed ) {
-			return;
-		}
+		if ( !$feed ) return;
 
 		// Verifica se esse feed ja existe
 		$jaExiste = $this->Gateway->exists( $feed );
@@ -274,9 +263,8 @@ class Gateway extends SG_Controller {
 		// Tenta adicionar o link rss
 		if( !$pages->data && ( strpos( $query, '.com' ) !== false ) ) {
 			$retorno = $this->__parse( $query );
-			if( !$retorno ) {
-				return reject( [] );
-			} 
+			if( !$retorno ) return reject( [] );
+			
 			// Seta os dados
 			$pages->data[] = $retorno;
 			$pages->total_pages = 1;
